@@ -45,8 +45,6 @@ sort($category_list);
 // var_dump($name_list);
 // echo "</pre>";
 // exit;
-
-
 // 宿題）削除後のリダイレクト時にセッションメッセージ$_SESSION[del_msg]を消す必要あり。
 ?>
 

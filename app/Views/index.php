@@ -1,62 +1,7 @@
 <?php
-
-session_start();
-require_once '../../vendor/autoload.php';
-require_once '../Services/helper.php';
-require_once '../config/config.php';
-
-use App\Database\DbConnect;
-use App\Services\GetForm;
-use function App\Services\flash;
-use function App\Services\flashMsg;
 use function App\Services\h;
-use function App\Services\old;
-use function App\Services\paginate;
 use function App\Services\setRecieveIcon;
 use function App\Services\setSendIcon;
-use function App\Services\setToken;
-
-if(!isset($_SESSION['login'])) {
-  header('Location: ./MemberLoginView.php');
-  exit;
-}
-
-$in = GetForm::getForm();
-
-$tasks = DbConnect::getMemberData($_SESSION['login_id']);
-$current_page = isset($in['page']) ? $in['page'] : null;
-// $paginate_tasks = paginate($tasks, $current_page, $base_url=basename(__FILE__));
-$paginate_tasks = paginate($tasks, $current_page, $base_url=$_SERVER['PHP_SELF']);
-
-// 宿題）下で展開する際に[0][1]で渡しているので、ちゃんとKeyを設定してあげた方が見栄えがよいかも
-
-// echo '<pre>';
-// var_dump($tasks[0]);
-// echo '</pre>';
-// exit;
-
-
-// echo "<pre>";
-// var_dump($tasks);
-// echo "</pre>";
-// exit;
-
-$categories = DbConnect::getCategory($_SESSION['login_id']);
-$token = setToken();
-
-$flash_array = "";
-$old = "";
-if(isset($_SESSION['error'])) {
-  $flash_array = flash($_SESSION['error']);
-  unset($_SESSION['error']);
-}
-if(isset($_SESSION['old'])) {
-  $old = old($_SESSION['old']);
-  unset($_SESSION['old']);
-}
-
-
-// 宿題）削除後のリダイレクト時にセッションメッセージ$_SESSION[del_msg]を消す必要あり。
 ?>
 
 <!DOCTYPE html>
@@ -76,10 +21,11 @@ if(isset($_SESSION['old'])) {
         <h1>タスクNOTE</h1>
         <div>
           <P>ユーザー名：<span><?php echo h($_SESSION['login_name'] )?>さん</span></P>
-          <form action="../Controller/LogoutController.php" method="post">
+          <form action="../Controller/MemberController.php" method="post">
             <button id="logout-btn" type="submit">
               <img src="../../images/box-arrow-right.svg" alt="">
               <span>ログアウト</span>
+              <input type="hidden" name="mode" value="logout">
               <input type="hidden" name="token" value="<?php echo h($token) ?>">
               <input type="hidden" name="login_user" value="<?php echo MEMBER?>">
             </button>
@@ -93,7 +39,7 @@ if(isset($_SESSION['old'])) {
       <div style="text-align: right;"><a href="./MemberDashbordView.php?member_id=<?php echo $_SESSION['login_id'];?>">ダッシュボードへ</a></div>
       <section id="new-task">
         <h2>新規タスク登録</h2>
-        <form action="../Controller/MemberController.php" method="post">
+        <form action="?mode=store" method="post">
           <ul>
             <li>
               <label for="priority">優先度</label>
@@ -108,7 +54,8 @@ if(isset($_SESSION['old'])) {
             <li>
               <label for="catgory">カテゴリー</label>
               <!-- <input type="text" /> -->
-              <input type="text" name="category" list="categories" placeholder="テキスト入力または選択" autocomplete="off" />
+              <input type="text" name="category" list="categories" placeholder="テキスト入力または選択" autocomplete="off"
+              value="<?php echo isset($old['category']) ? $old['category'] : ""; ?>"/>
               <datalist id="categories">
                 <?php foreach($categories as $category): ?>
                   <option value="<?php echo $category['category']; ?>">
@@ -118,17 +65,17 @@ if(isset($_SESSION['old'])) {
             </li>
             <li>
               <label for="theme">テーマ</label>
-              <input type="text" name="theme" id="theme" />
+              <input type="text" name="theme" id="theme" value="<?php echo isset($old['theme']) ? $old['theme'] : "" ?>"/>
               <?php echo isset($flash_array['theme']) ? "<span class='flash-msg'>{$flash_array['theme']}</span>" : '' ?>
             </li>
             <li>
               <label for="content">タスク概略</label>
-              <input type="text" name="content" id="content" />
+              <input type="text" name="content" id="content" value="<?php echo isset($old['content']) ? $old['content'] : "" ?>" />
               <?php echo isset($flash_array['content']) ? "<span class='flash-msg'>{$flash_array['content']}</span>" : '' ?>
             </li>
             <li>
               <label for="deadline">目標完了日</label>
-              <input type="date" name="deadline" id="deadline" />
+              <input type="date" name="deadline" id="deadline" value="<?php echo isset($old['deadline']) ? $old['deadline'] : "" ?>"/>
               <?php echo isset($flash_array['deadline']) ? "<span class='flash-msg'>{$flash_array['deadline']}</span>" : '' ?>
             </li>
             <li>
@@ -163,8 +110,8 @@ if(isset($_SESSION['old'])) {
             <tr>
               <td class="priority"><?php echo str_repeat('☆', $task['priority'])?></td>
               <td><?php echo $task['category'] ?></td>
-              <td class="edit-link"><?php echo "<a href='./MemberEditView.php?id={$task['id']}'>{$task['theme']}</a>" ?></td>
-              <td class="edit-link"><?php echo "<a href='./MemberEditView.php?id={$task['id']}'>{$task['content']}</a>" ?></td>
+              <td class="edit-link"><?php echo "<a href='?mode=edit&id={$task['id']}'>{$task['theme']}</a>" ?></td>
+              <td class="edit-link"><?php echo "<a href='?mode=edit?id={$task['id']}'>{$task['content']}</a>" ?></td>
               <td><?php echo $task['deadline'] ?></td>
               <td class="msg-icon">
                 <?php echo setSendIcon($task['msg_flag'], $task['mem_to_mg'], $task['id']) ?>

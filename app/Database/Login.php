@@ -14,7 +14,7 @@ class Login extends DbConnect
    * param array $in postデータ
    * param string $table テーブル名 
    */
-  public static function login(array $in, string $table):void
+  public static function login(array $in, string $table): bool
   {
     if(self::blankCheck($in)) {
 
@@ -37,12 +37,14 @@ class Login extends DbConnect
           $_SESSION['login'] = $login_user['email']; // セッションにログイン情報を登録
           $_SESSION['login_id'] = $login_user['id'];
           $_SESSION['login_name']= $login_user['name'];
-          header('Location: ../Views/index.php');
+          // header('Location: ../Views/index.php');
+          return true;
         } 
         if($table === MANAGER) {
           $_SESSION['m_login'] = $in['email'];
           $_SESSION['m_login_name']= $login_user['name'];
-          header('Location: ../Views/ManagerIndex.php');
+          // header('Location: ../Views/ManagerIndex.php');
+          return true;
         }
         exit;
       }

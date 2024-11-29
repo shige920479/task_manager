@@ -34,7 +34,7 @@ class UpdateTask extends StoreTask
         $stmt->bindValue('id', $in['id'], \PDO::PARAM_INT);
         $stmt->execute();
         $pdo = [];
-        header('Location:../Views/index.php');
+        header('Location: ?mode=index');
         exit;
   
       } catch(PDOException $e) {
@@ -43,7 +43,7 @@ class UpdateTask extends StoreTask
         exit;
       }
     } else {
-      header("Location: ../Views/MemberEditView.php?id={$in['id']}");
+      header("Location: ?mode=edit&id={$in['id']}");
       exit;
     }
   }

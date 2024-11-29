@@ -33,7 +33,7 @@ class StoreTask extends DbConnect
         $stmt->bindValue(':deadline', $in['deadline'], \PDO::PARAM_STR);
         $stmt->execute();
         $pdo = [];
-        header('Location: ../Views/index.php');
+        header('Location: ?mode=index');
         exit;
         
       } catch(PDOException $e) {
@@ -42,7 +42,9 @@ class StoreTask extends DbConnect
         exit;
       }
     } else {
-      header('Location: ../Views/index.php');
+      // var_dump($_SESSION);
+      // exit;
+      header('Location: ?mode=index');
       exit;
     }
   }

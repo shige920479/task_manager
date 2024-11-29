@@ -1,37 +1,8 @@
 <?php
-session_start();
-require_once '../../vendor/autoload.php';
-require_once '../Services/helper.php';
-require_once '../config/config.php';
-use App\Database\DbConnect;
-use App\Services\GetForm;
-
-use function App\Services\flash;
+// require_once '../Services/helper.php';
 use function App\Services\h;
-use function App\Services\old;
 use function App\Services\setChatHtml;
 use function App\Services\setToken;
-
-if(!isset($_SESSION['login'])) {
-  header('Location: ./MemberLoginView.php');
-  exit;
-}
-
-$in = GetForm::getForm();
-$task = DbConnect::selectId($in['id']);
-$chats = DbConnect::getMessage($in['id'], MEMBER);
-
-$flash_array = "";
-$old = "";
-if(isset($_SESSION['error'])) {
-  $flash_array = flash($_SESSION['error']);
-  unset($_SESSION['error']);
-}
-if(isset($_SESSION['old'])) {
-  $old = old($_SESSION['old']);
-  unset($_SESSION['old']);
-}
-
 ?>
 
 <!DOCTYPE html>
@@ -46,7 +17,7 @@ if(isset($_SESSION['old'])) {
 <body>
   <div id="chat-wrapper">
       <h1>コメント編集</h1>
-      <div id="to_index"><a href="./index.php">一覧へ戻る</a></div>
+      <div id="to_index"><a href="?mode=index">一覧へ戻る</a></div>
       <div id="chat-flex">
         <section id="task-side">
             <ul>
@@ -83,9 +54,9 @@ if(isset($_SESSION['old'])) {
           <ul class="chat-room">
             <?php echo $chats ? setChatHtml($chats, MEMBER) : "" ?>
           </ul>
-          <form action="../Controller/MemberController.php" method="post" id="message-box">
+          <form action="?mode=send_message" method="post" id="message-box">
             <label>メッセージ入力<?php echo isset($flash_array['comment']) ? "<span class='flash-msg'>{$flash_array['comment']}</span>" : ""; ?></label>
-            <textarea name="comment" rows="3"></textarea>
+            <textarea name="comment" rows="3"><?php isset($old['comment']) ? $old['comment'] : ""; ?></textarea>
             <button type="submit" class="sendmsg-btn btn">メッセージ送信</button>
             <input type="hidden" name="id" value="<?php echo $task['id'] ?>">
             <input type="hidden" name="sender" value="1">

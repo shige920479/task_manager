@@ -1,60 +1,7 @@
 <?php
-session_start();
-require_once '../../vendor/autoload.php';
 require_once '../Services/helper.php';
-use App\Database\DbConnect;
-use App\Services\GetForm;
-use function App\Services\flash;
 use function App\Services\h;
-use function App\Services\old;
 use function App\Services\setToken;
-
-if(!isset($_SESSION['login'])) {
-  header('Location: ./MemberLoginView.php');
-  exit;
-}
-
-// echo __DIR__;
-// echo '<br>';
-// echo __FILE__;
-// echo '<br>';
-// echo dirname(__FILE__);
-
-// exit;
-
-
-$in = GetForm::getForm();
-// echo "<pre>";
-// var_dump($in);
-// echo "</pre>";
-// exit;
-
-
-$data = DbConnect::selectId($in['id']);
-
-// echo "<pre>";
-// var_dump($data);
-// echo "</pre>";
-// exit;
-
-$categories = DbConnect::getCategory($data['member_id']); 
-// echo "<pre>";
-// var_dump($categories);
-// echo "</pre>";
-// exit;
-$flash_array = "";
-$old = "";
-if(isset($_SESSION['error'])) {
-  $flash_array = flash($_SESSION['error']);
-  unset($_SESSION['error']);
-}
-if(isset($_SESSION['old'])) {
-  $old = old($_SESSION['old']);
-  unset($_SESSION['old']);
-}
-
-
-
 ?>
 
 <!DOCTYPE html>
@@ -69,9 +16,9 @@ if(isset($_SESSION['old'])) {
 <body>
 <div class="wrapper edit-wrapper">
       <h1>編集ページ</h1>
-      <div id="to_index"><a href="./index.php">一覧へ戻る</a></div>
+      <div id="to_index"><a href="?mode=index">一覧へ戻る</a></div>
       <section>
-        <form action="../Controller/MemberController.php" method="post">
+        <form action="?mode=update" method="post">
           <ul id="edit-table">
             <li>
               <label for="priority">優先度</label>

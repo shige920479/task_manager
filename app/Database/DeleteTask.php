@@ -31,7 +31,7 @@ class DeleteTask extends DbConnect
         $stmt->bindValue(':id', $id, \PDO::PARAM_INT);
         $stmt->execute();
         $_SESSION['del_msg'] = "カテゴリー : 「{$del_data['category']}」 タイトル : 「{$del_data['theme']}」 を削除しました";
-        header('Location: ../Views/index.php');
+        header('Location: ?mode=index');
       
     } catch(\PDOException $e) {
       flashMsg('db', "登録に失敗しました : {$e->getMessage()}"); //フラッシュメッセージ用、完成後に削除。

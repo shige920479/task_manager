@@ -1,7 +1,7 @@
 <?php
 namespace App\Services;
 
-function paginate($tasks, $current_page, $base_url)
+function paginate($tasks, $current_page)
 {
     $max_per_page = 10;
     $total_num = count($tasks);
@@ -24,7 +24,7 @@ function paginate($tasks, $current_page, $base_url)
         if($i === 1) {
             $page_html .= "<li class='this'>{$i}</li>";
         } else {
-            $page_html .= "<li><a href='{$base_url}?page={$i}'>{$i}</a></li>";
+            $page_html .= "<li><a href='?mode=index&page={$i}'>{$i}</a></li>";
         }
         }
     } else {
@@ -35,7 +35,7 @@ function paginate($tasks, $current_page, $base_url)
         if($i === intval($current_page)) {
             $page_html .= "<li class='this'>{$i}</li>";
         } else {
-            $page_html .= "<li><a href='{$base_url}?page={$i}'>{$i}</a></li>";
+            $page_html .= "<li><a href='?mode=index&page={$i}'>{$i}</a></li>";
         }
         }
     }
@@ -83,9 +83,9 @@ function setSendIcon($msg_flag, $mem_to_mg, $task_id) {
     if($msg_flag === 0) {
         return "";
     } elseif($mem_to_mg === 1) {
-        return "<a href='./MemberChatView.php?id={$task_id}'><img src='../../images/hikoki.png'></a>";
+        return "<a href='?mode=chat&id={$task_id}'><img src='../../images/hikoki.png'></a>";
     } elseif($mem_to_mg === 2) {
-        return "<a href='./MemberChatView.php?id={$task_id}'><img src='../../images/checkbox.png'></a>";
+        return "<a href='?mode=chat&id={$task_id}'><img src='../../images/checkbox.png'></a>";
     }
 }
 
@@ -103,9 +103,9 @@ function setRecieveIcon($msg_flag, $mg_to_mem, $task_id) {
     if($msg_flag === 0) {
         return "";
     } elseif($mg_to_mem === 1) {
-        return "<a href='./MemberChatView.php?id={$task_id}'><img src='../../images/midoku.png'></a>";
+        return "<a href='?mode=chat&id={$task_id}'><img src='../../images/midoku.png'></a>";
     } elseif($mg_to_mem === 0) {
-        return "<a href='./MemberChatView.php?id={$task_id}'><img src='../../images/kidoku.png'></a>";
+        return "<a href='?mode=chat&id={$task_id}'><img src='../../images/kidoku.png'></a>";
     }
 }
 function MgSetReceiveIcon($msg_flag, $mem_to_mg, $task_id) {
