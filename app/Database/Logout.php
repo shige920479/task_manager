@@ -10,7 +10,7 @@ class Logout
     $_SESSION = array();
     session_destroy();
     if($in['login_user'] === MEMBER) {
-      header('Location: ../Views/index.php');
+      header('Location: ./MemberLogin.php');
     } elseif($in['login_user'] === MANAGER) {
       header('Location: ../Views/ManagerLoginView.php');
     }

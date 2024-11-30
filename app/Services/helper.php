@@ -53,6 +53,7 @@ function flash(array $flash_messages): array {
     foreach($flash_messages as $key => $value) {
         $flash[$key] = $value;
     }
+    unset($_SESSION['error']);
     return $flash;
 }
 
@@ -64,6 +65,7 @@ function old(array $old_inputs): array {
     foreach($old_inputs as $key => $value) {
         $old[$key] = $value;
     }
+    unset($_SESSION['old']);
     return $old;
 }
 

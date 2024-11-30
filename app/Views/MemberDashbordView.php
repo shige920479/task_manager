@@ -1,49 +1,3 @@
-<?php
-require_once '../../vendor/autoload.php';
-// date_default_timezone_set('Asia/Tokyo');
-
-use App\Database\DbConnect;
-use App\Services\GetForm;
-use Carbon\Carbon;
-
-session_start();
-if(!isset($_SESSION['login'])) {
-  header('Location: ./MemberLoginView.php');
-  exit;
-}
-
-
-$in = GetForm::getForm();
-
-Carbon::setLocale('ja'); 
-$current_week = isset($in['week']) ? $in['week'] : Carbon::now()->format('Y-m-d');
-
-$start_date = Carbon::parse($current_week)->startOfWeek(Carbon::MONDAY);
-$end_date = $start_date->copy()->endOfWeek(Carbon::FRIDAY);
-
-$prev_week = $start_date->copy()->subWeek()->format('Y-m-d');
-$next_week = $start_date->copy()->addWeek()->format('Y-m-d');
-
-$tasks = DbConnect::getMemberData($in['member_id']);
-$categories = array_unique(array_column($tasks, 'category'));
-
-// echo "<pre>";
-// var_dump(array_unique(array_column($tasks, 'member_id')));
-// echo "</pre>";
-// exit;
-
-// echo $current_week;
-// echo $prev_week;
-// echo $next_week;
-
-// echo "<pre>";
-// var_dump($current_week);
-// echo "</pre>";
-// exit;
-
-
-?>
-
 <!DOCTYPE html>
 <html lang="ja">
   <head>
@@ -55,11 +9,11 @@ $categories = array_unique(array_column($tasks, 'category'));
   </head>
   <body>
     <div class="wrapper">
-    <div style="text-align:right"><a href="./index.php?=<?php echo $in['member_id']?>">一覧画面へ</a></div> <!-- 要）CSS修正 -->
+    <div style="text-align:right"><a href="?mode=index&id=<?php echo $in['member_id']?>">一覧画面へ</a></div> <!-- 要）CSS修正 -->
       <div id="month">
-        <a href='<?php echo "?week={$prev_week}&member_id={$in['member_id']}";?>'>前週</a>
+        <a href='<?php echo "?mode=dashboard&week={$prev_week}&member_id={$in['member_id']}";?>'>前週</a>
         <p><?php echo $start_date->format('m/d'); ?> ～ <?php echo $end_date->format('m/d'); ?></p>
-        <a href='<?php echo "?week={$next_week}&member_id={$in['member_id']}";?>'>来週</a>
+        <a href='<?php echo "?mode=dashboard&week={$next_week}&member_id={$in['member_id']}";?>'>来週</a>
       </div>
       <table id="taskboard">
         <thead>

@@ -1,22 +1,6 @@
 <?php
-session_start();
-require_once '../Services/helper.php';
-use function App\Services\flash;
 use function App\Services\h;
-use function App\Services\old;
 use function App\Services\setToken;
-
-$flash_array = "";
-$old = "";
-if(isset($_SESSION['error'])) {
-  $flash_array = flash($_SESSION['error']);
-  unset($_SESSION['error']);
-}
-if(isset($_SESSION['old'])) {
-  $old = old($_SESSION['old']);
-  unset($_SESSION['old']);
-}
-
 ?>
 
 <!DOCTYPE html>
@@ -34,14 +18,11 @@ if(isset($_SESSION['old'])) {
       <h2>チームメンバーログイン</h2>
       <div class="login-box">
         <h3>Sign Up</h3>
-        <form action="../Controller/MemberController.php" method="post">
+        <form action="?mode=login" method="post">
           <ul>
             <div class="input">
               <label for="email">メールアドレス</label>
-              <input
-                type="email"
-                name="email"
-                id="email"
+              <input type="email" name="email" id="email"
                 <?php if(isset($old['email'])) echo h("value='{$old['email']}'") ?>
               />
               <?php if(isset($flash_array['email'])) echo h("<span class='flash-msg'>{$flash_array['email']}</span>") ?>
@@ -49,11 +30,7 @@ if(isset($_SESSION['old'])) {
             <div class="input">
               <label for="password">パスワード</label>
               
-              <input
-                type="password"
-                name="password"
-                id="password"
-              />
+              <input type="password" name="password" id="password"/>
               <?php if(isset($flash_array['password'])) echo h("<span class='flash-msg'>{$flash_array['password']}</span>"); ?>
             </div>
             <input type="hidden" name="mode" value="login">

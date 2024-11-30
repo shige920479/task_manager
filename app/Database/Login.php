@@ -22,22 +22,22 @@ class Login extends DbConnect
 
       if(!$login_user) {
         flashMsg('email', 'メールアドレスが登録されておりません、再度入力願います');
-        if($table === MEMBER) {header('Location: ../Views/MemberLoginView.php');}
+        if($table === MEMBER) {header('Location: ./MemberLogin.php');}
         if($table === MANAGER) {header('Location: ../Views/ManagerLoginView.php');}
         exit;
       } elseif(!password_verify($in['password'], $login_user['password'])) {
         flashMsg('password', 'パスワードが異なっております、再度入力願います');
-        if($table === MEMBER) {header('Location: ../Views/MemberLoginView.php');}
+        if($table === MEMBER) {header('Location: ./MemberLogin.php');}
         if($table === MANAGER) {header('Location: ../Views/ManagerLoginView.php');}
         exit;
       } else {
         session_regenerate_id(TRUE); // セッションidを再発行
-        if(isset($_SESSION['old'])) { unset($_SESSION['old']); } // エラー時に使う入力情報を消去<-ここで使うべきか見直し
+        if(isset($_SESSION['old'])) unset($_SESSION['old']);  // エラー時に使う入力情報を消去<-ここで使うべきか見直し
         if($table === MEMBER) { 
           $_SESSION['login'] = $login_user['email']; // セッションにログイン情報を登録
           $_SESSION['login_id'] = $login_user['id'];
           $_SESSION['login_name']= $login_user['name'];
-          // header('Location: ../Views/index.php');
+          header('Location: ./MemberController.php?mode=index');
           return true;
         } 
         if($table === MANAGER) {
@@ -49,7 +49,7 @@ class Login extends DbConnect
         exit;
       }
     } else {
-      if($table === MEMBER) {header('Location: ../Views/MemberLoginView.php');}
+      if($table === MEMBER) {header('Location: ./MemberLogin.php');}
       if($table === MANAGER)  {header('Location: ../Views/ManagerLoginView.php');}
       exit;
     }

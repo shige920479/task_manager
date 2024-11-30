@@ -21,7 +21,7 @@ use function App\Services\setSendIcon;
         <h1>タスクNOTE</h1>
         <div>
           <P>ユーザー名：<span><?php echo h($_SESSION['login_name'] )?>さん</span></P>
-          <form action="../Controller/MemberController.php" method="post">
+          <form action="?mode=logout" method="post">
             <button id="logout-btn" type="submit">
               <img src="../../images/box-arrow-right.svg" alt="">
               <span>ログアウト</span>
@@ -36,7 +36,7 @@ use function App\Services\setSendIcon;
 
     <div class="task-wrapper">
       <!-- 要）CSS修正 -->
-      <div style="text-align: right;"><a href="./MemberDashbordView.php?member_id=<?php echo $_SESSION['login_id'];?>">ダッシュボードへ</a></div>
+      <div style="text-align: right;"><a href="?mode=dashboard&member_id=<?php echo $_SESSION['login_id'];?>">ダッシュボードへ</a></div>
       <section id="new-task">
         <h2>新規タスク登録</h2>
         <form action="?mode=store" method="post">
@@ -111,7 +111,7 @@ use function App\Services\setSendIcon;
               <td class="priority"><?php echo str_repeat('☆', $task['priority'])?></td>
               <td><?php echo $task['category'] ?></td>
               <td class="edit-link"><?php echo "<a href='?mode=edit&id={$task['id']}'>{$task['theme']}</a>" ?></td>
-              <td class="edit-link"><?php echo "<a href='?mode=edit?id={$task['id']}'>{$task['content']}</a>" ?></td>
+              <td class="edit-link"><?php echo "<a href='?mode=edit&id={$task['id']}'>{$task['content']}</a>" ?></td>
               <td><?php echo $task['deadline'] ?></td>
               <td class="msg-icon">
                 <?php echo setSendIcon($task['msg_flag'], $task['mem_to_mg'], $task['id']) ?>
