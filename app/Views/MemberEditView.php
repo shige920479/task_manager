@@ -1,19 +1,8 @@
 <?php
-require_once '../Services/helper.php';
 use function App\Services\h;
-use function App\Services\setToken;
+include '../Views/MemberHeader.php';
 ?>
 
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TODO-EDIT</title>
-  <link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css" />
-  <link rel="stylesheet" href="../../css/style.css" />
-</head>
-<body>
 <div class="wrapper edit-wrapper">
       <h1>編集ページ</h1>
       <div id="to_index"><a href="?mode=index">一覧へ戻る</a></div>
@@ -61,7 +50,7 @@ use function App\Services\setToken;
           </ul>
           <input type="hidden" name="id" value="<?php echo $data['id'] ?>">
           <input type="hidden" name="mode" value="update">
-          <input type="hidden" name="token" value="<?php echo h(setToken());?>">
+          <input type="hidden" name="token" value="<?php echo h($token);?>">
         </form> 
       </section>
     </div>

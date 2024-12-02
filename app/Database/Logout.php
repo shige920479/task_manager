@@ -8,6 +8,7 @@ class Logout
   public static function logout(array $in): void
   {
     $_SESSION = array();
+    setcookie(session_name(), '', time()-1, '/');
     session_destroy();
     if($in['login_user'] === MEMBER) {
       header('Location: ./MemberLogin.php');

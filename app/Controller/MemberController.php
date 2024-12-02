@@ -65,11 +65,11 @@ switch ($in['mode']) {
   case 'edit':
     $data = DbConnect::selectId($in['id']);
     $categories = DbConnect::getCategory($data['member_id']); 
+    $token = setToken();
     $flash_array = "";
     $old = "";
     if(isset($_SESSION['error'])) $flash_array = flash($_SESSION['error']);   
     if(isset($_SESSION['old'])) $old = old($_SESSION['old']);
-
     include('../Views/MemberEditView.php');
     break;
 
@@ -84,6 +84,7 @@ switch ($in['mode']) {
   case 'chat':
     $task = DbConnect::selectId($in['id']);
     $chats = DbConnect::getMessage($in['id'], MEMBER);
+    $token = setToken();
     $flash_array = "";
     $old = "";
     if(isset($_SESSION['error'])) $flash_array = flash($_SESSION['error']);
@@ -108,6 +109,7 @@ switch ($in['mode']) {
 
     $tasks = DbConnect::getMemberData($in['member_id']);
     $categories = array_unique(array_column($tasks, 'category'));
+    $token = setToken();
 
     include('../Views/MemberDashbordView.php');
     break;

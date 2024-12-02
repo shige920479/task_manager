@@ -15,11 +15,11 @@ body {
     "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
-.wrapper {
+.calender-wrapper {
   max-width: 1200px;
   margin: 50px auto;
 }
-.wrapper table {
+.calender-wrapper table {
   width: 100%;
 }
 

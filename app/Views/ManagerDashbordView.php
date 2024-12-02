@@ -1,14 +1,7 @@
-<!DOCTYPE html>
-<html lang="ja">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ダッシュボード</title>
-    <link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css" />
-    <link rel="stylesheet" href="../../css/calender_style.css" />
-  </head>
-  <body>
-    <div class="wrapper">
+<?php
+include '../Views/ManagerHeader.php';
+?>
+    <div class="calender-wrapper">
       <div style="text-align:right"><a href="?mode=index">一覧画面へ</a></div> <!-- 要）CSS修正 -->
       <div id="month">
         <a href='<?php echo "?mode=dashboard&week={$prev_week}";?>'>前週</a>

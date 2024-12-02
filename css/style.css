@@ -562,7 +562,7 @@ header {
 /*全体*/
 #chat-wrapper {
   max-width: 800px;
-  margin: 80px auto 0 auto;
+  margin: 40px auto 0 auto;
 }
 #chat-flex {
   display: flex;
@@ -664,4 +664,113 @@ header {
   width: 150px;
   padding: 5px 20px;
   margin-left: auto;
+}
+/*----------------------------------------------------
+ダッシュボード MemberDashBoard.php, ManagerDashBoard.php, 
+----------------------------------------------------*/
+.calender-wrapper {
+  max-width: 1200px;
+  margin: 50px auto;
+}
+.calender-wrapper table {
+  width: 100%;
+}
+
+/* カレンダー期間表示・prev＋next */
+#month {
+  display: flex;
+  align-items: center;
+  column-gap: 15px;
+}
+#month p {
+  font-size: 1.5rem;
+}
+
+/* ボード全体 */
+#taskboard th:nth-child(1) {
+  width: 10%;
+}
+#taskboard th {
+  width: 18%;
+  border: 2px solid #fff;
+}
+
+#taskboard th {
+  background-color: #4c4962b9;
+  color: #fff;
+  border-radius: 5px;
+  padding: 5px 0;
+}
+#taskboard td {
+  vertical-align: top;
+  border: 2px solid #fff;
+}
+#taskboard tr:nth-child(odd) {
+  background-color: rgba(128, 128, 128, 0.142);
+}
+#taskboard tr:nth-child(even) {
+  background-color: rgba(128, 128, 128, 0.071);
+}
+.category {
+  min-height: 100px;
+  color: #fff;
+  font-weight: bold;
+  padding-left: 5px;
+}
+td:has(.category) {
+  background-color: #4c496287;
+}
+/*box*/
+#taskboard td {
+  padding: 5px 0;
+}
+.box {
+  width: 100%;
+  /* background-color: rgba(0, 255, 0, 0.55); */
+  background-color: #967ac6;
+  min-height: 40px;
+  border-radius: 5px;
+  padding: 3px 3px 3px 7px;
+  vertical-align: top;
+  /* color: #4c4962; */
+  color: #fff;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+.box span,
+.box p {
+  font-size: 0.8rem;
+}
+.box .theme {
+  background-color: #291693b7;
+  color: #fff;
+  border-radius: 5px;
+  padding: 2px 6px;
+}
+.theme-flex {
+  display: flex;
+  justify-content: space-between;
+}
+.star {
+  color: gold;
+}
+
+/* boxの色をメンバー毎に設定（今回はメンバーが増えた際の対応は考慮外）*/
+.box.mem-color1 {
+  background-color: red;
+}
+.box.mem-color2 {
+  background-color: rgb(0, 60, 255);
+}
+.box.mem-color3 {
+  background-color: rgb(255, 200, 0);
+}
+.box.mem-color4 {
+  background-color: rgb(12, 180, 68);
+}
+.box.mem-color5 {
+  background-color: rgb(255, 0, 247);
+}
+.box.mem-color6 {
+  background-color: rgb(0, 255, 234);
 }
