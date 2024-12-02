@@ -18,7 +18,7 @@ use function App\Services\setToken;
       <h2>チームメンバーログイン</h2>
       <div class="login-box">
         <h3>Sign Up</h3>
-        <form action="?mode=login" method="post">
+        <form action="./MemberLogin.php" method="post">
           <ul>
             <div class="input">
               <label for="email">メールアドレス</label>
@@ -40,11 +40,11 @@ use function App\Services\setToken;
         </form>
         <div id="to-register">
           <span>アカントが未登録ですか？</span>
-          <a href="../Views/MemberAccountView.php">アカウントを作成</a>
+          <a href="./MemberAccount.php">アカウントを作成</a>
         </div>
       </div>
       <div id="to-manager">
-        <a href="./ManagerLoginView.php">管理者用ログイン画面はこちら</a>
+        <a href="./ManagerLogin.php">管理者用ログイン画面はこちら</a>
       </div>
     </section>
   </body>

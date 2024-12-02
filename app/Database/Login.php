@@ -23,12 +23,12 @@ class Login extends DbConnect
       if(!$login_user) {
         flashMsg('email', 'メールアドレスが登録されておりません、再度入力願います');
         if($table === MEMBER) {header('Location: ./MemberLogin.php');}
-        if($table === MANAGER) {header('Location: ../Views/ManagerLoginView.php');}
+        if($table === MANAGER) {header('Location: ./ManagerLogin.php');}
         exit;
       } elseif(!password_verify($in['password'], $login_user['password'])) {
         flashMsg('password', 'パスワードが異なっております、再度入力願います');
         if($table === MEMBER) {header('Location: ./MemberLogin.php');}
-        if($table === MANAGER) {header('Location: ../Views/ManagerLoginView.php');}
+        if($table === MANAGER) {header('Location: ./ManagerLogin.php');}
         exit;
       } else {
         session_regenerate_id(TRUE); // セッションidを再発行
@@ -43,14 +43,14 @@ class Login extends DbConnect
         if($table === MANAGER) {
           $_SESSION['m_login'] = $in['email'];
           $_SESSION['m_login_name']= $login_user['name'];
-          // header('Location: ../Views/ManagerIndex.php');
+          header('Location: ./ManagerController.php?mode=index');
           return true;
         }
         exit;
       }
     } else {
       if($table === MEMBER) {header('Location: ./MemberLogin.php');}
-      if($table === MANAGER)  {header('Location: ../Views/ManagerLoginView.php');}
+      if($table === MANAGER)  {header('Location: ./ManagerLogin.php');}
       exit;
     }
   }

@@ -12,7 +12,7 @@ class Logout
     if($in['login_user'] === MEMBER) {
       header('Location: ./MemberLogin.php');
     } elseif($in['login_user'] === MANAGER) {
-      header('Location: ../Views/ManagerLoginView.php');
+      header('Location: ./ManagerLogin.php');
     }
     exit;
   }

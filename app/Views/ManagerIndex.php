@@ -1,51 +1,9 @@
 <?php
-/** ログイン後の画面表示
- * 1.Taskテーブルからログインメンバーの表示データを取得する
- * 2.htmlに展開
- */
-
-
-session_start();
-require_once '../../vendor/autoload.php';
 require_once '../Services/helper.php';
-use App\Database\DbConnect;
-use App\Services\GetForm;
-use function App\Services\flash;
-use function App\Services\flashMsg;
 use function App\Services\h;
 use function App\Services\MgSetReceiveIcon;
 use function App\Services\MgSetSendIcon;
-use function App\Services\paginate;
-use function App\Services\setRecieveIcon;
-use function App\Services\setSendIcon;
 use function App\Services\setToken;
-
-if(!isset($_SESSION['m_login'])) {
-  header('Location: ./ManagerLoginView.php');
-  exit;
-}
-
-$in = GetForm::getForm();
-$tasks = DbConnect::getTaskData($in);
-$current_page = isset($in['page']) ? $in['page'] : null;
-// $paginate_tasks = paginate($tasks, $current_page, $base_url=basename(__FILE__));
-$paginate_tasks = paginate($tasks, $current_page, $base_url=$_SERVER['PHP_SELF']);
-// echo "<pre>";
-// var_dump($tasks);
-// echo "</pre>";
-// exit;
-
-// selectボックス用のデータ取得
-$name_list = array_unique(array_column($tasks, 'name'));
-sort($name_list);
-$category_list = array_unique(array_column($tasks, 'category'));
-sort($category_list);
-
-// echo "<pre>";
-// var_dump($name_list);
-// echo "</pre>";
-// exit;
-// 宿題）削除後のリダイレクト時にセッションメッセージ$_SESSION[del_msg]を消す必要あり。
 ?>
 
 <!DOCTYPE html>
@@ -66,11 +24,10 @@ sort($category_list);
         <h1>メンバータスク一覧</h1>
         <div>
           <P>ユーザー名：<span><?php echo h($_SESSION['m_login_name'])?>さん</span></P>
-          <form action="../Controller/ManagerController.php" method="post">
+          <form action="?mode=logout" method="post">
             <button id="logout-btn" type="submit">
               <img src="../../images/box-arrow-right.svg" alt="">
               <span>ログアウト</span>
-              <input type="hidden" name="mode" value="logout">
               <input type="hidden" name="login_user" value="<?php echo MANAGER ?>">
               <input type="hidden" name="token" value="<?php echo h(setToken()) ?>">
             </button>
@@ -79,7 +36,7 @@ sort($category_list);
       </div>
     </header>
     <div class="task-wrapper">
-    <div style="text-align: right;"><a href="./ManagerDashbordView.php">ダッシュボードへ</a></div>
+    <div style="text-align: right;"><a href="?mode=dashboard">ダッシュボードへ</a></div>
       <section id="search-section">
         <h2>タスク検索</h2>
         <form action="" method="get" id="search">
@@ -108,6 +65,7 @@ sort($category_list);
             </li>
             <li><button type="submit" class="search-btn btn">検索</button></li>
           </ul>
+          <input type="hidden" name="mode" value="index">
         </form>
       </section>
       <section id="m-task-list">
@@ -120,7 +78,7 @@ sort($category_list);
             <?php endif ;?>
             <!-- 後でaction="" method=""を追加する -->
         </div>
-        <ul id="paginate"><?php echo $paginate_tasks[1] ? $paginate_tasks[1] : "" ;?></ul>
+        <ul id="paginate"><?php echo isset($paginate_tasks[1]) ? $paginate_tasks[1] : "" ;?></ul>
         <table>
           <thead>
             <tr>
@@ -135,8 +93,8 @@ sort($category_list);
               <td><?php echo h($task['name']);?></td>
               <td class="priority"><?php echo h(str_repeat('☆',$task['priority'])) ?></td>
               <td><?php echo h($task['category']) ?></td>
-              <td class="edit-link"><?php echo "<a href='./ManagerChatView.php?id={$task['id']}'>{$task['theme']}</a>" ?></td>
-              <td class="edit-link"><?php echo "<a href='./ManagerChatView.php?id={$task['id']}'>{$task['content']}</a>" ?></td>
+              <td class="edit-link"><?php echo "<a href='?mode=chat&id={$task['id']}'>{$task['theme']}</a>" ?></td>
+              <td class="edit-link"><?php echo "<a href='?mode=chat&id={$task['id']}'>{$task['content']}</a>" ?></td>
               <td><?php echo h($task['deadline']) ?></td>
               <td>残日数</td>
               <td class="msg-icon">

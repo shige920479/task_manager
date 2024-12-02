@@ -1,18 +1,7 @@
 <?php
-session_start();
 require_once '../Services/helper.php';
-
-use function App\Services\flash;
 use function App\Services\h;
-use function App\Services\old;
 use function App\Services\setToken;
-
-
-list($flash_array, $old) = [null, null];
-if(isset($_SESSION['error'])) { $flash_array = flash($_SESSION['error']);}
-if(isset($_SESSION['old'])) { $old = old($_SESSION['old']); }
-unset($_SESSION['error'], $_SESSION['old']);
-
 ?>
 
 <!DOCTYPE html>
@@ -28,7 +17,7 @@ unset($_SESSION['error'], $_SESSION['old']);
     <section class="login-wrapper">
       <h1>Task Manager</h1>
       <h2 id="manager-title">管理者ログイン</h2>
-      <form action="../Controller/ManagerController.php" method="post">
+      <form action="./ManagerLogin.php" method="post">
         <div class="login-box">
           <h3>Sign Up</h3>
           <ul>
@@ -49,7 +38,7 @@ unset($_SESSION['error'], $_SESSION['old']);
         </div>
       </form>
       <div id="to-member">
-        <a href="./MemberLoginView.php">メンバー用ログイン画面はこちら</a>
+        <a href="./MemberLogin.php">メンバー用ログイン画面はこちら</a>
       </div>
     </section>
   </body>

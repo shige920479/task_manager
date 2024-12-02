@@ -16,7 +16,7 @@ class CreateTable extends DbConnect
       $sql = "CREATE table member (
               id INT PRIMARY KEY AUTO_INCREMENT,
               name VARCHAR(50) NOT NULL,
-              email VARCHAR(50) NOT NULL,
+              email VARCHAR(50) NOT NULL UNIQUE,/* UNIQUE の記述方法があっているか？？ */
               password VARCHAR(255) NOT NULL,
               created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
               updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

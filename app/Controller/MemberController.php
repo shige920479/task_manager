@@ -40,9 +40,11 @@ $in = GetForm::getForm();
 switch ($in['mode']) {
   case 'index':
       $tasks = DbConnect::getMemberData($_SESSION['login_id']);
-      $current_page = isset($in['page']) ? $in['page'] : null;
-      $paginate_tasks = paginate($tasks, $current_page);
-      $categories = DbConnect::getCategory($_SESSION['login_id']);
+      if($tasks) {
+        $current_page = isset($in['page']) ? $in['page'] : null;
+        $paginate_tasks = paginate($tasks, $current_page, $in);
+        $categories = DbConnect::getCategory($_SESSION['login_id']);
+      }
       $token = setToken();
       $flash_array = "";
       $old = "";
@@ -71,12 +73,10 @@ switch ($in['mode']) {
     include('../Views/MemberEditView.php');
     break;
 
-  case 'store_account':
-    StoreMemberAccount::memberRegister($in);
-    break;
   case 'store':
     StoreTask::storeTask($in);
     break;
+
   case 'update':  //完了
     UpdateTask::updateTask($in);
     break;
@@ -116,9 +116,4 @@ switch ($in['mode']) {
     DeleteTask::softDelete($in['id']);
     break;
 
-  // 11/21は　228が消せない対策から
-  // バリデーションもところどころないので追加
-  // default:
-    // code...
-    // break;  
 }

@@ -1,19 +1,7 @@
 <?php
 require_once '../Services/helper.php';
-use function App\Services\flash;
-use function App\Services\old;
+use function App\Services\h;
 use function App\Services\setToken;
-
-session_start();
-
-$flash_array = "";
-$old = "";
-if(isset($_SESSION['error'])) {
-  $flash_array = flash($_SESSION['error']);
-  $old = old($_SESSION['old']);
-  unset($_SESSION['error'], $_SESSION['old']);
-}
-
 ?>
 
 <!DOCTYPE html>
@@ -29,21 +17,21 @@ if(isset($_SESSION['error'])) {
     <section class="login-wrapper">
       <h1>Task Manager</h1>
       <h2>アカウント作成</h2>
-      <form action="../Controller/MemberController.php" method="post" class="login-box">
+      <form action="?mode=store_account" method="post" class="login-box">
         <ul>
           <div class="input">
               <label for="name">ユーザーネーム</label>
-              <span><?php echo (isset($flash_array['name'])) ? $flash_array['name'] : ""; ?></span>
+              <span><?php echo isset($flash_array['name']) ? $flash_array['name'] : ""; ?></span>
               <input type="text" name="name" id="name" value="<?php echo (isset($old['name'])) ? $old['name']: "";?>"/>
           </div>
           <div class="input">
             <label for="email">メールアドレス</label>
-            <span><?php echo (isset($flash_array['email'])) ? $flash_array['email'] : ""; ?></span>
+            <span><?php echo isset($flash_array['email']) ? $flash_array['email'] : ""; ?></span>
             <input type="email" name="email" id="email" value="<?php echo (isset($old['email'])) ? $old['email']: "";?>"/>
           </div>
           <div class="input">
             <label for="password">パスワード</label>
-            <span><?php echo (isset($flash_array['password'])) ? $flash_array['password'] : ""; ?></span>
+            <span><?php echo isset($flash_array['password']) ? $flash_array['password'] : ""; ?></span>
             <input type="password" name="password" id="password"/>
           </div>
           <div class="input">
@@ -51,10 +39,10 @@ if(isset($_SESSION['error'])) {
             <input type="password" name="confirm-password" id="confirm-password"/>
           </div>
           <input type="hidden" name="mode" value="store_account">
-          <input type="hidden" name="token" value="<?php echo setToken();?>">
+          <input type="hidden" name="token" value="<?php echo h(setToken());?>">
           <button type="submit">アカウント登録</button>
         </ul>
-        <a href="./MemberLoginView.php">ログイン画面に戻る</a>
+        <a href="./MemberLogin.php">ログイン画面に戻る</a>
       </form>
     </section>
   </body>

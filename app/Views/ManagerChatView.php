@@ -1,31 +1,8 @@
 <?php
-session_start();
-require_once '../../vendor/autoload.php';
 require_once '../Services/helper.php';
-require_once '../config/config.php';
-
-use App\Database\DbConnect;
-use App\Services\GetForm;
-
 use function App\Services\h;
 use function App\Services\setToken;
 use function App\Services\setChatHtml;
-
-if(!isset($_SESSION['m_login'])) {
-  header('Location: ./ManagerLoginView.php');
-  exit;
-}
-
-
-$in = GetForm::getForm();
-$task = DbConnect::selectId($in['id']);
-$chats = DbConnect::getMessage($in['id'], MANAGER);
-// echo "<pre>";
-// var_dump($chats);
-// echo "</pre>";
-// exit;
-
-
 ?>
 
 <!DOCTYPE html>
@@ -40,7 +17,7 @@ $chats = DbConnect::getMessage($in['id'], MANAGER);
 <body>
   <div id="chat-wrapper">
       <h1>コメント編集</h1>
-      <div id="to_index"><a href="./ManagerIndex.php">一覧へ戻る</a></div>
+      <div id="to_index"><a href="?mode=index">一覧へ戻る</a></div>
       <div id="chat-flex">
         <section id="task-side">
             <ul>
@@ -79,9 +56,11 @@ $chats = DbConnect::getMessage($in['id'], MANAGER);
           </ul>
 
           <!-- メッセージを飛ばすと、mem_to_mg が2になる、送信マークも出ない・・・＞原因調査 -->
-          <form action="../Controller/ManagerController.php" method="post" id="message-box">
-            <label>メッセージ入力</label>
-            <textarea name="comment" rows="3"></textarea>
+          <form action="?mode=send_message" method="post" id="message-box">
+            <label>メッセージ入力
+              <span><?php echo isset($flash_array['comment']) ? $flash_array['comment'] : ""; ?></span>
+            </label>
+            <textarea name="comment" rows="3"><?php echo isset($old['comment']) ? $old['comment'] : ""; ?></textarea>
             <button type="submit" class="sendmsg-btn btn">メッセージ送信</button>
             <input type="hidden" name="mode" value="send_message">
             <input type="hidden" name="id" value="<?php echo $task['id'] ?>">

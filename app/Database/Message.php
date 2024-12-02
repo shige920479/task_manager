@@ -33,8 +33,9 @@ class Message extends DbConnect
         $stmt->bindValue(':id', $in['id'], PDO::PARAM_INT);
         $stmt->execute();
   
-        if($in['sender'] === "0") header("Location: ../Views/ManagerChatView.php?id={$in['id']}");
-        if($in['sender'] === "1") header("Location:?mode=chat&id={$in['id']}");
+        // if($in['sender'] === "0") header("Location:?mode=chat&id={$in['id']}");
+        // if($in['sender'] === "1") header("Location:?mode=chat&id={$in['id']}");
+        header("Location:?mode=chat&id={$in['id']}");
       
       } catch(PDOException $e) {
         flashMsg('db', "データ取得に失敗しました : {$e->getMessage()}"); //フラッシュメッセージ用、完成後に削除。
@@ -42,8 +43,10 @@ class Message extends DbConnect
         exit;
       }
     } else {
-      if($in['sender'] === "0") header("Location: ../Views/ManagerChatView.php?id={$in['id']}");
-      if($in['sender'] === "1") header("Location: ?mode=chat&id={$in['id']}");
+      // if($in['sender'] === "0") header("Location: ?mode=chat&id={$in['id']}");
+      // if($in['sender'] === "1") header("Location: ?mode=chat&id={$in['id']}");
+      // exit('elseに入っている');
+      header("Location: ?mode=chat&id={$in['id']}");
     }
   }
 

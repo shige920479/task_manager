@@ -185,10 +185,10 @@ class DbConnect
         $stmt->bindValue(':category', $in['category'], PDO::PARAM_STR);
       }
       if(!empty($in['theme'])) {
-        $category = '%'. $in['theme'] . '%';
-        $stmt->bindValue(':theme', $category, PDO::PARAM_STR);
+        $theme = '%'. $in['theme'] . '%';
+        $stmt->bindValue(':theme', $theme, PDO::PARAM_STR);
       }
-      // echo $sql;
+      // var_dump($stmt);
       // exit;
       $stmt->execute();
       $all_data = $stmt->fetchAll();

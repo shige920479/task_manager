@@ -25,7 +25,6 @@ use function App\Services\setSendIcon;
             <button id="logout-btn" type="submit">
               <img src="../../images/box-arrow-right.svg" alt="">
               <span>ログアウト</span>
-              <input type="hidden" name="mode" value="logout">
               <input type="hidden" name="token" value="<?php echo h($token) ?>">
               <input type="hidden" name="login_user" value="<?php echo MEMBER?>">
             </button>
@@ -97,7 +96,7 @@ use function App\Services\setSendIcon;
             <?php endif ;?>
             <!-- 後でaction="" method=""を追加する -->
           </div>
-        <ul id="paginate"><?php echo $paginate_tasks[1] ? $paginate_tasks[1] : "" ;?></ul>
+        <ul id="paginate"><?php echo isset($paginate_tasks[1]) ? $paginate_tasks[1] : "" ;?></ul>
         <table>
           <thead>
             <tr>
