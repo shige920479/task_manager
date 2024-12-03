@@ -8,7 +8,6 @@ use function App\Services\setToken;
 include '../Views/ManagerHeader.php';
 ?>
     <div class="task-wrapper">
-    <div style="text-align: right;"><a href="?mode=dashboard">ダッシュボードへ</a></div>
       <section id="search-section">
         <h2>タスク検索</h2>
         <form action="" method="get" id="search">

@@ -17,16 +17,20 @@ use function App\Services\h;
     <header>
       <div id="task-header" class="task-wrapper">
         <h1>タスクNOTE</h1>
-        <div>
-          <P>ユーザー名：<span><?php echo h($_SESSION['login_name'] )?>さん</span></P>
-          <form action="?mode=logout" method="post">
-            <button id="logout-btn" type="submit">
-              <img src="../../images/box-arrow-right.svg" alt="">
-              <span>ログアウト</span>
-              <input type="hidden" name="token" value="<?php echo h($token) ?>">
-              <input type="hidden" name="login_user" value="<?php echo MEMBER?>">
-            </button>
-          </form>
-        </div>
+        <div id="header-nav">
+          <div><a href="?mode=dashboard&member_id=<?php echo $_SESSION['login_id'];?>" id="dashboard-link">ダッシュボードへ</a></div>
+          <div id="menu-icon">
+            <img src="../../images/menu.png" alt="">
+            <div class="menu-content">
+              <p>member account</p>
+              <P><?php echo h($_SESSION['login_name'] )?>さん</P>
+              <form action="?mode=logout" method="post">
+                <button id="logout-btn" type="submit">ログアウト</button>
+                <input type="hidden" name="token" value="<?php echo h($token) ?>">
+                <input type="hidden" name="login_user" value="<?php echo MEMBER?>">
+              </form>
+            </div>
+          </div>
+        </div>  
       </div>
     </header>

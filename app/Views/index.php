@@ -7,7 +7,6 @@ include '../Views/MemberHeader.php';
 
     <div class="task-wrapper">
       <!-- 要）CSS修正 -->
-      <div style="text-align: right;"><a href="?mode=dashboard&member_id=<?php echo $_SESSION['login_id'];?>">ダッシュボードへ</a></div>
       <section id="new-task">
         <h2>新規タスク登録</h2>
         <form action="?mode=store" method="post">

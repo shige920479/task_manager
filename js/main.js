@@ -23,6 +23,12 @@ $(function () {
       return false;
     }
   });
+  $("#menu-icon").on("mouseenter", function () {
+    $(".menu-content").addClass("open");
+  });
+  $(".menu-content").on("mouseleave", function () {
+    $(this).removeClass("open");
+  });
 
   //完了処理
   // $("#form").submit(function () {
