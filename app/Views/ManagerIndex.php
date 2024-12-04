@@ -1,10 +1,7 @@
 <?php
-require_once '../Services/helper.php';
 use function App\Services\h;
 use function App\Services\MgSetReceiveIcon;
 use function App\Services\MgSetSendIcon;
-use function App\Services\setToken;
-
 include '../Views/ManagerHeader.php';
 ?>
     <div class="task-wrapper">
@@ -15,18 +12,26 @@ include '../Views/ManagerHeader.php';
             <li>
               <label for="name">メンバー名</label>
               <select name="name" id="name">
-                <option value="">選択してください</option>
+                <option value="">選択なし</option>
                 <?php foreach($name_list as $name) :?>
-                <option value="<?php echo $name ?>"><?php echo $name ?></option>
+                  <?php if($name === $in['name']): ?>
+                    <option value="<?php echo $name ?>" selected><?php echo $name ?></option>
+                  <?php else:?>
+                    <option value="<?php echo $name ?>"><?php echo $name ?></option>
+                  <?php endif; ?>
                 <?php endforeach ;?>
               </select>
             </li>
             <li>
               <label for="category">カテゴリー</label>
               <select name="category" id="category">
-                <option value="">選択してください</option>
-                <?php foreach($category_list as $category) :?>
-                <option value="<?php echo $category ?>"><?php echo $category ?></option>
+                <option value="">選択なし</option>
+                <?php foreach($category_list as $category):?>
+                  <?php if($category === $in['category']): ?>
+                    <option value="<?php echo $category ?>" selected><?php echo $category ?></option>
+                  <?php else:?>
+                    <option value="<?php echo $category ?>"><?php echo $category ?></option>
+                  <?php endif; ?>
                 <?php endforeach ;?>
               </select>
             </li>
@@ -65,7 +70,7 @@ include '../Views/ManagerHeader.php';
               <td class="priority"><?php echo h(str_repeat('☆',$task['priority'])) ?></td>
               <td><?php echo h($task['category']) ?></td>
               <td class="edit-link"><?php echo "<a href='?mode=chat&id={$task['id']}'>{$task['theme']}</a>" ?></td>
-              <td class="edit-link"><?php echo "<a href='?mode=chat&id={$task['id']}'>{$task['content']}</a>" ?></td>
+              <td><?php echo h($task['content']) ?></td>
               <td><?php echo h($task['deadline']) ?></td>
               <td>残日数</td>
               <td class="msg-icon">

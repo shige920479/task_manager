@@ -71,7 +71,7 @@ include '../Views/MemberHeader.php';
         <table>
           <thead>
             <tr>
-              <th>優先度</th><th>カテゴリー</th><th>タイトル</th><th>コメント</th><th>目標完了日</th><th>送信</th><th>受信</th><th>完了</th>
+              <th>優先度</th><th>カテゴリー</th><th>テーマ</th><th>タスク概略</th><th>目標完了日</th><th>送信</th><th>受信</th><th>完了</th>
             </tr>
           </thead>
           <tbody>
@@ -81,7 +81,7 @@ include '../Views/MemberHeader.php';
               <td class="priority"><?php echo str_repeat('☆', $task['priority'])?></td>
               <td><?php echo $task['category'] ?></td>
               <td class="edit-link"><?php echo "<a href='?mode=edit&id={$task['id']}'>{$task['theme']}</a>" ?></td>
-              <td class="edit-link"><?php echo "<a href='?mode=edit&id={$task['id']}'>{$task['content']}</a>" ?></td>
+              <td><?php echo $task['content'] ?></td>
               <td><?php echo $task['deadline'] ?></td>
               <td class="msg-icon">
                 <?php echo setSendIcon($task['msg_flag'], $task['mem_to_mg'], $task['id']) ?>

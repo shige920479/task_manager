@@ -19,23 +19,23 @@ use function App\Services\setToken;
       <h2>アカウント作成</h2>
       <form action="?mode=store_account" method="post" class="login-box">
         <ul>
-          <div class="input">
+          <div class="input account">
               <label for="name">ユーザーネーム</label>
-              <span><?php echo isset($flash_array['name']) ? $flash_array['name'] : ""; ?></span>
+              <?php echo isset($flash_array['name']) ? "<span class='flash-msg'>{$flash_array['name']}</span>" : '' ?>
               <input type="text" name="name" id="name" value="<?php echo (isset($old['name'])) ? $old['name']: "";?>"/>
           </div>
-          <div class="input">
+          <div class="input account">
             <label for="email">メールアドレス</label>
-            <span><?php echo isset($flash_array['email']) ? $flash_array['email'] : ""; ?></span>
+            <?php echo isset($flash_array['email']) ? "<span class='flash-msg'>{$flash_array['email']}</span>" : '' ?>
             <input type="email" name="email" id="email" value="<?php echo (isset($old['email'])) ? $old['email']: "";?>"/>
           </div>
-          <div class="input">
+          <div class="input account">
             <label for="password">パスワード</label>
-            <span><?php echo isset($flash_array['password']) ? $flash_array['password'] : ""; ?></span>
+            <?php echo isset($flash_array['password']) ? "<span class='flash-msg'>{$flash_array['password']}</span>" : '' ?>
             <input type="password" name="password" id="password"/>
           </div>
           <div class="input">
-            <label for="confirm-password">パスワード(確認用)</label>
+            <label for="confirm-password">パスワード（確認用）</label>
             <input type="password" name="confirm-password" id="confirm-password"/>
           </div>
           <input type="hidden" name="mode" value="store_account">

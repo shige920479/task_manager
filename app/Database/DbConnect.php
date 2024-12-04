@@ -139,7 +139,7 @@ class DbConnect
   }
 
 
-  public static function getCategory($member_id) {
+  public static function getCategory(int $member_id) {
     try {
       $pdo = self::db_connect();
       $sql = "SELECT DISTINCT category FROM task where member_id = :member_id";
@@ -158,7 +158,7 @@ class DbConnect
   }
 
 //Manager.indexで使用（全員or検索双方のデータを取得） ※memberテーブルと連結させてメンバー名も取得
-  public static function getTaskData($in) {
+  public static function getTaskData(?array $in) {
     try {
       $pdo = self::db_connect();
       $sql = 'SELECT t.*, m.name

@@ -48,10 +48,8 @@ include '../Views/ManagerHeader.php';
 
           <!-- メッセージを飛ばすと、mem_to_mg が2になる、送信マークも出ない・・・＞原因調査 -->
           <form action="?mode=send_message" method="post" id="message-box">
-            <label>メッセージ入力
-              <span><?php echo isset($flash_array['comment']) ? $flash_array['comment'] : ""; ?></span>
-            </label>
-            <textarea name="comment" rows="3"><?php echo isset($old['comment']) ? $old['comment'] : ""; ?></textarea>
+            <label>メッセージ入力<?php echo isset($flash_array['comment']) ? "<span class='flash-msg'>{$flash_array['comment']}</span>" : ""; ?></label>
+            <textarea name="comment" rows="3"><?php echo isset($old['comment']) ? h($old['comment']) : ""; ?></textarea>
             <button type="submit" class="sendmsg-btn btn">メッセージ送信</button>
             <input type="hidden" name="mode" value="send_message">
             <input type="hidden" name="id" value="<?php echo $task['id'] ?>">

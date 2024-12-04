@@ -5,14 +5,11 @@ html {
 }
 
 body {
-  /* font-family: "Kosugi Maru", sans-serif;
-  font-weight: 100; */
-  /* font-style: normal; */
-  color: rgb(86, 86, 86);
-  font-size: 0.9rem;
-
   font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
     "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-style: normal;
+  color: rgb(86, 86, 86);
+  font-size: 0.9rem;
 }
 
 a {
@@ -150,7 +147,14 @@ table {
   margin-left: 20px;
   text-decoration: underline;
 }
-
+/*-------------------------------------------
+ メンバーアカウント作成画面 MemberAccountView.php
+-------------------------------------------*/
+.input.account label {
+  display: inline-block;
+  width: 80px;
+  font-size: 0.8rem;
+}
 /*-------------------------------------------
 管理者ログイン画面 ManagerLoginView.php
 -------------------------------------------*/
@@ -287,18 +291,18 @@ header {
   font-size: 1rem;
   margin-top: 20px;
   margin-bottom: 15px;
-  display: inline-block;
-  position: relative;
 }
-.new-task h2::after {
+/*            全体をみて問題なければ消し          */
+/* .new-task h2::after {
   content: "";
+  display: block;
   background-color: #464e54;
   width: 100%;
   height: 1px;
   position: absolute;
   bottom: -2px;
   left: 0;
-}
+} */
 #new-task ul {
   display: flex;
   align-items: flex-start;
@@ -377,7 +381,7 @@ header {
 }
 #task-list th,
 #task-list td {
-  line-height: 2;
+  line-height: 2.5;
 }
 #task-list th {
   background-color: rgba(30, 30, 211, 0.644);
@@ -390,11 +394,11 @@ header {
 
 #task-list th:nth-child(1),
 #task-list td:nth-child(1) {
-  width: 4%;
-  text-align: center;
+  width: 6%;
+  padding-left: 8px;
 }
 #task-list th:nth-child(2) {
-  width: 15%;
+  width: 13%;
 }
 #task-list th:nth-child(3) {
   width: 25%;
@@ -422,9 +426,13 @@ header {
   width: 6%;
   text-align: center;
 }
+.edit-link a {
+  color: #050505;
+}
 .edit-link a:hover {
   text-decoration: underline;
-  color: black;
+  color: rgb(8, 2, 44);
+  font-weight: bold;
 }
 
 /*メッセージ 送信・受信アイコン*/
@@ -435,21 +443,6 @@ header {
 .msg-icon img {
   width: 25px;
 }
-
-/*★★★★★★ 恐らくこれが必要なくなる★★★★★★*/
-/* .msg-link {
-  display: flex;
-} */
-.msg-link a {
-  display: block;
-  width: 25px;
-  margin: 0 auto;
-  line-height: 1px;
-}
-.msg-link img {
-  width: 100%;
-}
-/*★★★★★★ 恐らくこれが必要なくなる★★★★★★*/
 
 /*削除メッセージ */
 #task-list span {
@@ -489,6 +482,8 @@ header {
   width: 100%;
 }
 #edit-table label {
+  display: inline-block;
+  width: 70px;
   font-size: 0.8rem;
 }
 #edit-table select,
@@ -576,7 +571,7 @@ header {
 }
 #m-task-list th,
 #m-task-list td {
-  line-height: 2.5;
+  line-height: 3;
 }
 #m-task-list th {
   background-color: rgba(30, 30, 211, 0.644);

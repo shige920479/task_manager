@@ -11,37 +11,37 @@ include '../Views/MemberHeader.php';
           <ul id="edit-table">
             <li>
               <label for="priority">優先度</label>
+              <?php echo isset($flash_array['priority']) ? "<span class='flash-msg'>{$flash_array['priority']}</span>" : '' ?>
               <select name="priority" id="priority">
                   <option value="1">1:高</option>
                   <option value="2">2:中</option>
                   <option value="3">3:低</option>
               </select>
-              <?php echo isset($flash_array['priority']) ? "<span class='flash-msg'>{$flash_array['priority']}</span>" : '' ?>
             </li>
             <li>
               <label for="category">カテゴリー</label>
+              <?php echo isset($flash_array['category']) ? "<span class='flash-msg'>{$flash_array['category']}</span>" : '' ?>
               <input type="text" name="category" list="categories" value="<?php echo h($data['category']) ?>" autocomplete="off" />
               <datalist id="categories">
               <?php foreach($categories as $category): ?>
                   <option value="<?php echo $category['category']; ?>"><?php echo $category['category']; ?></option>
               <?php endforeach ;?>
               </datalist>
-              <?php echo isset($flash_array['category']) ? "<span class='flash-msg'>{$flash_array['category']}</span>" : '' ?>
             </li>
             <li>
               <label for="theme">タイトル</label>
-              <input type="text" name="theme" id="theme" value="<?php echo $data['theme']?>"/>
               <?php echo isset($flash_array['theme']) ? "<span class='flash-msg'>{$flash_array['theme']}</span>" : '' ?>
+              <input type="text" name="theme" id="theme" value="<?php echo $data['theme']?>"/>
             </li>
             <li>
               <label for="content">コメント</label>
-              <textarea type="text" name="content" id="content"><?php echo $data['content']?></textarea>
               <?php echo isset($flash_array['content']) ? "<span class='flash-msg'>{$flash_array['content']}</span>" : '' ?>
+              <textarea type="text" name="content" id="content"><?php echo $data['content']?></textarea>
             </li>
             <li>
               <label for="deadline">目標完了日</label>
-              <input type="date" name="deadline" id="deadline" value="<?php echo $data['deadline']?>"/>
               <?php echo isset($flash_array['deadline']) ? "<span class='flash-msg'>{$flash_array['deadline']}</span>" : '' ?>
+              <input type="date" name="deadline" id="deadline" value="<?php echo $data['deadline']?>"/>
             </li>
             </li>
             <li>

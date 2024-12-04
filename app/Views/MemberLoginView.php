@@ -22,9 +22,7 @@ use function App\Services\setToken;
           <ul>
             <div class="input">
               <label for="email">メールアドレス</label>
-              <input type="email" name="email" id="email"
-                <?php if(isset($old['email'])) echo h("value='{$old['email']}'") ?>
-              />
+              <input type="email" name="email" id="email" value="<?php echo isset($old['email']) ? h($old['email']) : ''; ?>" />
               <?php if(isset($flash_array['email'])) echo h("<span class='flash-msg'>{$flash_array['email']}</span>") ?>
             </div>
             <div class="input">

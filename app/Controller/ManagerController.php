@@ -24,6 +24,8 @@ switch ($in['mode']) {
 
   case 'index':
     $tasks = DbConnect::getTaskData($in);
+    var_dump($in);
+
     if($tasks) {
       $current_page = isset($in['page']) ? $in['page'] : null;
       $paginate_tasks = paginate($tasks, $current_page ,$in); 
@@ -31,9 +33,17 @@ switch ($in['mode']) {
        * 検索後のgetパラメータを渡す必要あり
        *  name/ category/ theme
       */
-      $name_list = array_unique(array_column($tasks, 'name'));
+
+      $all_data =DbConnect::getTaskData(null);
+      // echo '<pre>';
+      // var_dump($all_data);
+      // echo '</pre>';
+      // exit;
+
+      
+      $name_list = array_unique(array_column($all_data, 'name')); //常にmember全員を表示
       sort($name_list);
-      $category_list = array_unique(array_column($tasks, 'category'));
+      $category_list = array_unique(array_column($tasks, 'category'));//選択したメンバーでリスト内容を変える
       sort($category_list);
     }
 
