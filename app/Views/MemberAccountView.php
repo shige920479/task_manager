@@ -20,18 +20,24 @@ use function App\Services\setToken;
       <form action="?mode=store_account" method="post" class="login-box">
         <ul>
           <div class="input account">
-              <label for="name">ユーザーネーム</label>
-              <?php echo isset($flash_array['name']) ? "<span class='flash-msg'>{$flash_array['name']}</span>" : '' ?>
+              <div>
+                <label for="name">ユーザーネーム</label>
+                <?php echo isset($flash_array['name']) ? "<span class='flash-msg'>{$flash_array['name']}</span>" : '' ?>
+              </div>
               <input type="text" name="name" id="name" value="<?php echo (isset($old['name'])) ? $old['name']: "";?>"/>
           </div>
           <div class="input account">
-            <label for="email">メールアドレス</label>
-            <?php echo isset($flash_array['email']) ? "<span class='flash-msg'>{$flash_array['email']}</span>" : '' ?>
+            <div>
+              <label for="email">メールアドレス</label>
+              <?php echo isset($flash_array['email']) ? "<span class='flash-msg'>{$flash_array['email']}</span>" : '' ?>
+            </div>
             <input type="email" name="email" id="email" value="<?php echo (isset($old['email'])) ? $old['email']: "";?>"/>
           </div>
           <div class="input account">
-            <label for="password">パスワード</label>
-            <?php echo isset($flash_array['password']) ? "<span class='flash-msg'>{$flash_array['password']}</span>" : '' ?>
+            <div>
+              <label for="password">パスワード</label>
+              <?php echo isset($flash_array['password']) ? "<span class='flash-msg'>{$flash_array['password']}</span>" : '' ?>
+            </div>
             <input type="password" name="password" id="password"/>
           </div>
           <div class="input">
@@ -42,7 +48,7 @@ use function App\Services\setToken;
           <input type="hidden" name="token" value="<?php echo h(setToken());?>">
           <button type="submit">アカウント登録</button>
         </ul>
-        <a href="./MemberLogin.php">ログイン画面に戻る</a>
+        <p id="to-login"><a href="./MemberLogin.php">ログイン画面に戻る</a></p>
       </form>
     </section>
   </body>

@@ -2,7 +2,6 @@
 include '../Views/ManagerHeader.php';
 ?>
     <div class="calender-wrapper">
-      <div style="text-align:right"><a href="?mode=index">一覧画面へ</a></div> <!-- 要）CSS修正 -->
       <div id="month">
         <a href='<?php echo "?mode=dashboard&week={$prev_week}";?>'>前週</a>
         <p><?php echo $start_date->format('m/d'); ?> ～ <?php echo $end_date->format('m/d'); ?></p>

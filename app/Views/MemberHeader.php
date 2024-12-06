@@ -18,7 +18,8 @@ use function App\Services\h;
       <div id="task-header" class="task-wrapper">
         <h1>タスクNOTE</h1>
         <div id="header-nav">
-          <div><a href="?mode=dashboard&member_id=<?php echo $_SESSION['login_id'];?>" id="dashboard-link">ダッシュボードへ</a></div>
+          <div><a href="?mode=index" id="header-link">タスク一覧</a></div>
+          <div><a href="?mode=dashboard&member_id=<?php echo $_SESSION['login_id'];?>" id="header-link">ダッシュボード</a></div>
           <div id="menu-icon">
             <img src="../../images/menu.png" alt="">
             <div class="menu-content">

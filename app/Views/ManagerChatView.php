@@ -8,7 +8,6 @@ include '../Views/ManagerHeader.php';
 
   <div id="chat-wrapper">
       <h1>コメント編集</h1>
-      <div id="to_index"><a href="?mode=index">一覧へ戻る</a></div>
       <div id="chat-flex">
         <section id="task-side">
             <ul>
@@ -18,9 +17,7 @@ include '../Views/ManagerHeader.php';
               </li>
               <li>
                 <label for="priority">優先度</label>
-                <div>
-                  <?php echo str_repeat('☆',$task['priority']);?>
-                </div>
+                <div><?php echo str_repeat('☆',$task['priority']);?></div>
               </li>
               <li>
                 <label for="category">カテゴリー</label>
@@ -54,7 +51,7 @@ include '../Views/ManagerHeader.php';
             <input type="hidden" name="mode" value="send_message">
             <input type="hidden" name="id" value="<?php echo $task['id'] ?>">
             <input type="hidden" name="sender" value="0">
-            <input type="hidden" name="token" value="<?php echo h(setToken());?>">
+            <input type="hidden" name="token" value="<?php echo h($token);?>">
           </form>
         </section>
       </div>

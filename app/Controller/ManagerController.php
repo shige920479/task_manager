@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use function App\Services\flash;
 use function App\Services\old;
 use function App\Services\paginate;
+use function App\Services\setToken;
 
 session_start();
 
@@ -33,7 +34,7 @@ switch ($in['mode']) {
        * 検索後のgetパラメータを渡す必要あり
        *  name/ category/ theme
       */
-
+      $token = setToken();
       $all_data =DbConnect::getTaskData(null);
       // echo '<pre>';
       // var_dump($all_data);
@@ -51,8 +52,13 @@ switch ($in['mode']) {
     break;
   
   case 'chat':
+    echo "<pre>";
+    echo var_dump($in);
+    echo "</pre>";
+
     $task = DbConnect::selectId($in['id']);
     $chats = DbConnect::getMessage($in['id'], MANAGER);
+    $token = setToken();
     $flash_array = "";
     $old = "";
     if(isset($_SESSION['error'])) $flash_array = flash($_SESSION['error']);
@@ -83,6 +89,7 @@ switch ($in['mode']) {
     break;
 
   case 'logout':
+    
     Logout::logout($in);
     break;
   // default:

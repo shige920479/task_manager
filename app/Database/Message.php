@@ -15,6 +15,8 @@ class Message extends DbConnect
     if(self::validation($in)) {
       try {
         $pdo = self::db_connect();
+
+        $pdo->beginTransaction(); // トランザクション開始
         $sql = 'INSERT INTO message
                 (task_id, comment, sender)
                 VALUES
@@ -32,12 +34,14 @@ class Message extends DbConnect
         $stmt = $pdo->prepare($sql);
         $stmt->bindValue(':id', $in['id'], PDO::PARAM_INT);
         $stmt->execute();
+        $pdo->commit(); // コミット
   
         // if($in['sender'] === "0") header("Location:?mode=chat&id={$in['id']}");
         // if($in['sender'] === "1") header("Location:?mode=chat&id={$in['id']}");
         header("Location:?mode=chat&id={$in['id']}");
       
       } catch(PDOException $e) {
+        $pdo->rollBack(); // ロールバック
         flashMsg('db', "データ取得に失敗しました : {$e->getMessage()}"); //フラッシュメッセージ用、完成後に削除。
         header('Location: ../Views/500error.php');
         exit;

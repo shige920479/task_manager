@@ -6,7 +6,7 @@ require_once '../Services/helper.php';
 class GetForm
 {
   public static function getForm() {
-    
+
     if($_SERVER['REQUEST_METHOD'] === 'POST') {
       if(!isset($_POST['token']) || $_POST['token'] !== $_SESSION['token']) {
         flashMsg('tokenerror', "不正なリクエストです、再度ログインをお試しください"); //フラッシュメッセージ用、完成後に削除。

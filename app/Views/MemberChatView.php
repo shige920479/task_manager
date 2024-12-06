@@ -6,7 +6,6 @@ include '../Views/MemberHeader.php';
 
   <div id="chat-wrapper">
       <h1>コメント編集</h1>
-      <div id="to_index"><a href="?mode=index">一覧へ戻る</a></div>
       <div id="chat-flex">
         <section id="task-side">
             <ul>
