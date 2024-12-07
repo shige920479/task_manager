@@ -25,11 +25,35 @@ class DbConnect
   * param int $member_id
   * return array $member_data 
   */
-  public static function getMemberData(int $member_id): array
+  // public static function getMemberData(int $member_id): array
+  //  {
+  //   try {
+  //     $pdo = self::db_connect();
+  //     $sql = "SELECT * FROM task WHERE member_id = :member_id and del_flag = 0";
+  //     $stmt = $pdo->prepare($sql);
+  //     $stmt->bindValue(':member_id', $member_id, PDO::PARAM_INT);
+  //     $stmt->execute();
+  //     $member_data = $stmt->fetchAll();
+  //     list($pdo, $stmt) = [null, null];
+  //     return $member_data;
+
+  //   } catch(PDOException $e) {
+  //     flashMsg('db', "データ取得に失敗しました : {$e->getMessage()}"); //フラッシュメッセージ用、完成後に削除。
+  //     header('Location: ../Views/500error.php');
+  //     exit;
+  //   }
+  // }
+  public static function getMemberData(int $member_id, ?string $sort_order): array
    {
     try {
       $pdo = self::db_connect();
       $sql = "SELECT * FROM task WHERE member_id = :member_id and del_flag = 0";
+
+      if(!isset($sort_order) || $sort_order === "") $sql .= ' ORDER BY created_at desc';
+      if(isset($sort_order) && $sort_order === 'sort_deadline') $sql .= ' ORDER BY deadline';
+      if(isset($sort_order) && $sort_order === 'sort_category') $sql .= ' ORDER BY category'; 
+      if(isset($sort_order) && $sort_order === 'sort_priority') $sql .= ' ORDER BY priority desc'; 
+
       $stmt = $pdo->prepare($sql);
       $stmt->bindValue(':member_id', $member_id, PDO::PARAM_INT);
       $stmt->execute();

@@ -23,7 +23,6 @@ include '../Views/MemberHeader.php';
             </li>
             <li>
               <label for="catgory">カテゴリー</label>
-              <!-- <input type="text" /> -->
               <input type="text" name="category" list="categories" placeholder="テキスト入力または選択" autocomplete="off"
               value="<?php echo isset($old['category']) ? $old['category'] : ""; ?>"/>
               <datalist id="categories">
@@ -66,8 +65,19 @@ include '../Views/MemberHeader.php';
             <?php $_SESSION['del_msg'] = ''?>
             <?php endif ;?>
             <!-- 後でaction="" method=""を追加する -->
-          </div>
-        <ul id="paginate"><?php echo isset($paginate_tasks[1]) ? $paginate_tasks[1] : "" ;?></ul>
+        </div>
+        <div id="sort-pagination">
+          <form action="" method="get" id="sort">
+            <select name="sort_order" id="sort_order">
+              <option value="">新規登録順</option>
+              <option value="sort_deadline" <?php echo isset($in['sort_order']) && $in['sort_order'] === 'sort_deadline' ? 'selected': "";?>>目標完了日順</option>
+              <option value="sort_category" <?php echo isset($in['sort_order']) && $in['sort_order'] === 'sort_category' ? 'selected': "";?>>カテゴリー別</option>
+              <option value="sort_priority" <?php echo isset($in['sort_order']) && $in['sort_order'] === 'sort_priority' ? 'selected': "";?>>優先度順</option>
+            </select>
+            <input type="hidden" name="mode" value="index">
+          </form>
+          <ul id="paginate"><?php echo isset($paginate_tasks[1]) ? $paginate_tasks[1] : "" ;?></ul>
+        </div>
         <table>
           <thead>
             <tr>

@@ -24,22 +24,36 @@ use function App\Services\setToken;
 
 
 session_start();
-// echo '<pre>';
-// var_dump($_SESSION);
-// echo '</pre>';
+
 if(!isset($_SESSION['login'])) {
   header('Location: ./MemberLogin.php');
   exit;
 }
 
 $in = GetForm::getForm();
-// echo '<pre>';
-// var_dump($in);
-// echo '</pre>';
 
 switch ($in['mode']) {
+  // case 'index':
+  //     $tasks = DbConnect::getMemberData($_SESSION['login_id']);
+  //     if($tasks) {
+  //       $current_page = isset($in['page']) ? $in['page'] : null;
+  //       $paginate_tasks = paginate($tasks, $current_page, $in);
+  //       $categories = DbConnect::getCategory($_SESSION['login_id']);
+  //     }
+  //     $token = setToken();
+  //     $flash_array = "";
+  //     $old = "";
+  //     if(isset($_SESSION['error'])) $flash_array = flash($_SESSION['error']);
+  //     if(isset($_SESSION['old'])) $old = old($_SESSION['old']);
+
+  //     include('../Views/index.php');
+  //     break;
   case 'index':
-      $tasks = DbConnect::getMemberData($_SESSION['login_id']);
+      if(isset($in['sort_order'])) {
+        $tasks = DbConnect::getMemberData($_SESSION['login_id'], $in['sort_order']);
+      } else {
+        $tasks = DbConnect::getMemberData($_SESSION['login_id'], null);
+      }
       if($tasks) {
         $current_page = isset($in['page']) ? $in['page'] : null;
         $paginate_tasks = paginate($tasks, $current_page, $in);
@@ -107,7 +121,7 @@ switch ($in['mode']) {
     $prev_week = $start_date->copy()->subWeek()->format('Y-m-d');
     $next_week = $start_date->copy()->addWeek()->format('Y-m-d');
 
-    $tasks = DbConnect::getMemberData($in['member_id']);
+    $tasks = DbConnect::getMemberData($in['member_id'], null);
     $categories = array_unique(array_column($tasks, 'category'));
     $token = setToken();
 

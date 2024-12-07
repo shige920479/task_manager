@@ -30,6 +30,11 @@ $(function () {
     $(this).removeClass("open");
   });
 
+  //ソート
+  $("#sort_order").on("change", function () {
+    $("#sort").submit();
+  });
+
   //完了処理
   // $("#form").submit(function () {
   //   let checks = [];

@@ -1,6 +1,5 @@
 <?php
 use function App\Services\h;
-use function App\Services\setToken;
 ?>
 
 <!DOCTYPE html>
