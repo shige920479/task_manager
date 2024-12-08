@@ -182,7 +182,7 @@ class DbConnect
   }
 
 //Manager.indexで使用（全員or検索双方のデータを取得） ※memberテーブルと連結させてメンバー名も取得
-  public static function getTaskData(?array $in) {
+  public static function getTaskData(?array $in, ?string $sort_order) {
     try {
       $pdo = self::db_connect();
       $sql = 'SELECT t.*, m.name
@@ -190,15 +190,17 @@ class DbConnect
               left join member as m 
               ON t.member_id = m.id
               WHERE t.del_flag = 0';
-      if(!empty($in['name'])) {
-        $sql .= " AND m.name = :name";
-      }
-      if(!empty($in['category'])) {
-        $sql .= " AND t.category = :category";
-      }
-      if(!empty($in['theme'])) {
-        $sql .= " AND t.theme LIKE :theme";
-      }
+      if(!empty($in['name'])) $sql .= " AND m.name = :name";
+      if(!empty($in['category'])) $sql .= " AND t.category = :category";
+      if(!empty($in['theme'])) $sql .= " AND t.theme LIKE :theme";
+      if(!isset($sort_order) || $sort_order === "") $sql .= ' ORDER BY t.created_at desc';
+      if(isset($sort_order) && $sort_order === 'sort_name') $sql .= ' ORDER BY m.name';
+      if(isset($sort_order) && $sort_order === 'sort_deadline') $sql .= ' ORDER BY t.deadline';
+      if(isset($sort_order) && $sort_order === 'sort_category') $sql .= ' ORDER BY t.category'; 
+      if(isset($sort_order) && $sort_order === 'sort_priority') $sql .= ' ORDER BY t.priority desc'; 
+
+      // echo $sql;
+      // exit;
 
       $stmt = $pdo->prepare($sql);
 

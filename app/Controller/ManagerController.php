@@ -11,6 +11,7 @@ use function App\Services\flash;
 use function App\Services\old;
 use function App\Services\paginate;
 use function App\Services\setToken;
+use function PHPSTORM_META\type;
 
 session_start();
 
@@ -21,11 +22,19 @@ if(!isset($_SESSION['m_login'])) {
 
 $in = GetForm::getForm();
 
+// echo '<pre>';
+// var_dump($in);
+// echo '</pre>';
+
+
 switch ($in['mode']) {
 
   case 'index':
-    $tasks = DbConnect::getTaskData($in);
-    var_dump($in);
+    if(isset($in['sort_order'])) {
+      $tasks = DbConnect::getTaskData($in, $in['sort_order']);
+    } else {
+      $tasks = DbConnect::getTaskData($in, null);
+    }
 
     if($tasks) {
       $current_page = isset($in['page']) ? $in['page'] : null;
@@ -35,7 +44,7 @@ switch ($in['mode']) {
        *  name/ category/ theme
       */
       $token = setToken();
-      $all_data =DbConnect::getTaskData(null);
+      $all_data =DbConnect::getTaskData(null, null);
       // echo '<pre>';
       // var_dump($all_data);
       // echo '</pre>';
@@ -74,7 +83,7 @@ switch ($in['mode']) {
     break;
   
   case 'dashboard':
-    $tasks = DbConnect::getTaskData($in);
+    $tasks = DbConnect::getTaskData($in, null);
 
     Carbon::setLocale('ja'); 
     $current_week = isset($in['week']) ? $in['week'] : Carbon::now()->format('Y-m-d');

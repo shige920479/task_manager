@@ -471,13 +471,26 @@ header {
 }
 
 /*削除メッセージ */
-#task-list span {
-  color: #0087ff;
+#task-list .del_msg {
+  color: #fff;
   margin-left: 40px;
-  font-size: 0.85rem;
-  background-color: #3ea8ff5e;
-  padding: 2px 30px;
-  border-radius: 5px;
+  font-size: 0.8rem;
+  background-color: #748baee8;
+  padding: 7px 40px;
+  border-radius: 15px;
+  font-weight: bold;
+  position: relative;
+}
+#task-list .del_msg::before {
+  content: "";
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-image: url(../images/check_mark_white.png);
+  background-size: contain;
+  position: absolute;
+  top: 5px;
+  left: 15px;
 }
 
 /*-------------------------------------------
@@ -570,9 +583,6 @@ header {
 } */
 
 /* task一覧(マネージャー) */
-#m-task-list div form {
-  margin-top: 30px;
-}
 #m-task-list .edit-btn {
   background-color: rgb(22, 155, 22);
   border-radius: 5px;

@@ -35,6 +35,9 @@ $(function () {
     $("#sort").submit();
   });
 
+  const targets = $(".diff-date").html();
+  console.log(targets);
+
   //完了処理
   // $("#form").submit(function () {
   //   let checks = [];

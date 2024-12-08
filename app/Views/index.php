@@ -59,12 +59,10 @@ include '../Views/MemberHeader.php';
       <section id="task-list">
         <div id="title-page">
           <h2>タスク一覧</h2>
-            <!-- 宿題）↓↓↓ここはファンション化ですっきりさせたい -->        
             <?php if(!empty($_SESSION['del_msg'])) :?>
-            <?php echo "<span>{$_SESSION['del_msg']}</span>"; ?>
-            <?php $_SESSION['del_msg'] = ''?>
+            <?php echo "<span class='del_msg'>{$_SESSION['del_msg']}</span>"; ?>
+            <?php unset($_SESSION['del_msg'])?>
             <?php endif ;?>
-            <!-- 後でaction="" method=""を追加する -->
         </div>
         <div id="sort-pagination">
           <form action="" method="get" id="sort">

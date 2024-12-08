@@ -1,6 +1,9 @@
 <?php
 namespace App\Services;
 
+use Carbon\Carbon;
+use DateTime;
+
 function paginate($tasks, $current_page, $in)
 {
     $max_per_page = 10; //1ページあたりの最大表示件数
@@ -184,6 +187,18 @@ function MgSetReceiveIcon($msg_flag, $mem_to_mg, $task_id) {
         return "<a href='?mode=chat&id={$task_id}'><img src='../../images/kidoku.png'></a>";
     }
 }
+
+/** ManagerIndex.php 残日数の計算メソッド
+ * param $deadline(完了目標日)
+ * return $remain_date 現在との差分日数
+ */
+function diffDate(string $deadline): string
+{
+    $deadline_date = Carbon::parse($deadline);
+    $remain_date = Carbon::today()->diffInDays($deadline_date);
+    return $remain_date;
+}
+
 
 /** MemberChatView.php chat-roomのコメント表示html生成メソッド
  * param array messageテーブルデータ
