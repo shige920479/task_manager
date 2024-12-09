@@ -23,7 +23,6 @@ use function App\Services\h;
           <div id="menu-icon">
             <img src="../../images/menu.png" alt="">
             <div class="menu-content">
-              <p>member account</p>
               <P><?php echo h($_SESSION['login_name'] )?>さん</P>
               <form action="?mode=logout" method="post">
                 <button id="logout-btn" type="submit">ログアウト</button>

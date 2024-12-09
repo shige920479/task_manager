@@ -61,9 +61,9 @@ switch ($in['mode']) {
     break;
   
   case 'chat':
-    echo "<pre>";
-    echo var_dump($in);
-    echo "</pre>";
+    // echo "<pre>";
+    // echo var_dump($in);
+    // echo "</pre>";
 
     $task = DbConnect::selectId($in['id']);
     $chats = DbConnect::getMessage($in['id'], MANAGER);

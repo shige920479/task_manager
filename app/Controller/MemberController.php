@@ -77,8 +77,10 @@ switch ($in['mode']) {
    * エラーで戻ってきた後の入力欄に違和感あり（元のデータが入っている）。
    */
   case 'edit':
-    $data = DbConnect::selectId($in['id']);
-    $categories = DbConnect::getCategory($data['member_id']); 
+    $edit_data = DbConnect::selectId($in['id']);
+
+    $categories = DbConnect::getCategory($edit_data['member_id']); 
+
     $token = setToken();
     $flash_array = "";
     $old = "";

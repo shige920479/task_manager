@@ -1,6 +1,4 @@
-<?php
-use function App\Services\h;
-?>
+<?php use function App\Services\h;?>
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -24,7 +22,6 @@ use function App\Services\h;
           <div id="menu-icon">
             <img src="../../images/menu.png" alt="">
             <div class="menu-content">
-              <p>manager account</p>
               <P><?php echo h($_SESSION['m_login_name'])?>さん</P>
               <form action="?mode=logout" method="post">
                 <button id="logout-btn" type="submit">ログアウト</button>

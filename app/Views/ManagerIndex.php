@@ -81,7 +81,7 @@ include '../Views/ManagerHeader.php';
               <td class="edit-link"><?php echo "<a href='?mode=chat&id={$task['id']}'>{$task['theme']}</a>" ?></td>
               <td><?php echo h($task['content']) ?></td>
               <td><?php echo h($task['deadline']) ?></td>
-              <td class="diff-date"><?php echo diffDate($task['deadline'])."日" ?></td>
+              <td class="diff-date" data-days="<?= diffDate($task['deadline']) ?>"><?= diffDate($task['deadline'])."日" ?></td>
               <td class="msg-icon">
                 <?php echo MgSetSendIcon($task['msg_flag'],$task['mg_to_mem'] , $task['id']) ?>
               </td>

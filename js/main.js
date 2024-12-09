@@ -35,8 +35,17 @@ $(function () {
     $("#sort").submit();
   });
 
-  const targets = $(".diff-date").html();
-  console.log(targets);
+  //残日数の文字色
+  $("td[data-days]").each(function () {
+    const days = parseInt($(this).data("days"), 10);
+    if (days <= 0) {
+      $(this).css("color", "red");
+    }
+  });
+
+  // チャット内のスクロール最下部表示
+  let element = document.getElementById("chat-inner");
+  element?.scrollIntoView(false);
 
   //完了処理
   // $("#form").submit(function () {

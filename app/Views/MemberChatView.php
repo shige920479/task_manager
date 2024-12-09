@@ -39,7 +39,7 @@ include '../Views/MemberHeader.php';
         </section>
         <section id="chat-side">
           <label>メッセージボックス</label>
-          <ul class="chat-room">
+          <ul id="chat-room">
             <?php echo $chats ? setChatHtml($chats, MEMBER) : "" ?>
           </ul>
           <form action="?mode=send_message" method="post" id="message-box">
