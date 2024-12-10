@@ -9,23 +9,25 @@ use function App\Services\old_store;
 
 class Login extends DbConnect
 {  
-  static $login_user;
+  private static $user_data;
+  
   /**
-   * param array $in postデータ
-   * param string $table テーブル名 
+   * メンバー・マネージャー共通のログイン認証
+   * @param array $in 入力データ（メールアドレス・パスワード）
+   * @param string $table member|manager テーブル 
    */
   public static function login(array $in, string $table): bool
   {
     if(self::blankCheck($in)) {
 
-      $login_user = self::getUserByEmail($in['email'], $table);
+      self::$user_data = self::getUserByEmail($in['email'], $table);
 
-      if(!$login_user) {
+      if(!self::$user_data) {
         flashMsg('email', 'メールアドレスが登録されておりません、再度入力願います');
         if($table === MEMBER) {header('Location: ./MemberLogin.php');}
         if($table === MANAGER) {header('Location: ./ManagerLogin.php');}
         exit;
-      } elseif(!password_verify($in['password'], $login_user['password'])) {
+      } elseif(!password_verify($in['password'], self::$user_data['password'])) {
         flashMsg('password', 'パスワードが異なっております、再度入力願います');
         if($table === MEMBER) {header('Location: ./MemberLogin.php');}
         if($table === MANAGER) {header('Location: ./ManagerLogin.php');}
@@ -34,15 +36,15 @@ class Login extends DbConnect
         session_regenerate_id(TRUE); // セッションidを再発行
         if(isset($_SESSION['old'])) unset($_SESSION['old']);  // エラー時に使う入力情報を消去<-ここで使うべきか見直し
         if($table === MEMBER) { 
-          $_SESSION['login'] = $login_user['email']; // セッションにログイン情報を登録
-          $_SESSION['login_id'] = $login_user['id'];
-          $_SESSION['login_name']= $login_user['name'];
+          $_SESSION['login'] = self::$user_data['email']; // セッションにログイン情報を登録
+          $_SESSION['login_id'] = self::$user_data['id'];
+          $_SESSION['login_name']= self::$user_data['name'];
           header('Location: ./MemberController.php?mode=index');
           return true;
         } 
         if($table === MANAGER) {
           $_SESSION['m_login'] = $in['email'];
-          $_SESSION['m_login_name']= $login_user['name'];
+          $_SESSION['m_login_name']= self::$user_data['name'];
           header('Location: ./ManagerController.php?mode=index');
           return true;
         }

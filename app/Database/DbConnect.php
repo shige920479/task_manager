@@ -10,39 +10,27 @@ use function App\Services\flashMsg;
 use PDO;
 use PDOException;
 
-// 作ってみた後にすべての例外処理を外せるか見直し -> ここは外さないで、他のファイルで外せるものを検討。
-
 class DbConnect
 {
-  protected static function db_connect() {
+  /**
+   * データベース接続
+   * @param void
+   * @return pdo
+   */
+  protected static function db_connect(): pdo
+  {
       $pdo = new PDO(DSN, USERNAME, PASSWORD);
       $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
       $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
       return $pdo;
   }
 
-  /** index.php メンバーidからタスクデータを取得
-  * param int $member_id
-  * return array $member_data 
-  */
-  // public static function getMemberData(int $member_id): array
-  //  {
-  //   try {
-  //     $pdo = self::db_connect();
-  //     $sql = "SELECT * FROM task WHERE member_id = :member_id and del_flag = 0";
-  //     $stmt = $pdo->prepare($sql);
-  //     $stmt->bindValue(':member_id', $member_id, PDO::PARAM_INT);
-  //     $stmt->execute();
-  //     $member_data = $stmt->fetchAll();
-  //     list($pdo, $stmt) = [null, null];
-  //     return $member_data;
-
-  //   } catch(PDOException $e) {
-  //     flashMsg('db', "データ取得に失敗しました : {$e->getMessage()}"); //フラッシュメッセージ用、完成後に削除。
-  //     header('Location: ../Views/500error.php');
-  //     exit;
-  //   }
-  // }
+  /**
+   * メンバーidから該当のタスクデータを取得（index.php）
+   * @param int $member_id
+   * @param null|string $sort_order デフォルトはnull、並べ替えの際に規則を取得
+   * @return array|bool $member_data メンバーのタスクデータ、登録直後の初期データがない際はfalse
+   */
   public static function getMemberData(int $member_id, ?string $sort_order): array
    {
     try {
@@ -68,10 +56,14 @@ class DbConnect
     }
   }
 
-  /** ManagerChatView.php, MemberChatView.php, MemberEditView.php, DeleteTask.php で使用
-   * 変数名が判りにくいので、別途命名
+  /**
+   * タスクidから該当のタスクデータとメンバーの名前を取得 
+   * (MemberController.php,ManagerController.php,DeleteTask.php)
+   * @param int $task_id 選択したタスクid
+   * @return array $task 該当のタスクデータ・メンバーの名前
    */
-  public static function selectId($id) {
+  public static function getTaskById(int $task_id): array
+  {
     try {
       $pdo = self::db_connect();
       $sql = "SELECT t.*, m.name
@@ -81,7 +73,7 @@ class DbConnect
               WHERE t.id = :id";
 
       $stmt = $pdo->prepare($sql);
-      $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+      $stmt->bindValue(':id', $task_id, PDO::PARAM_INT);
       $stmt->execute();
       $task = $stmt->fetch();
       list($pdo, $stmt) = [null, null];
@@ -94,13 +86,19 @@ class DbConnect
     } 
   }
 
-  /** MemberChatView.php, ManagerChatView.php
-   * param int $task_id
-   * return array メッセージデータ
+  /** 
+   * チャットボックス内のメッセージデータ取得＆ページ読込時に未読メッセージの既読化（一覧ページのアイコン切替）
+   * taskテーブルとmessageテーブルの双方を処理する為、トランザクションを設定
+   * （MemberController.php,ManagerContrller.php)
+   * @param int $task_id
+   * @param string $login_user メンバー|マネージャーかを識別
+   * @return array $chats メッセージデータ
    */
-  public static function getMessage($task_id, $login_user) {
+  public static function getChatData(int $task_id, string $login_user): array
+  {
     try {
       $pdo = self::db_connect();
+      $pdo->beginTransaction(); // トランザクション開始
       $sql = "SELECT * FROM message WHERE task_id = :task_id";
       $stmt = $pdo->prepare($sql);
       $stmt->bindValue(':task_id', $task_id, PDO::PARAM_INT);
@@ -110,19 +108,27 @@ class DbConnect
       // メッセージの読み込みと同時に、memberおよびmanagerの確認フラグを処理
       if($chats) self::loadConfirm($task_id, $login_user, $pdo);
 
+      $pdo->commit(); //コミット
       list($pdo, $stmt) = [null, null];
       return $chats;
 
     } catch(PDOException $e) {
       flashMsg('db', "データ取得に失敗しました : {$e->getMessage()}"); //フラッシュメッセージ用、完成後に削除。
+      $pdo->rollBack(); // ロールバック
       header('Location: ../Views/500error.php');
       exit;
     }
   }
-
+  /**
+   * getChatData()内でのみ使用、ページ読込時に既読としてメンバー・マネージャー双方のフラグを処理（アイコンに反映）
+   * @param int $task_id
+   * @param string $login_user メンバーorマネージャーかを識別
+   * @param pdo $pdo
+   * @return void
+   */
   private static function loadConfirm(int $task_id, string $login_user, $pdo): void
   {
-    $sql = "SELECT * FROM task WHERE id = :id"; //selectId()でも良いが、何度もこちらの方がPDO一回で済む
+    $sql = "SELECT * FROM task WHERE id = :id";
     $stmt = $pdo->prepare($sql);
     $stmt->bindValue(':id', $task_id, PDO::PARAM_INT);
     $stmt->execute();
@@ -140,20 +146,22 @@ class DbConnect
     $stmt->execute();
   }
   
-  
-  /** Login.php
-   * param string メールアドレス、テーブル名
-   * return array メンバー情報
+  /** 
+   * ログイン認証時にメールアドレスからユーザー情報を取得（Login.php）
+   * @param string $email メールアドレス
+   * @param string $table memberテーブルormanagerテーブルを識別
+   * @return array|bool $user_data 認証中ユーザーの登録情報|登録無ければfalse
    */
-  public static function getUserByEmail($email, $table) {
+  public static function getUserByEmail(string $email, string $table): array
+   {
     try {
       $pdo = self::db_connect();
       $stmt = $pdo->prepare("SELECT * FROM {$table} WHERE email = :email");
       $stmt->bindValue(':email', $email, PDO::PARAM_STR);
       $stmt->execute();
-      $login_member = $stmt->fetch();
+      $user_data = $stmt->fetch();
       list($pdo, $stmt) = [null, null];
-      return $login_member;
+      return $user_data;
 
     } catch(PDOException $e) {
       flashMsg('db', "データ取得に失敗しました : {$e->getMessage()}"); //フラッシュメッセージ用、完成後に削除。
@@ -161,9 +169,13 @@ class DbConnect
       exit;
     } 
   }
-
-
-  public static function getCategory(int $member_id) {
+  /**
+   * タスク一覧のセレクトボックスのoptionタグに使用するカテゴリーを取得（MemberController.php）
+   * @param int $member_id ログイン中のメンバーid
+   * @return $categories タスクに使用しているカテゴリー（重複なし）
+   */
+  public static function getCategory(int $member_id): array
+   {
     try {
       $pdo = self::db_connect();
       $sql = "SELECT DISTINCT category FROM task where member_id = :member_id";
@@ -181,8 +193,14 @@ class DbConnect
     }
   }
 
-//Manager.indexで使用（全員or検索双方のデータを取得） ※memberテーブルと連結させてメンバー名も取得
-  public static function getTaskData(?array $in, ?string $sort_order) {
+  /**
+   * 全メンバーのタスクデータに加えmemberテーブルから名前を取得（ManagerIndex.php）
+   * @param array $in 検索時のGETリクエストを取得
+   * @param null|array 一覧表の並べ替え時の規則を取得
+   * @return array $all_data 全メンバー|検索|並べ替え後のタスクデータ
+   */
+  public static function getTaskData(?array $in, ?string $sort_order):array
+   {
     try {
       $pdo = self::db_connect();
       $sql = 'SELECT t.*, m.name
@@ -227,17 +245,4 @@ class DbConnect
       exit;
     }
   }
-
-
-  /**
-   * 必要なデータ
-   * 【要件】最大10件、ページは最後まで表示
-   * 【必要なデータ】 10件分のデータ、ページ数、現在のページ
-   */
-
-
-  
-
-
-
 }

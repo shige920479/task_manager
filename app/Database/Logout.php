@@ -5,6 +5,11 @@ require_once '../config/config.php';
 
 class Logout
 {
+  /**
+   * メンバー・マネージャー共通のログアウト処理
+   * @param array $in member|manager
+   * @return void
+   */
   public static function logout(array $in): void
   {
     $_SESSION = array();

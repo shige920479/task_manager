@@ -7,30 +7,33 @@ use function App\Services\flashMsg;
 /////////////////////////////////////////////////////
 
 /**
- * 宿題）$_SESSION[del_msg]を消してない為、エラー画面から戻ると
- * フラッシュメッセージが表示される。
- */
-
-/**
  * データ削除クラス（完全削除とソフトデリート）
- * param $id
- * return void
  */
-
 class DeleteTask extends DbConnect
 {
-  // 完了処理
-  public static function softDelete($id) {
-    try {
-        $del_data = self::selectId($id);
-        
-        // 削除用の処理
+  /**
+   * メンバー側のタスク完了処理（ソフトデリート）
+   * @param $id タスクid
+   * @return void
+   */
+  public static function softDelete(int $id): void
+   {
+    try {        
+        // 削除後のメッセージ表示用の情報取得
         $pdo = self::db_connect();
+        $sql = "SELECT theme FROM task WHERE id = :id";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue(':id', $id, \PDO::PARAM_INT);
+        $stmt->execute();
+        $del_data = $stmt->fetch();
+
+        // 削除処理
         $sql = "UPDATE task SET del_flag = 1 WHERE id = :id";
         $stmt = $pdo->prepare($sql);
         $stmt->bindValue(':id', $id, \PDO::PARAM_INT);
         $stmt->execute();
         $_SESSION['del_msg'] = "タイトル : 「{$del_data['theme']}」のタスクを完了しました";
+        list($pdo, $stmt) = [null, null];
         header('Location: ?mode=index');
       
     } catch(\PDOException $e) {
@@ -43,7 +46,7 @@ class DeleteTask extends DbConnect
   public static function hardDelete($id) {
     try {
       // message用処理
-      $del_data = self::selectId($id);
+      $del_data = self::getTaskById($id);
       $_SESSION['del_msg'] = "カテゴリー : 「{$del_data['category']}」/ タイトル : 「{$del_data['title']}」 を削除しました";
       
       // 削除用の処理

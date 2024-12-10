@@ -11,12 +11,20 @@ use function App\Services\old_store;
 
 /////////////////////////////////////////////////////
 
+/**
+ * 新規タスク登録用クラス
+ */
 class StoreTask extends DbConnect
 {
-  public static function storeTask ($in) {
 
+  /**
+   * データベースへの新規タスク登録
+   * @param array $in 入力データ
+   * @return void 
+   */
+   public static function storeTask (array $in): void
+  {
     if(self::validation($in)) {
-
       try {
         $pdo = DbConnect::db_connect();
         $sql = "INSERT INTO task
@@ -32,7 +40,7 @@ class StoreTask extends DbConnect
         $stmt->bindValue(':content', $in['content'], \PDO::PARAM_STR);
         $stmt->bindValue(':deadline', $in['deadline'], \PDO::PARAM_STR);
         $stmt->execute();
-        $pdo = [];
+        list($pdo, $stmt) = [null, null];
         header('Location: ?mode=index');
         exit;
         
@@ -42,14 +50,17 @@ class StoreTask extends DbConnect
         exit;
       }
     } else {
-      // var_dump($_SESSION);
-      // exit;
       header('Location: ?mode=index');
       exit;
     }
   }
-  protected static function validation($in) {
-
+  /**
+   * 新規タスク登録専用のバリデーション
+   * @param array $in 入力データ
+   * @return bool
+   */
+  private static function validation(array $in): bool
+  {
     //優先度のバリデーション
     if($in['priority'] === "") {
       flashMsg('priority', '要選択');
@@ -96,11 +107,16 @@ class StoreTask extends DbConnect
     $result = empty($_SESSION['error']) ? true : false;
     return $result;
   }
-  //日付チェック
-  protected static function dateValidate($inputDate, $format = 'Y-m-d') {
+  /**
+   * 新規タスク登録のバリデーションで使用する日付バリデーション
+   * @param string $input_date 入力された日付(フォーマット済の日付)
+   * @param string $format 日付をインスタンス化する際に使用
+   */
+  private static function dateValidate(string $input_date, string $format = 'Y-m-d'): bool
+  {
     date_default_timezone_set('Asia/Tokyo');
-    $d = DateTime::createFromFormat($format, $inputDate);
-    return $d && $d->format($format) === $inputDate;
+    $d = DateTime::createFromFormat($format, $input_date);
+    return $d && $d->format($format) === $input_date;
   }
 
 }

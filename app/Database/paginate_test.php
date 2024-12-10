@@ -8,7 +8,7 @@ use function PHPSTORM_META\type;
 
 session_start();
 $in = GetForm::getForm();
-$tasks = DbConnect::getTaskData($in);
+$tasks = DbConnect::getTaskData($in, $sort_order);
 
 // echo count($tasks); //77件
 

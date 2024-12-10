@@ -101,7 +101,7 @@ include '../Views/MemberHeader.php';
                 <form action="../Controller/MemberController.php" method="post">
                   <button type="submit" class="comp-btn btn">完了</button>
                   <input type="hidden" name="mode" value="soft_del">
-                  <input type="hidden" name="id" value="<?php echo $task['id'] ?>">
+                  <input type="hidden" name="id" value="<?php echo h($task['id']) ?>">
                   <input type="hidden" name="token" value="<?php echo h($token); ?>">
                 </form>
               </td>

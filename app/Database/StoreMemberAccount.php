@@ -5,9 +5,18 @@ require_once '../Services/helper.php';
 use function App\Services\flashMsg;
 use function App\Services\old_store;
 
+/**
+ * メンバー新規アカウント登録用クラス
+ */
 class StoreMemberAccount extends DbConnect
 {
-  public static function memberRegister($in) {
+  /**
+   * データベースへのアカント登録
+   * @param array $in 入力データ
+   * @return void 登録後はログイン画面へ遷移
+   */
+  public static function memberRegister(array $in): void
+   {
     self::Validation($in);
     if(isset($_SESSION['error'])) {
       header('Location: ./MemberAccount.php');
@@ -39,7 +48,11 @@ class StoreMemberAccount extends DbConnect
       }
     }
   }
-
+  /**
+   * 新規アカンウト登録専用のバリデーション
+   * @param array $in 入力データ
+   * @return bool
+   */
   private static function Validation($in) {
     if($in['name'] === "") {
       flashMsg('name', '名前を入力してください');

@@ -1,21 +1,27 @@
 <?php
 namespace App\Database;
 
-use PDO;
-use PDOException;
-
 use function App\Services\flashMsg;
 use function App\Services\old_store;
 
+/**
+ * タスクに対するコメント（チャット）のデータベース登録用クラス
+ */
 class Message extends DbConnect
 {
-  public static function sendMessage($in) {
+  /**
+   * チャットメッセージ登録&&一覧表のアイコンステータス変更用フラグの切替
+   * @param array $in 入力データ ['sender'] = member|manager ・・処理が異なるので識別用の引数
+   * @return void
+   */
+
+  public static function sendMessage(array $in): void
+   {
     // getformの改行対応が必要
 
     if(self::validation($in)) {
       try {
         $pdo = self::db_connect();
-
         $pdo->beginTransaction(); // トランザクション開始
         $sql = 'INSERT INTO message
                 (task_id, comment, sender)
@@ -23,40 +29,39 @@ class Message extends DbConnect
                 (:task_id, :comment, :sender)
                 ';
         $stmt = $pdo->prepare($sql);
-        $stmt->bindValue(':task_id', $in['id'], PDO::PARAM_INT);
-        $stmt->bindValue(':comment', $in['comment'], PDO::PARAM_STR);
-        $stmt->bindValue(':sender', $in['sender'], PDO::PARAM_INT);
+        $stmt->bindValue(':task_id', $in['id'], \PDO::PARAM_INT);
+        $stmt->bindValue(':comment', $in['comment'], \PDO::PARAM_STR);
+        $stmt->bindValue(':sender', $in['sender'], \PDO::PARAM_INT);
         $stmt->execute();
         
         if($in['sender'] === "0") $sql = "UPDATE task SET msg_flag = 1, mg_to_mem = 1 WHERE id = :id";
         if($in['sender'] === "1") $sql = "UPDATE task SET mem_to_mg = 1 WHERE id = :id";
         
         $stmt = $pdo->prepare($sql);
-        $stmt->bindValue(':id', $in['id'], PDO::PARAM_INT);
+        $stmt->bindValue(':id', $in['id'], \PDO::PARAM_INT);
         $stmt->execute();
         $pdo->commit(); // コミット
-  
-        // if($in['sender'] === "0") header("Location:?mode=chat&id={$in['id']}");
-        // if($in['sender'] === "1") header("Location:?mode=chat&id={$in['id']}");
+
         header("Location:?mode=chat&id={$in['id']}");
       
-      } catch(PDOException $e) {
+      } catch(\PDOException $e) {
         $pdo->rollBack(); // ロールバック
         flashMsg('db', "データ取得に失敗しました : {$e->getMessage()}"); //フラッシュメッセージ用、完成後に削除。
         header('Location: ../Views/500error.php');
         exit;
       }
     } else {
-      // if($in['sender'] === "0") header("Location: ?mode=chat&id={$in['id']}");
-      // if($in['sender'] === "1") header("Location: ?mode=chat&id={$in['id']}");
-      // exit('elseに入っている');
       header("Location: ?mode=chat&id={$in['id']}");
     }
   }
 
-  protected static function validation($in) {
-
-    //コメントのバリデーション
+  /**
+   * チャットメッセージ専用のバリデーション
+   * @param array $in 入力データ
+   * @return bool
+   */
+  private static function validation(array $in): bool
+   {
     if($in['comment'] === "") {
       flashMsg('comment', '未入力です');
     } elseif(mb_strlen($in['comment']) > 255) {
@@ -66,6 +71,5 @@ class Message extends DbConnect
     $result = empty($_SESSION['error']) ? true : false;
     return $result;
   }
-
 }
 

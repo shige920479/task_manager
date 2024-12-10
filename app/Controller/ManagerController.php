@@ -44,13 +44,9 @@ switch ($in['mode']) {
        *  name/ category/ theme
       */
       $token = setToken();
-      $all_data =DbConnect::getTaskData(null, null);
-      // echo '<pre>';
-      // var_dump($all_data);
-      // echo '</pre>';
-      // exit;
 
-      
+      //検索フォーム用のデータ取得
+      $all_data =DbConnect::getTaskData(null, null);
       $name_list = array_unique(array_column($all_data, 'name')); //常にmember全員を表示
       sort($name_list);
       $category_list = array_unique(array_column($tasks, 'category'));//選択したメンバーでリスト内容を変える
@@ -65,8 +61,8 @@ switch ($in['mode']) {
     // echo var_dump($in);
     // echo "</pre>";
 
-    $task = DbConnect::selectId($in['id']);
-    $chats = DbConnect::getMessage($in['id'], MANAGER);
+    $task = DbConnect::getTaskById($in['id']);
+    $chats = DbConnect::getChatData($in['id'], MANAGER);
     $token = setToken();
     $flash_array = "";
     $old = "";

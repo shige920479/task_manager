@@ -31,6 +31,7 @@ if(!isset($_SESSION['login'])) {
 }
 
 $in = GetForm::getForm();
+var_dump($in);
 
 switch ($in['mode']) {
   // case 'index':
@@ -77,7 +78,7 @@ switch ($in['mode']) {
    * エラーで戻ってきた後の入力欄に違和感あり（元のデータが入っている）。
    */
   case 'edit':
-    $edit_data = DbConnect::selectId($in['id']);
+    $edit_data = DbConnect::getTaskById($in['id']);
 
     $categories = DbConnect::getCategory($edit_data['member_id']); 
 
@@ -98,8 +99,8 @@ switch ($in['mode']) {
     break;
 
   case 'chat':
-    $task = DbConnect::selectId($in['id']);
-    $chats = DbConnect::getMessage($in['id'], MEMBER);
+    $task = DbConnect::getTaskById($in['id']);
+    $chats = DbConnect::getChatData($in['id'], MEMBER);
     $token = setToken();
     $flash_array = "";
     $old = "";
