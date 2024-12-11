@@ -2,23 +2,23 @@
 
 require_once '../../vendor/autoload.php';
 use App\Database\DbConnect;
-use App\Services\GetForm;
+use App\Services\GetRequest;
 
 use function PHPSTORM_META\type;
 
 session_start();
-$in = GetForm::getForm();
-$tasks = DbConnect::getTaskData($in, $sort_order);
+$request = GetRequest::getRequest();
+$tasks = DbConnect::getTaskData($request, $sort_order);
 
 // echo count($tasks); //77件
 
 // echo "<pre>";
-// var_dump($in);
+// var_dump($request);
 // echo "</pre>";
 // exit;
 
-// $current_page = $in['page'];
-  paginate($tasks, $in['page']);
+// $current_page = $request['page'];
+  paginate($tasks, $request['page']);
 
 function paginate($tasks, $current_page)
 {
@@ -35,7 +35,7 @@ function paginate($tasks, $current_page)
   $data_array = array();
   $page_html = "";
 
-  // if(empty($in['page'])) {
+  // if(empty($request['page'])) {
   if(empty($current_page)) {
     for($i = 0; $i < $max_per_page; $i++ ) {
       array_push($data_array, $tasks[$i]);

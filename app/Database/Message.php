@@ -11,15 +11,15 @@ class Message extends DbConnect
 {
   /**
    * チャットメッセージ登録&&一覧表のアイコンステータス変更用フラグの切替
-   * @param array $in 入力データ ['sender'] = member|manager ・・処理が異なるので識別用の引数
+   * @param array $request 入力データ ['sender'] = member|manager ・・処理が異なるので識別用の引数
    * @return void
    */
 
-  public static function sendMessage(array $in): void
+  public static function sendMessage(array $request): void
    {
     // getformの改行対応が必要
 
-    if(self::validation($in)) {
+    if(self::validation($request)) {
       try {
         $pdo = self::db_connect();
         $pdo->beginTransaction(); // トランザクション開始
@@ -29,20 +29,20 @@ class Message extends DbConnect
                 (:task_id, :comment, :sender)
                 ';
         $stmt = $pdo->prepare($sql);
-        $stmt->bindValue(':task_id', $in['id'], \PDO::PARAM_INT);
-        $stmt->bindValue(':comment', $in['comment'], \PDO::PARAM_STR);
-        $stmt->bindValue(':sender', $in['sender'], \PDO::PARAM_INT);
+        $stmt->bindValue(':task_id', $request['id'], \PDO::PARAM_INT);
+        $stmt->bindValue(':comment', $request['comment'], \PDO::PARAM_STR);
+        $stmt->bindValue(':sender', $request['sender'], \PDO::PARAM_INT);
         $stmt->execute();
         
-        if($in['sender'] === "0") $sql = "UPDATE task SET msg_flag = 1, mg_to_mem = 1 WHERE id = :id";
-        if($in['sender'] === "1") $sql = "UPDATE task SET mem_to_mg = 1 WHERE id = :id";
+        if($request['sender'] === "0") $sql = "UPDATE task SET msg_flag = 1, mg_to_mem = 1 WHERE id = :id";
+        if($request['sender'] === "1") $sql = "UPDATE task SET mem_to_mg = 1 WHERE id = :id";
         
         $stmt = $pdo->prepare($sql);
-        $stmt->bindValue(':id', $in['id'], \PDO::PARAM_INT);
+        $stmt->bindValue(':id', $request['id'], \PDO::PARAM_INT);
         $stmt->execute();
         $pdo->commit(); // コミット
 
-        header("Location:?mode=chat&id={$in['id']}");
+        header("Location:?mode=chat&id={$request['id']}");
       
       } catch(\PDOException $e) {
         $pdo->rollBack(); // ロールバック
@@ -51,22 +51,22 @@ class Message extends DbConnect
         exit;
       }
     } else {
-      header("Location: ?mode=chat&id={$in['id']}");
+      header("Location: ?mode=chat&id={$request['id']}");
     }
   }
 
   /**
    * チャットメッセージ専用のバリデーション
-   * @param array $in 入力データ
+   * @param array $request 入力データ
    * @return bool
    */
-  private static function validation(array $in): bool
+  private static function validation(array $request): bool
    {
-    if($in['comment'] === "") {
+    if($request['comment'] === "") {
       flashMsg('comment', '未入力です');
-    } elseif(mb_strlen($in['comment']) > 255) {
+    } elseif(mb_strlen($request['comment']) > 255) {
       flashMsg('comment', '255文字以内で入力願います');
-      old_store('comment', $in['comment']);
+      old_store('comment', $request['comment']);
     }
     $result = empty($_SESSION['error']) ? true : false;
     return $result;

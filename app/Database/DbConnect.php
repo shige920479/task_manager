@@ -1,9 +1,9 @@
 <?php
 namespace App\Database;
-require_once '../config/config.php';
+// require_once '../config/config.php';
 
 //フラッシュメッセージ用、完成後にメッセージも合わせて削除。
-require_once '../Services/helper.php'; 
+// require_once '../Services/helper.php'; 
 use function App\Services\flashMsg;
 /////////////////////////////////////////////////////
 
@@ -26,7 +26,8 @@ class DbConnect
   }
 
   /**
-   * メンバーidから該当のタスクデータを取得（index.php）
+   * メンバーidから該当のタスクデータを取得
+   * 
    * @param int $member_id
    * @param null|string $sort_order デフォルトはnull、並べ替えの際に規則を取得
    * @return array|bool $member_data メンバーのタスクデータ、登録直後の初期データがない際はfalse
@@ -58,6 +59,7 @@ class DbConnect
 
   /**
    * タスクidから該当のタスクデータとメンバーの名前を取得 
+   * 
    * (MemberController.php,ManagerController.php,DeleteTask.php)
    * @param int $task_id 選択したタスクid
    * @return array $task 該当のタスクデータ・メンバーの名前
@@ -88,13 +90,12 @@ class DbConnect
 
   /** 
    * チャットボックス内のメッセージデータ取得＆ページ読込時に未読メッセージの既読化（一覧ページのアイコン切替）
-   * taskテーブルとmessageテーブルの双方を処理する為、トランザクションを設定
-   * （MemberController.php,ManagerContrller.php)
+   * 
    * @param int $task_id
    * @param string $login_user メンバー|マネージャーかを識別
    * @return array $chats メッセージデータ
    */
-  public static function getChatData(int $task_id, string $login_user): array
+  public static function getChatData(int $task_id, string $login_user): array|false
   {
     try {
       $pdo = self::db_connect();
@@ -121,6 +122,7 @@ class DbConnect
   }
   /**
    * getChatData()内でのみ使用、ページ読込時に既読としてメンバー・マネージャー双方のフラグを処理（アイコンに反映）
+   * 
    * @param int $task_id
    * @param string $login_user メンバーorマネージャーかを識別
    * @param pdo $pdo
@@ -148,11 +150,12 @@ class DbConnect
   
   /** 
    * ログイン認証時にメールアドレスからユーザー情報を取得（Login.php）
+   * 
    * @param string $email メールアドレス
    * @param string $table memberテーブルormanagerテーブルを識別
    * @return array|bool $user_data 認証中ユーザーの登録情報|登録無ければfalse
    */
-  public static function getUserByEmail(string $email, string $table): array
+  public static function getUserByEmail(string $email, string $table): array|false
    {
     try {
       $pdo = self::db_connect();
@@ -171,6 +174,7 @@ class DbConnect
   }
   /**
    * タスク一覧のセレクトボックスのoptionタグに使用するカテゴリーを取得（MemberController.php）
+   * 
    * @param int $member_id ログイン中のメンバーid
    * @return $categories タスクに使用しているカテゴリー（重複なし）
    */
@@ -195,11 +199,12 @@ class DbConnect
 
   /**
    * 全メンバーのタスクデータに加えmemberテーブルから名前を取得（ManagerIndex.php）
-   * @param array $in 検索時のGETリクエストを取得
+   * 
+   * @param array $request 検索時のGETリクエストを取得
    * @param null|array 一覧表の並べ替え時の規則を取得
    * @return array $all_data 全メンバー|検索|並べ替え後のタスクデータ
    */
-  public static function getTaskData(?array $in, ?string $sort_order):array
+  public static function getTaskData(?array $request, ?string $sort_order): array
    {
     try {
       $pdo = self::db_connect();
@@ -208,9 +213,9 @@ class DbConnect
               left join member as m 
               ON t.member_id = m.id
               WHERE t.del_flag = 0';
-      if(!empty($in['name'])) $sql .= " AND m.name = :name";
-      if(!empty($in['category'])) $sql .= " AND t.category = :category";
-      if(!empty($in['theme'])) $sql .= " AND t.theme LIKE :theme";
+      if(!empty($request['name'])) $sql .= " AND m.name = :name";
+      if(!empty($request['category'])) $sql .= " AND t.category = :category";
+      if(!empty($request['theme'])) $sql .= " AND t.theme LIKE :theme";
       if(!isset($sort_order) || $sort_order === "") $sql .= ' ORDER BY t.created_at desc';
       if(isset($sort_order) && $sort_order === 'sort_name') $sql .= ' ORDER BY m.name';
       if(isset($sort_order) && $sort_order === 'sort_deadline') $sql .= ' ORDER BY t.deadline';
@@ -222,14 +227,14 @@ class DbConnect
 
       $stmt = $pdo->prepare($sql);
 
-      if(!empty($in['name'])) {
-        $stmt->bindValue(':name', $in['name'], PDO::PARAM_STR);
+      if(!empty($request['name'])) {
+        $stmt->bindValue(':name', $request['name'], PDO::PARAM_STR);
       }
-      if(!empty($in['category'])) {
-        $stmt->bindValue(':category', $in['category'], PDO::PARAM_STR);
+      if(!empty($request['category'])) {
+        $stmt->bindValue(':category', $request['category'], PDO::PARAM_STR);
       }
-      if(!empty($in['theme'])) {
-        $theme = '%'. $in['theme'] . '%';
+      if(!empty($request['theme'])) {
+        $theme = '%'. $request['theme'] . '%';
         $stmt->bindValue(':theme', $theme, PDO::PARAM_STR);
       }
       // var_dump($stmt);

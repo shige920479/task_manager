@@ -15,7 +15,7 @@ include '../Views/ManagerHeader.php';
               <select name="name" id="name">
                 <option value="">選択なし</option>
                 <?php foreach($name_list as $name) :?>
-                  <?php if($name === $in['name']): ?>
+                  <?php if($name === $request['name']): ?>
                     <option value="<?php echo $name ?>" selected><?php echo $name ?></option>
                   <?php else:?>
                     <option value="<?php echo $name ?>"><?php echo $name ?></option>
@@ -28,7 +28,7 @@ include '../Views/ManagerHeader.php';
               <select name="category" id="category">
                 <option value="">選択なし</option>
                 <?php foreach($category_list as $category):?>
-                  <?php if($category === $in['category']): ?>
+                  <?php if($category === $request['category']): ?>
                     <option value="<?php echo $category ?>" selected><?php echo $category ?></option>
                   <?php else:?>
                     <option value="<?php echo $category ?>"><?php echo $category ?></option>
@@ -51,15 +51,15 @@ include '../Views/ManagerHeader.php';
           <form action="" method="get" id="sort">
             <select name="sort_order" id="sort_order">
               <option value="">新規登録順</option>
-              <option value="sort_name" <?php echo isset($in['sort_order']) && $in['sort_order'] === 'sort_name' ? 'selected': "";?>>メンバー別</option>
-              <option value="sort_category" <?php echo isset($in['sort_order']) && $in['sort_order'] === 'sort_category' ? 'selected': "";?>>カテゴリー別</option>
-              <option value="sort_deadline" <?php echo isset($in['sort_order']) && $in['sort_order'] === 'sort_deadline' ? 'selected': "";?>>完了目標順</option>
-              <option value="sort_priority" <?php echo isset($in['sort_order']) && $in['sort_order'] === 'sort_priority' ? 'selected': "";?>>優先度順</option>
+              <option value="sort_name" <?php echo isset($request['sort_order']) && $request['sort_order'] === 'sort_name' ? 'selected': "";?>>メンバー別</option>
+              <option value="sort_category" <?php echo isset($request['sort_order']) && $request['sort_order'] === 'sort_category' ? 'selected': "";?>>カテゴリー別</option>
+              <option value="sort_deadline" <?php echo isset($request['sort_order']) && $request['sort_order'] === 'sort_deadline' ? 'selected': "";?>>完了目標順</option>
+              <option value="sort_priority" <?php echo isset($request['sort_order']) && $request['sort_order'] === 'sort_priority' ? 'selected': "";?>>優先度順</option>
             </select>
             <input type="hidden" name="mode" value="index">
-            <input type="hidden" name="name" value="<?php echo $in['name'] ?? '';?>">
-            <input type="hidden" name="category" value="<?php echo $in['category'] ?? '';?>">
-            <input type="hidden" name="theme" value="<?php echo $in['theme'] ?? '';?>">
+            <input type="hidden" name="name" value="<?php echo $request['name'] ?? '';?>">
+            <input type="hidden" name="category" value="<?php echo $request['category'] ?? '';?>">
+            <input type="hidden" name="theme" value="<?php echo $request['theme'] ?? '';?>">
 
           </form>
           <ul id="paginate"><?php echo isset($paginate_tasks[1]) ? $paginate_tasks[1] : "" ;?></ul>

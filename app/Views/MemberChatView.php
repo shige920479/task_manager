@@ -39,9 +39,11 @@ include '../Views/MemberHeader.php';
         </section>
         <section id="chat-side">
           <label>メッセージボックス</label>
-          <ul id="chat-room">
-            <?php echo $chats ? setChatHtml($chats, MEMBER) : "" ?>
-          </ul>
+          <div id="chat-room">
+            <ul id="chat-inner">
+              <?php echo $chats ? setChatHtml($chats, MEMBER) : "" ?>
+            </ul>
+          </div>
           <form action="?mode=send_message" method="post" id="message-box">
             <label>メッセージ入力<?php echo isset($flash_array['comment']) ? "<span class='flash-msg'>{$flash_array['comment']}</span>" : ""; ?></label>
             <textarea name="comment" rows="3"><?php isset($old['comment']) ? $old['comment'] : ""; ?></textarea>

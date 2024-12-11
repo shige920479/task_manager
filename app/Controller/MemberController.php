@@ -11,7 +11,7 @@ use App\Database\Message;
 use App\Database\StoreMemberAccount;
 use App\Database\StoreTask;
 use App\Database\UpdateTask;
-use App\Services\GetForm;
+use App\Services\GetRequest;
 use Carbon\Carbon;
 
 use function App\Services\flash;
@@ -30,34 +30,20 @@ if(!isset($_SESSION['login'])) {
   exit;
 }
 
-$in = GetForm::getForm();
-var_dump($in);
+$request = GetRequest::getRequest();
 
-switch ($in['mode']) {
-  // case 'index':
-  //     $tasks = DbConnect::getMemberData($_SESSION['login_id']);
-  //     if($tasks) {
-  //       $current_page = isset($in['page']) ? $in['page'] : null;
-  //       $paginate_tasks = paginate($tasks, $current_page, $in);
-  //       $categories = DbConnect::getCategory($_SESSION['login_id']);
-  //     }
-  //     $token = setToken();
-  //     $flash_array = "";
-  //     $old = "";
-  //     if(isset($_SESSION['error'])) $flash_array = flash($_SESSION['error']);
-  //     if(isset($_SESSION['old'])) $old = old($_SESSION['old']);
+switch ($request['mode']) {
 
-  //     include('../Views/index.php');
-  //     break;
   case 'index':
-      if(isset($in['sort_order'])) {
-        $tasks = DbConnect::getMemberData($_SESSION['login_id'], $in['sort_order']);
+      if(isset($request['sort_order'])) {
+        $tasks = DbConnect::getMemberData($_SESSION['login_id'], $request['sort_order']);
       } else {
         $tasks = DbConnect::getMemberData($_SESSION['login_id'], null);
       }
+
       if($tasks) {
-        $current_page = isset($in['page']) ? $in['page'] : null;
-        $paginate_tasks = paginate($tasks, $current_page, $in);
+        $current_page = isset($request['page']) ? $request['page'] : null;
+        $paginate_tasks = paginate($tasks, $current_page, $request);
         $categories = DbConnect::getCategory($_SESSION['login_id']);
       }
       $token = setToken();
@@ -70,7 +56,7 @@ switch ($in['mode']) {
       break;
   
   case 'logout':
-    Logout::logout($in);
+    Logout::logout($request);
     break;
   
   /** ルーティングは完了
@@ -78,7 +64,7 @@ switch ($in['mode']) {
    * エラーで戻ってきた後の入力欄に違和感あり（元のデータが入っている）。
    */
   case 'edit':
-    $edit_data = DbConnect::getTaskById($in['id']);
+    $edit_data = DbConnect::getTaskById($request['id']);
 
     $categories = DbConnect::getCategory($edit_data['member_id']); 
 
@@ -91,16 +77,16 @@ switch ($in['mode']) {
     break;
 
   case 'store':
-    StoreTask::storeTask($in);
+    StoreTask::storeTask($request);
     break;
 
   case 'update':  //完了
-    UpdateTask::updateTask($in);
+    UpdateTask::updateTask($request);
     break;
 
   case 'chat':
-    $task = DbConnect::getTaskById($in['id']);
-    $chats = DbConnect::getChatData($in['id'], MEMBER);
+    $task = DbConnect::getTaskById($request['id']);
+    $chats = DbConnect::getChatData($request['id'], MEMBER);
     $token = setToken();
     $flash_array = "";
     $old = "";
@@ -111,12 +97,12 @@ switch ($in['mode']) {
     break;
 
   case 'send_message':
-    Message::sendMessage($in);
+    Message::sendMessage($request);
     break;
 
   case 'dashboard':
     Carbon::setLocale('ja'); 
-    $current_week = isset($in['week']) ? $in['week'] : Carbon::now()->format('Y-m-d');
+    $current_week = isset($request['week']) ? $request['week'] : Carbon::now()->format('Y-m-d');
 
     $start_date = Carbon::parse($current_week)->startOfWeek(Carbon::MONDAY);
     $end_date = $start_date->copy()->endOfWeek(Carbon::FRIDAY);
@@ -124,7 +110,7 @@ switch ($in['mode']) {
     $prev_week = $start_date->copy()->subWeek()->format('Y-m-d');
     $next_week = $start_date->copy()->addWeek()->format('Y-m-d');
 
-    $tasks = DbConnect::getMemberData($in['member_id'], null);
+    $tasks = DbConnect::getMemberData($request['member_id'], null);
     $categories = array_unique(array_column($tasks, 'category'));
     $token = setToken();
 
@@ -132,7 +118,7 @@ switch ($in['mode']) {
     break;
 
   case 'soft_del':
-    DeleteTask::softDelete($in['id']);
+    DeleteTask::softDelete($request['id']);
     break;
 
 }

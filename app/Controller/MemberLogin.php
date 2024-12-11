@@ -3,16 +3,17 @@ require_once '../../vendor/autoload.php';
 require_once '../Services/helper.php';
 require_once '../config/config.php';
 
-use App\Services\GetForm;
 use App\Database\Login;
+use App\Services\GetRequest;
+
 use function App\Services\flash;
 use function App\Services\old;
 
 session_start();
-$in = GetForm::getForm();
+$request = GetRequest::getRequest();
 
-if(!empty($in) && $in['mode'] === 'login') {
-  Login::Login($in, MEMBER);
+if(!empty($request) && $request['mode'] === 'login') {
+  Login::Login($request, MEMBER);
 } else {
   $flash_array = "";
   $old = "";

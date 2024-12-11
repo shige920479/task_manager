@@ -68,9 +68,9 @@ include '../Views/MemberHeader.php';
           <form action="" method="get" id="sort">
             <select name="sort_order" id="sort_order">
               <option value="">新規登録順</option>
-              <option value="sort_deadline" <?php echo isset($in['sort_order']) && $in['sort_order'] === 'sort_deadline' ? 'selected': "";?>>目標完了日順</option>
-              <option value="sort_category" <?php echo isset($in['sort_order']) && $in['sort_order'] === 'sort_category' ? 'selected': "";?>>カテゴリー別</option>
-              <option value="sort_priority" <?php echo isset($in['sort_order']) && $in['sort_order'] === 'sort_priority' ? 'selected': "";?>>優先度順</option>
+              <option value="sort_deadline" <?php echo isset($request['sort_order']) && $request['sort_order'] === 'sort_deadline' ? 'selected': "";?>>目標完了日順</option>
+              <option value="sort_category" <?php echo isset($request['sort_order']) && $request['sort_order'] === 'sort_category' ? 'selected': "";?>>カテゴリー別</option>
+              <option value="sort_priority" <?php echo isset($request['sort_order']) && $request['sort_order'] === 'sort_priority' ? 'selected': "";?>>優先度順</option>
             </select>
             <input type="hidden" name="mode" value="index">
           </form>

@@ -13,21 +13,21 @@ class Login extends DbConnect
   
   /**
    * メンバー・マネージャー共通のログイン認証
-   * @param array $in 入力データ（メールアドレス・パスワード）
+   * @param array $request 入力データ（メールアドレス・パスワード）
    * @param string $table member|manager テーブル 
    */
-  public static function login(array $in, string $table): bool
+  public static function login(array $request, string $table): bool
   {
-    if(self::blankCheck($in)) {
+    if(self::blankCheck($request)) {
 
-      self::$user_data = self::getUserByEmail($in['email'], $table);
+      self::$user_data = self::getUserByEmail($request['email'], $table);
 
       if(!self::$user_data) {
         flashMsg('email', 'メールアドレスが登録されておりません、再度入力願います');
         if($table === MEMBER) {header('Location: ./MemberLogin.php');}
         if($table === MANAGER) {header('Location: ./ManagerLogin.php');}
         exit;
-      } elseif(!password_verify($in['password'], self::$user_data['password'])) {
+      } elseif(!password_verify($request['password'], self::$user_data['password'])) {
         flashMsg('password', 'パスワードが異なっております、再度入力願います');
         if($table === MEMBER) {header('Location: ./MemberLogin.php');}
         if($table === MANAGER) {header('Location: ./ManagerLogin.php');}
@@ -43,7 +43,7 @@ class Login extends DbConnect
           return true;
         } 
         if($table === MANAGER) {
-          $_SESSION['m_login'] = $in['email'];
+          $_SESSION['m_login'] = $request['email'];
           $_SESSION['m_login_name']= self::$user_data['name'];
           header('Location: ./ManagerController.php?mode=index');
           return true;
@@ -57,15 +57,15 @@ class Login extends DbConnect
     }
   }
 
-  private static function blankCheck(array $in):bool
+  private static function blankCheck(array $request):bool
   {
     $result = false;
-    if($in['email'] === '') {
+    if($request['email'] === '') {
       flashMsg('email', 'メールアドレスを入力してください');
     } else {
-      old_store('email', $in['email']);
+      old_store('email', $request['email']);
     }
-    if($in['password'] === '') {
+    if($request['password'] === '') {
       flashMsg('password', 'パスワードを入力してください');
     }
     $result = !isset($_SESSION['error']) ?? true;

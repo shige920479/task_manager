@@ -13,6 +13,7 @@ class DeleteTask extends DbConnect
 {
   /**
    * メンバー側のタスク完了処理（ソフトデリート）
+   * 
    * @param $id タスクid
    * @return void
    */

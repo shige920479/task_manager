@@ -5,13 +5,12 @@ require_once '../Services/helper.php';
 use App\Database\DbConnect;
 use App\Database\Logout;
 use App\Database\Message;
-use App\Services\GetForm;
+use App\Services\GetRequest;
 use Carbon\Carbon;
 use function App\Services\flash;
 use function App\Services\old;
 use function App\Services\paginate;
 use function App\Services\setToken;
-use function PHPSTORM_META\type;
 
 session_start();
 
@@ -20,25 +19,25 @@ if(!isset($_SESSION['m_login'])) {
   exit;
 }
 
-$in = GetForm::getForm();
+$request = GetRequest::getRequest();
 
 // echo '<pre>';
-// var_dump($in);
+// var_dump($request);
 // echo '</pre>';
 
 
-switch ($in['mode']) {
+switch ($request['mode']) {
 
   case 'index':
-    if(isset($in['sort_order'])) {
-      $tasks = DbConnect::getTaskData($in, $in['sort_order']);
+    if(isset($request['sort_order'])) {
+      $tasks = DbConnect::getTaskData($request, $request['sort_order']);
     } else {
-      $tasks = DbConnect::getTaskData($in, null);
+      $tasks = DbConnect::getTaskData($request, null);
     }
 
     if($tasks) {
-      $current_page = isset($in['page']) ? $in['page'] : null;
-      $paginate_tasks = paginate($tasks, $current_page ,$in); 
+      $current_page = isset($request['page']) ? $request['page'] : null;
+      $paginate_tasks = paginate($tasks, $current_page ,$request); 
       /**
        * 検索後のgetパラメータを渡す必要あり
        *  name/ category/ theme
@@ -58,11 +57,11 @@ switch ($in['mode']) {
   
   case 'chat':
     // echo "<pre>";
-    // echo var_dump($in);
+    // echo var_dump($request);
     // echo "</pre>";
 
-    $task = DbConnect::getTaskById($in['id']);
-    $chats = DbConnect::getChatData($in['id'], MANAGER);
+    $task = DbConnect::getTaskById($request['id']);
+    $chats = DbConnect::getChatData($request['id'], MANAGER);
     $token = setToken();
     $flash_array = "";
     $old = "";
@@ -73,29 +72,40 @@ switch ($in['mode']) {
     break;
 
   case 'send_message':
-    Message::sendMessage($in);
+    Message::sendMessage($request);
     
     include('../Views/ManagerChatView.php');
     break;
   
   case 'dashboard':
-    $tasks = DbConnect::getTaskData($in, null);
+    // echo '<pre>';
+    // var_dump($request);
+    // echo '</pre>';
+    // exit;
+    
+    $tasks = DbConnect::getTaskData(null, null);
+
+    // echo '<pre>';
+    // var_dump($tasks);
+    // echo '</pre>';
+    // exit;
+
 
     Carbon::setLocale('ja'); 
-    $current_week = isset($in['week']) ? $in['week'] : Carbon::now()->format('Y-m-d');
+    $current_week = isset($request['week']) ? $request['week'] : Carbon::now()->format('Y-m-d');
     $start_date = Carbon::parse($current_week)->startOfWeek(Carbon::MONDAY);
     $end_date = $start_date->copy()->endOfWeek(Carbon::FRIDAY);
     $prev_week = $start_date->copy()->subWeek()->format('Y-m-d');
     $next_week = $start_date->copy()->addWeek()->format('Y-m-d');
 
     $categories = array_unique(array_column($tasks, 'category'));
-
+    $token = setToken();
     include('../Views/ManagerDashbordView.php');
     break;
 
   case 'logout':
     
-    Logout::logout($in);
+    Logout::logout($request);
     break;
   // default:
   //   code...
