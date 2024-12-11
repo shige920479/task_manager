@@ -21,11 +21,6 @@ if(!isset($_SESSION['m_login'])) {
 
 $request = GetRequest::getRequest();
 
-// echo '<pre>';
-// var_dump($request);
-// echo '</pre>';
-
-
 switch ($request['mode']) {
 
   case 'index':
@@ -38,27 +33,19 @@ switch ($request['mode']) {
     if($tasks) {
       $current_page = isset($request['page']) ? $request['page'] : null;
       $paginate_tasks = paginate($tasks, $current_page ,$request); 
-      /**
-       * 検索後のgetパラメータを渡す必要あり
-       *  name/ category/ theme
-      */
-      $token = setToken();
-
-      //検索フォーム用のデータ取得
-      $all_data =DbConnect::getTaskData(null, null);
-      $name_list = array_unique(array_column($all_data, 'name')); //常にmember全員を表示
-      sort($name_list);
-      $category_list = array_unique(array_column($tasks, 'category'));//選択したメンバーでリスト内容を変える
-      sort($category_list);
     }
+
+    $token = setToken();
+    
+    $members =DbConnect::getMemberName();//検索フォーム用のデータ取得
+    sort($members);
+    $category_list = array_unique(array_column($tasks, 'category'));//選択したメンバーでリスト内容を変える
+    sort($category_list);
 
     include('../Views/ManagerIndex.php');
     break;
   
   case 'chat':
-    // echo "<pre>";
-    // echo var_dump($request);
-    // echo "</pre>";
 
     $task = DbConnect::getTaskById($request['id']);
     $chats = DbConnect::getChatData($request['id'], MANAGER);
@@ -78,18 +65,8 @@ switch ($request['mode']) {
     break;
   
   case 'dashboard':
-    // echo '<pre>';
-    // var_dump($request);
-    // echo '</pre>';
-    // exit;
     
     $tasks = DbConnect::getTaskData(null, null);
-
-    // echo '<pre>';
-    // var_dump($tasks);
-    // echo '</pre>';
-    // exit;
-
 
     Carbon::setLocale('ja'); 
     $current_week = isset($request['week']) ? $request['week'] : Carbon::now()->format('Y-m-d');
@@ -107,6 +84,7 @@ switch ($request['mode']) {
     
     Logout::logout($request);
     break;
+
   // default:
   //   code...
   //   break;

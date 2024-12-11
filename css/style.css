@@ -473,7 +473,9 @@ header {
 }
 
 /*削除メッセージ */
-#task-list .del_msg {
+#task-list .del_msg,
+#task-list .initial-msg,
+#m-task-list .initial-msg {
   color: #fff;
   margin-left: 40px;
   font-size: 0.8rem;
@@ -483,7 +485,8 @@ header {
   font-weight: bold;
   position: relative;
 }
-#task-list .del_msg::before {
+#task-list .del_msg::before,
+#task-list .initial-msg::before {
   content: "";
   display: inline-block;
   width: 20px;

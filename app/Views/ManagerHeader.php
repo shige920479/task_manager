@@ -22,7 +22,7 @@
           <div id="menu-icon">
             <img src="../../images/menu.png" alt="">
             <div class="menu-content">
-              <P><?php echo h($_SESSION['m_login_name'])?>さん</P>
+              <P><?php echo $_SESSION['m_login_name']?>さん</P>
               <form action="?mode=logout" method="post">
                 <button id="logout-btn" type="submit">ログアウト</button>
                 <input type="hidden" name="login_user" value="<?php echo MANAGER ?>">

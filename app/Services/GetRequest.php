@@ -1,6 +1,5 @@
 <?php
 namespace App\Services;
-require_once '../Services/helper.php';
 
 /**
  * 入力データの各種処理用クラス
@@ -17,7 +16,7 @@ class GetRequest
   {
     if($_SERVER['REQUEST_METHOD'] === 'POST') {
       if(!isset($_POST['token']) || $_POST['token'] !== $_SESSION['token']) {
-        flashMsg('tokenerror', "不正なリクエストです、再度ログインをお試しください"); //フラッシュメッセージ用、完成後に削除。
+        flashMsg('tokenerror', "不正なリクエストです、再度ログインをお試しください"); 
         header('Location: ../Views/400error.php');
         exit;
       } else {

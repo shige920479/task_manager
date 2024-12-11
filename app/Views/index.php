@@ -6,7 +6,6 @@ include '../Views/MemberHeader.php';
 ?>
 
     <div class="task-wrapper">
-      <!-- 要）CSS修正 -->
       <section id="new-task">
         <h2>新規タスク登録</h2>
         <form action="?mode=store" method="post">
@@ -24,7 +23,7 @@ include '../Views/MemberHeader.php';
             <li>
               <label for="catgory">カテゴリー</label>
               <input type="text" name="category" list="categories" placeholder="テキスト入力または選択" autocomplete="off"
-              value="<?php echo isset($old['category']) ? $old['category'] : ""; ?>"/>
+              value="<?php echo isset($old['category']) ? h($old['category']) : ""; ?>"/>
               <datalist id="categories">
                 <?php foreach($categories as $category): ?>
                   <option value="<?php echo $category['category']; ?>">
@@ -34,17 +33,17 @@ include '../Views/MemberHeader.php';
             </li>
             <li>
               <label for="theme">テーマ</label>
-              <input type="text" name="theme" id="theme" value="<?php echo isset($old['theme']) ? $old['theme'] : "" ?>"/>
+              <input type="text" name="theme" id="theme" value="<?php echo isset($old['theme']) ? h($old['theme']) : "" ?>"/>
               <?php echo isset($flash_array['theme']) ? "<span class='flash-msg'>{$flash_array['theme']}</span>" : '' ?>
             </li>
             <li>
               <label for="content">タスク概略</label>
-              <input type="text" name="content" id="content" value="<?php echo isset($old['content']) ? $old['content'] : "" ?>" />
+              <input type="text" name="content" id="content" value="<?php echo isset($old['content']) ? h($old['content']) : "" ?>" />
               <?php echo isset($flash_array['content']) ? "<span class='flash-msg'>{$flash_array['content']}</span>" : '' ?>
             </li>
             <li>
               <label for="deadline">目標完了日</label>
-              <input type="date" name="deadline" id="deadline" value="<?php echo isset($old['deadline']) ? $old['deadline'] : "" ?>"/>
+              <input type="date" name="deadline" id="deadline" value="<?php echo isset($old['deadline']) ? h($old['deadline']) : "" ?>"/>
               <?php echo isset($flash_array['deadline']) ? "<span class='flash-msg'>{$flash_array['deadline']}</span>" : '' ?>
             </li>
             <li>
@@ -63,6 +62,7 @@ include '../Views/MemberHeader.php';
             <?php echo "<span class='del_msg'>{$_SESSION['del_msg']}</span>"; ?>
             <?php unset($_SESSION['del_msg'])?>
             <?php endif ;?>
+            <?php echo empty($tasks) ? "<span class='initial-msg'>未完了のタスクはありません</span>": '';?>
         </div>
         <div id="sort-pagination">
           <form action="" method="get" id="sort">
@@ -112,6 +112,5 @@ include '../Views/MemberHeader.php';
         </table>
       </section>
     </div>
-
   </body>
 </html>

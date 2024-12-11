@@ -1,14 +1,8 @@
 <?php
 namespace App\Database;
-// require_once '../config/config.php';
 
-//フラッシュメッセージ用、完成後にメッセージも合わせて削除。
-// require_once '../Services/helper.php'; 
 use function App\Services\flashMsg;
-/////////////////////////////////////////////////////
-
 use PDO;
-use PDOException;
 
 class DbConnect
 {
@@ -50,8 +44,8 @@ class DbConnect
       list($pdo, $stmt) = [null, null];
       return $member_data;
 
-    } catch(PDOException $e) {
-      flashMsg('db', "データ取得に失敗しました : {$e->getMessage()}"); //フラッシュメッセージ用、完成後に削除。
+    } catch(\PDOException $e) {
+      flashMsg('db', "データ取得に失敗しました : {$e->getMessage()}");
       header('Location: ../Views/500error.php');
       exit;
     }
@@ -81,8 +75,8 @@ class DbConnect
       list($pdo, $stmt) = [null, null];
       return $task;
 
-    } catch(PDOException $e) {
-      flashMsg('db', "データ取得に失敗しました : {$e->getMessage()}"); //フラッシュメッセージ用、完成後に削除。
+    } catch(\PDOException $e) {
+      flashMsg('db', "データ取得に失敗しました : {$e->getMessage()}");
       header('Location: ../Views/500error.php');
       exit;
     } 
@@ -113,8 +107,8 @@ class DbConnect
       list($pdo, $stmt) = [null, null];
       return $chats;
 
-    } catch(PDOException $e) {
-      flashMsg('db', "データ取得に失敗しました : {$e->getMessage()}"); //フラッシュメッセージ用、完成後に削除。
+    } catch(\PDOException $e) {
+      flashMsg('db', "データ取得に失敗しました : {$e->getMessage()}");
       $pdo->rollBack(); // ロールバック
       header('Location: ../Views/500error.php');
       exit;
@@ -166,8 +160,8 @@ class DbConnect
       list($pdo, $stmt) = [null, null];
       return $user_data;
 
-    } catch(PDOException $e) {
-      flashMsg('db', "データ取得に失敗しました : {$e->getMessage()}"); //フラッシュメッセージ用、完成後に削除。
+    } catch(\PDOException $e) {
+      flashMsg('db', "データ取得に失敗しました : {$e->getMessage()}");
       header('Location: ../Views/500error.php');
       exit;
     } 
@@ -190,8 +184,8 @@ class DbConnect
       list($pdo, $stmt) = [null, null];
       return $categories;
 
-    } catch(PDOException $e) {
-      flashMsg('db', "データ取得に失敗しました : {$e->getMessage()}"); //フラッシュメッセージ用、完成後に削除。
+    } catch(\PDOException $e) {
+      flashMsg('db', "データ取得に失敗しました : {$e->getMessage()}");
       header('Location: ../Views/500error.php');
       exit;
     }
@@ -222,32 +216,45 @@ class DbConnect
       if(isset($sort_order) && $sort_order === 'sort_category') $sql .= ' ORDER BY t.category'; 
       if(isset($sort_order) && $sort_order === 'sort_priority') $sql .= ' ORDER BY t.priority desc'; 
 
-      // echo $sql;
-      // exit;
-
       $stmt = $pdo->prepare($sql);
 
-      if(!empty($request['name'])) {
-        $stmt->bindValue(':name', $request['name'], PDO::PARAM_STR);
-      }
-      if(!empty($request['category'])) {
-        $stmt->bindValue(':category', $request['category'], PDO::PARAM_STR);
-      }
+      if(!empty($request['name'])) $stmt->bindValue(':name', $request['name'], PDO::PARAM_STR);
+      if(!empty($request['category'])) $stmt->bindValue(':category', $request['category'], PDO::PARAM_STR);
       if(!empty($request['theme'])) {
         $theme = '%'. $request['theme'] . '%';
         $stmt->bindValue(':theme', $theme, PDO::PARAM_STR);
       }
-      // var_dump($stmt);
-      // exit;
+
       $stmt->execute();
       $all_data = $stmt->fetchAll();
       list($pdo, $stmt) = [null, null];
       return $all_data;
 
-    } catch(PDOException $e) {
+    } catch(\PDOException $e) {
       flashMsg('db', "データ取得に失敗しました : {$e->getMessage()}"); //フラッシュメッセージ用、完成後に削除。
       header('Location: ../Views/500error.php');
       exit;
+    }
+  }
+  /**
+   * 登録されている全メンバー名を取得
+   * 
+   * @param void
+   * @return array $members memberテーブルに登録済のメンバー名
+   */
+  public static function getMemberName(): array
+  {
+    try {
+      $pdo = self::db_connect();
+      $sql = 'SELECT name FROM member';
+      $stmt = $pdo->query($sql);
+      $members = $stmt->fetchAll();
+      list($pdo, $stmt) = [null, null];
+      return $members;
+
+    } catch(\PDOException $e) {
+      flashMsg('db', "データ取得に失敗しました : {$e->getMessage()}");
+      header('Location: ../Views/500error.php');
     }
   }
 }

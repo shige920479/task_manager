@@ -14,11 +14,11 @@ include '../Views/ManagerHeader.php';
               <label for="name">メンバー名</label>
               <select name="name" id="name">
                 <option value="">選択なし</option>
-                <?php foreach($name_list as $name) :?>
-                  <?php if($name === $request['name']): ?>
-                    <option value="<?php echo $name ?>" selected><?php echo $name ?></option>
+                <?php foreach($members as $member) :?>
+                  <?php if($member['name'] === $request['name']): ?>
+                    <option value="<?php echo $member['name'] ?>" selected><?php echo $member['name'] ?></option>
                   <?php else:?>
-                    <option value="<?php echo $name ?>"><?php echo $name ?></option>
+                    <option value="<?php echo $member['name'] ?>"><?php echo $member['name'] ?></option>
                   <?php endif; ?>
                 <?php endforeach ;?>
               </select>
@@ -47,6 +47,7 @@ include '../Views/ManagerHeader.php';
       </section>
       <section id="m-task-list">
         <h2>タスク一覧</h2>
+        <?php echo empty($tasks) ? "<span class='initial-msg'>未完了のタスクはありません</span>": '';?>
         <div id="sort-pagination">
           <form action="" method="get" id="sort">
             <select name="sort_order" id="sort_order">

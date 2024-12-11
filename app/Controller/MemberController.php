@@ -34,7 +34,7 @@ $request = GetRequest::getRequest();
 
 switch ($request['mode']) {
 
-  case 'index':
+  case 'index': // 最後にこの条件分岐を変えられるか検討
       if(isset($request['sort_order'])) {
         $tasks = DbConnect::getMemberData($_SESSION['login_id'], $request['sort_order']);
       } else {
@@ -58,11 +58,7 @@ switch ($request['mode']) {
   case 'logout':
     Logout::logout($request);
     break;
-  
-  /** ルーティングは完了
-   * エラーメッセージの配置がおかしい
-   * エラーで戻ってきた後の入力欄に違和感あり（元のデータが入っている）。
-   */
+
   case 'edit':
     $edit_data = DbConnect::getTaskById($request['id']);
 
@@ -80,7 +76,7 @@ switch ($request['mode']) {
     StoreTask::storeTask($request);
     break;
 
-  case 'update':  //完了
+  case 'update':
     UpdateTask::updateTask($request);
     break;
 

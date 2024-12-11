@@ -145,7 +145,7 @@ function h(string $str): string
  * セッショントークンの生成
  * 
  * @param void
- * @return stirng $csrf_token トークン 
+ * @return string $csrf_token トークン 
  */
 function setToken(): string
  {
