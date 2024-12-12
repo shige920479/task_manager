@@ -1,22 +1,19 @@
 <?php
 namespace App\Setup;
 
-// require_once '../../vendor/autoload.php';
-use App\Database\DbConnect;
-
-class CreateTable extends DbConnect
+class CreateTable extends Database
 {
   public static function memberTable(): void
    {
     try {
-      $pdo = self::db_connect();
+      $pdo = self::dbCon();
       $sql = "DROP TABLE IF EXISTS member";
       $pdo->query($sql);
 
       $sql = "CREATE table member (
               id INT PRIMARY KEY AUTO_INCREMENT,
               name VARCHAR(50) NOT NULL,
-              email VARCHAR(50) NOT NULL UNIQUE,/* UNIQUE の記述方法があっているか？？ */
+              email VARCHAR(50) NOT NULL UNIQUE,
               password VARCHAR(255) NOT NULL,
               created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
               updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -35,7 +32,7 @@ class CreateTable extends DbConnect
   public static function managerTable(): void
   {
    try {
-     $pdo = self::db_connect();
+     $pdo = self::dbCon();
      $sql = "DROP TABLE IF EXISTS manager";
      $pdo->query($sql);
 
@@ -62,7 +59,7 @@ class CreateTable extends DbConnect
   public static function taskTable(): void
    {
      try {
-      $pdo = self::db_connect();
+      $pdo = self::dbCon();
       $sql = "DROP TABLE IF EXISTS task";
       $pdo->query($sql);
 
@@ -96,7 +93,7 @@ class CreateTable extends DbConnect
   public static function messageTable(): void
   {
     try {
-     $pdo = self::db_connect();
+     $pdo = self::dbCon();
      $sql = "DROP TABLE IF EXISTS message";
      $pdo->query($sql);
 

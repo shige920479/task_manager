@@ -1,7 +1,5 @@
 <?php
 namespace App\Database;
-require_once '../Services/GetRequest.php';
-require_once '../config/config.php';
 
 class Logout
 {

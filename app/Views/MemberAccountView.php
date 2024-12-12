@@ -24,14 +24,14 @@ use function App\Services\setToken;
                 <label for="name">ユーザーネーム</label>
                 <?php echo isset($flash_array['name']) ? "<span class='flash-msg'>{$flash_array['name']}</span>" : '' ?>
               </div>
-              <input type="text" name="name" id="name" value="<?php echo (isset($old['name'])) ? $old['name']: "";?>"/>
+              <input type="text" name="name" id="name" value="<?php echo (isset($old['name'])) ? h($old['name']): "";?>"/>
           </div>
           <div class="input account">
             <div>
               <label for="email">メールアドレス</label>
               <?php echo isset($flash_array['email']) ? "<span class='flash-msg'>{$flash_array['email']}</span>" : '' ?>
             </div>
-            <input type="email" name="email" id="email" value="<?php echo (isset($old['email'])) ? $old['email']: "";?>"/>
+            <input type="email" name="email" id="email" value="<?php echo (isset($old['email'])) ? h($old['email']): "";?>"/>
           </div>
           <div class="input account">
             <div>

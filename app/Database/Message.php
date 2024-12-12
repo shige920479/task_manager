@@ -18,7 +18,6 @@ class Message extends DbConnect
   public static function sendMessage(array $request): void
    {
     // getformの改行対応が必要
-
     if(self::validation($request)) {
       try {
         $pdo = self::db_connect();

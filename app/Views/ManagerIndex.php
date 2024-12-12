@@ -13,12 +13,12 @@ include '../Views/ManagerHeader.php';
             <li>
               <label for="name">メンバー名</label>
               <select name="name" id="name">
-                <option value="">選択なし</option>
+                <option value="">全て選択</option>
                 <?php foreach($members as $member) :?>
                   <?php if($member['name'] === $request['name']): ?>
-                    <option value="<?php echo $member['name'] ?>" selected><?php echo $member['name'] ?></option>
+                    <option value="<?php echo $member['name'] ?>" selected><?php echo h($member['name']) ?></option>
                   <?php else:?>
-                    <option value="<?php echo $member['name'] ?>"><?php echo $member['name'] ?></option>
+                    <option value="<?php echo $member['name'] ?>"><?php echo h($member['name']) ?></option>
                   <?php endif; ?>
                 <?php endforeach ;?>
               </select>
@@ -26,19 +26,19 @@ include '../Views/ManagerHeader.php';
             <li>
               <label for="category">カテゴリー</label>
               <select name="category" id="category">
-                <option value="">選択なし</option>
+                <option value="">全て選択</option>
                 <?php foreach($category_list as $category):?>
                   <?php if($category === $request['category']): ?>
-                    <option value="<?php echo $category ?>" selected><?php echo $category ?></option>
+                    <option value="<?php echo $category ?>" selected><?php echo h($category) ?></option>
                   <?php else:?>
-                    <option value="<?php echo $category ?>"><?php echo $category ?></option>
+                    <option value="<?php echo $category ?>"><?php echo h($category) ?></option>
                   <?php endif; ?>
                 <?php endforeach ;?>
               </select>
             </li>
             <li>
               <label for="theme">テーマ</label>
-              <input type="text" name="theme">
+              <input type="text" name="theme" value="<?php echo isset($request['theme']) ? h($request['theme']): "";?>">
             </li>
             <li><button type="submit" class="search-btn btn">検索</button></li>
           </ul>
@@ -76,12 +76,12 @@ include '../Views/ManagerHeader.php';
             <?php if(isset($paginate_tasks[0])) :?>
             <?php foreach($paginate_tasks[0] as $task) :?>
             <tr>
-              <td><?php echo h($task['name']);?></td>
+              <td><?php echo $task['name'];?></td>
               <td class="priority"><?php echo h(str_repeat('☆',$task['priority'])) ?></td>
-              <td><?php echo h($task['category']) ?></td>
+              <td><?php echo $task['category'] ?></td>
               <td class="edit-link"><?php echo "<a href='?mode=chat&id={$task['id']}'>{$task['theme']}</a>" ?></td>
-              <td><?php echo h($task['content']) ?></td>
-              <td><?php echo h($task['deadline']) ?></td>
+              <td><?php echo $task['content'] ?></td>
+              <td><?php echo $task['deadline'] ?></td>
               <td class="diff-date" data-days="<?= diffDate($task['deadline']) ?>"><?= diffDate($task['deadline'])."日" ?></td>
               <td class="msg-icon">
                 <?php echo MgSetSendIcon($task['msg_flag'],$task['mg_to_mem'] , $task['id']) ?>

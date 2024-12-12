@@ -1,7 +1,6 @@
 <?php
 namespace App\Database;
 
-require_once '../Services/helper.php';
 use function App\Services\flashMsg;
 use function App\Services\old_store;
 
@@ -41,7 +40,7 @@ class StoreMemberAccount extends DbConnect
           header('Location: ./MemberAccount.php');
           exit;
         } else {
-          flashMsg('db', "登録に失敗しました : {$e->getMessage()}"); //フラッシュメッセージ用、完成後に削除。
+          flashMsg('db', "登録に失敗しました : {$e->getMessage()}");
           header('Location: ../Views/500error.php');
           exit;
         }

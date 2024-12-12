@@ -23,13 +23,13 @@ use function App\Services\setToken;
             <div class="input">
               <label for="email">メールアドレス</label>
               <input type="email" name="email" id="email" value="<?php echo isset($old['email']) ? h($old['email']) : ''; ?>" />
-              <?php if(isset($flash_array['email'])) echo h("<span class='flash-msg'>{$flash_array['email']}</span>") ?>
+              <?php if(isset($flash_array['email'])) echo "<span class='flash-msg'>{$flash_array['email']}</span>"; ?>
             </div>
             <div class="input">
               <label for="password">パスワード</label>
               
               <input type="password" name="password" id="password"/>
-              <?php if(isset($flash_array['password'])) echo h("<span class='flash-msg'>{$flash_array['password']}</span>"); ?>
+              <?php if(isset($flash_array['password'])) echo "<span class='flash-msg'>{$flash_array['password']}</span>"; ?>
             </div>
             <input type="hidden" name="mode" value="login">
             <input type="hidden" name="token" value="<?php echo h(setToken()); ?>">

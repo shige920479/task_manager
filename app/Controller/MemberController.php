@@ -5,21 +5,15 @@ require_once '../Services/helper.php';
 
 use App\Database\DbConnect;
 use App\Database\DeleteTask;
-use App\Database\Login;
 use App\Database\Logout;
 use App\Database\Message;
-use App\Database\StoreMemberAccount;
 use App\Database\StoreTask;
 use App\Database\UpdateTask;
 use App\Services\GetRequest;
 use Carbon\Carbon;
-
 use function App\Services\flash;
-use function App\Services\h;
 use function App\Services\old;
 use function App\Services\paginate;
-use function App\Services\setRecieveIcon;
-use function App\Services\setSendIcon;
 use function App\Services\setToken;
 
 
@@ -61,7 +55,6 @@ switch ($request['mode']) {
 
   case 'edit':
     $edit_data = DbConnect::getTaskById($request['id']);
-
     $categories = DbConnect::getCategory($edit_data['member_id']); 
 
     $token = setToken();
@@ -99,10 +92,8 @@ switch ($request['mode']) {
   case 'dashboard':
     Carbon::setLocale('ja'); 
     $current_week = isset($request['week']) ? $request['week'] : Carbon::now()->format('Y-m-d');
-
     $start_date = Carbon::parse($current_week)->startOfWeek(Carbon::MONDAY);
     $end_date = $start_date->copy()->endOfWeek(Carbon::FRIDAY);
-
     $prev_week = $start_date->copy()->subWeek()->format('Y-m-d');
     $next_week = $start_date->copy()->addWeek()->format('Y-m-d');
 

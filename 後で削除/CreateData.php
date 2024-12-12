@@ -1,10 +1,20 @@
 <?php
 namespace App\Setup;
 
-use App\Database\DbConnect;
+require_once '../config/config.php';
+
+use PDO;
 use PDOException;
 
-class CreateData{
+class {
+
+  protected static function Db() 
+  {
+    $pdo = new PDO(DSN, USERNAME, PASSWORD);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+    return $pdo;
+  }
 
   // managerダミーデータ挿入
   public static function insertManager(string $pass): void
@@ -13,13 +23,13 @@ class CreateData{
       $sql = "INSERT INTO manager
               (name, email, password)
               VALUES
-              ('admin', 'admin@mail.com', :password)
+              ('manager', 'manager1@mail.com', :password)
               ";
-      $pdo = DbConnect::db_connect();
+      $pdo = self::Db();
       $stmt = $pdo->prepare($sql);
       $stmt->bindValue(':password', $pass, \PDO::PARAM_STR);
       $stmt->execute();
-      $pdo = null;
+      list($pdo, $stmt) = [null, null];
       echo "managerデータの挿入に成功しました<br>";
 
     } catch(\PDOException $e) {
@@ -32,7 +42,7 @@ class CreateData{
   public static function insertMember(array $members): void
   {
     try {
-      $pdo = DbConnect::db_connect();
+      $pdo =self::Db();
       // データベースのレコードをいったん空にしておく
       $sql = "ALTER TABLE member auto_increment = 1";
       $pdo->query($sql);

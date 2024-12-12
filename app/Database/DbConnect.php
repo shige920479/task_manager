@@ -32,7 +32,7 @@ class DbConnect
       $pdo = self::db_connect();
       $sql = "SELECT * FROM task WHERE member_id = :member_id and del_flag = 0";
 
-      if(!isset($sort_order) || $sort_order === "") $sql .= ' ORDER BY created_at desc';
+      if(!isset($sort_order) || $sort_order === "") $sql .= ' ORDER BY updated_at desc';
       if(isset($sort_order) && $sort_order === 'sort_deadline') $sql .= ' ORDER BY deadline';
       if(isset($sort_order) && $sort_order === 'sort_category') $sql .= ' ORDER BY category'; 
       if(isset($sort_order) && $sort_order === 'sort_priority') $sql .= ' ORDER BY priority desc'; 
@@ -231,7 +231,7 @@ class DbConnect
       return $all_data;
 
     } catch(\PDOException $e) {
-      flashMsg('db', "データ取得に失敗しました : {$e->getMessage()}"); //フラッシュメッセージ用、完成後に削除。
+      flashMsg('db', "データ取得に失敗しました : {$e->getMessage()}");
       header('Location: ../Views/500error.php');
       exit;
     }

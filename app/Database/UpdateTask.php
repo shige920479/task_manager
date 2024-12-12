@@ -1,7 +1,6 @@
 <?php
 namespace App\Database;
 
-require_once '../Services/helper.php'; 
 use function App\Services\flashMsg;
 
 /**
@@ -38,11 +37,13 @@ class UpdateTask extends StoreTask
         $stmt->bindValue('id', $request['id'], \PDO::PARAM_INT);
         $stmt->execute();
         list($pdo, $stmt) = [null, null];
+        
+        if(isset($_SESSION['old'])) unset($_SESSION['old']);
         header('Location: ?mode=index');
         exit;
   
       } catch(\PDOException $e) {
-        flashMsg('db', "登録に失敗しました : {$e->getMessage()}"); //フラッシュメッセージ用、完成後に削除。
+        flashMsg('db', "登録に失敗しました : {$e->getMessage()}");
         header('Location: ../Views/500error.php');
         exit;
       }

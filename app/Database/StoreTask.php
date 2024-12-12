@@ -3,13 +3,8 @@ namespace App\Database;
 
 use DateTime;
 use PDOException;
-
-//フラッシュメッセージ用、完成後にメッセージも合わせて削除。
-require_once '../Services/helper.php'; 
 use function App\Services\flashMsg;
 use function App\Services\old_store;
-
-/////////////////////////////////////////////////////
 
 /**
  * 新規タスク登録用クラス
@@ -41,11 +36,13 @@ class StoreTask extends DbConnect
         $stmt->bindValue(':deadline', $request['deadline'], \PDO::PARAM_STR);
         $stmt->execute();
         list($pdo, $stmt) = [null, null];
+
+        if(isset($_SESSION['old'])) unset($_SESSION['old']);
         header('Location: ?mode=index');
         exit;
         
       } catch(PDOException $e) {
-        flashMsg('db', "登録に失敗しました : {$e->getMessage()}"); //フラッシュメッセージ用、完成後に削除。
+        flashMsg('db', "登録に失敗しました : {$e->getMessage()}");
         header('Location: ../Views/500error.php');
         exit;
       }
