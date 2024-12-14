@@ -3,8 +3,8 @@ use function App\Services\diffDate;
 use function App\Services\h;
 use function App\Services\MgSetReceiveIcon;
 use function App\Services\MgSetSendIcon;
-include '../Views/ManagerHeader.php';
 ?>
+<?php include '../Views/ManagerHeader.php';?>
     <div class="task-wrapper">
       <section id="search-section">
         <h2>タスク検索</h2>

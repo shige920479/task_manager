@@ -1,6 +1,4 @@
-<?php
-include '../Views/ManagerHeader.php';
-?>
+<?php include '../Views/ManagerHeader.php';?>
     <div class="calender-wrapper">
       <div id="month">
         <a href='<?php echo "?mode=dashboard&week={$prev_week}";?>'>前週</a>

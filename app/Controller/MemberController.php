@@ -28,7 +28,7 @@ $request = GetRequest::getRequest();
 
 switch ($request['mode']) {
 
-  case 'index': // 最後にこの条件分岐を変えられるか検討
+  case 'index':
     
     $tasks = DbConnect::getMemberData($_SESSION['login_id'], $request);
 

@@ -1,4 +1,6 @@
-<?php use function App\Services\h;?>
+<?php
+use function App\Services\h;
+?>
 
 <!DOCTYPE html>
 <html lang="ja">

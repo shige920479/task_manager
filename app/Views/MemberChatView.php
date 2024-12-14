@@ -1,9 +1,9 @@
 <?php
 use function App\Services\h;
 use function App\Services\setChatHtml;
-include '../Views/MemberHeader.php';
 ?>
 
+<?php include '../Views/MemberHeader.php'; ?>
   <div id="chat-wrapper">
       <h1>コメント編集</h1>
       <div id="chat-flex">

@@ -73,20 +73,6 @@ table {
   background-color: #4c4962;
 }
 
-/* #paginate li {
-  width: 20px;
-  text-align: center;
-  background-color: #fff;
-} */
-
-/* #paginate li a {
-  display: block;
-  background-color: #0087ff;
-  border-radius: 5%;
-  color: #fff;
-  font-weight: bold;
-} */
-
 /*-------------------------------------------
  メンバーログイン画面 MemberLoginView.php
 -------------------------------------------*/
@@ -224,7 +210,6 @@ header {
 }
 #header-link:hover {
   opacity: 0.7;
-  /* box-shadow: none; */
 }
 
 #menu-icon {
@@ -300,17 +285,6 @@ header {
   border-radius: 5px;
   box-shadow: 6px 6px 2px -2px rgba(0, 0, 0, 0.4);
 }
-/*            全体をみて問題なければ消し          */
-/* .new-task h2::after {
-  content: "";
-  display: block;
-  background-color: #464e54;
-  width: 100%;
-  height: 1px;
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-} */
 #new-task ul {
   display: flex;
   align-items: flex-start;
@@ -587,9 +561,6 @@ header {
   border-radius: 5px;
   line-height: 1;
 }
-/* #search-box li label {
-  display: block;
-} */
 
 /* task一覧(マネージャー) */
 #m-task-list .edit-btn {
@@ -709,50 +680,48 @@ header {
   width: calc((100% - 20px) * 0.5);
 }
 #chat-room {
-  width: 100%; /* チャットルームの幅を指定 */
+  width: 100%;
   height: 260px;
   border-radius: 5px;
-  background: #eee; /* チャットルームの背景を灰色 */
-  padding: 10px; /* 余白を10pxキープ */
+  background: #eee;
+  padding: 10px;
   margin: 5px 0 15px 0;
   overflow-y: scroll;
 }
 
 .chat {
-  display: flex; /* 要素を横並び */
-  margin-bottom: 10px; /* チャット同士に隙間を作る */
+  display: flex;
+  margin-bottom: 10px;
 }
 
 .chat .mes {
-  max-width: 70%; /* 短いチャットにも対応させるため、widthではなくmax-widthを指定 */
-  border-radius: 20px; /* （あとでも可）角丸を指定 */
-  padding: 0.3em; /* （あとでも可）メッセージの内側に余白 */
+  max-width: 70%;
+  border-radius: 20px;
+  padding: 0.3em;
   font-size: 0.85rem;
 }
 .chat .status {
-  color: #aaa; /* 文字色を灰色に指定 */
-  font-size: 11px; /* 文字サイズは小さめ */
-  align-self: flex-end; /* この要素は下寄せ */
-  margin: 0 5px; /* 左右に隙間を作る（ちょっと楽してます）*/
+  color: #aaa;
+  font-size: 11px;
+  align-self: flex-end;
+  margin: 0 5px;
 }
 /* 相手メッセージのCSS */
 .chat.you .mes {
-  color: #fff; /* 文字色を白 */
-  background: #8d8c8c; /* 背景を黒 */
+  color: #fff;
+  background: #8d8c8c;
 }
-
 /* 自分メッセージのCSS */
 .chat.me {
-  flex-direction: row-reverse; /* 左右の並び順を逆順にする */
+  flex-direction: row-reverse;
 }
-
 .chat.me .mes {
   color: #fff;
-  background: #5ac323; /* 背景色を緑 */
+  background: #5ac323;
 }
 
 .chat .status {
-  text-align: right; /* 右寄せにする */
+  text-align: right;
 }
 /*メッセージ入力*/
 #message-box {
@@ -836,13 +805,11 @@ td:has(.category) {
 }
 .box {
   width: 100%;
-  /* background-color: rgba(0, 255, 0, 0.55); */
   background-color: #967ac6;
   min-height: 40px;
   border-radius: 5px;
   padding: 3px 3px 3px 7px;
   vertical-align: top;
-  /* color: #4c4962; */
   color: #fff;
   margin-bottom: 5px;
   font-weight: bold;

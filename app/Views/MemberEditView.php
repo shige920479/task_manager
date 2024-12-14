@@ -1,4 +1,6 @@
-<?php use function App\Services\h; ?>
+<?php
+use function App\Services\h; 
+?>
 <?php include '../Views/MemberHeader.php'; ?>
 <div class="wrapper edit-wrapper">
       <h1>編集ページ</h1>

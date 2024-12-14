@@ -1,16 +1,14 @@
 <?php
-
-/////////// 完了後に削除/////////////////
 require_once '../Services/helper.php';
 use function App\Services\flash;
+
 session_start();
 $flash_msg = flash($_SESSION['error']);
-unset($_SESSION['error']);
 echo $flash_msg['tokenerror'];
-////////////////////////////////////////
-
+$_SESSION = array();
+setcookie(session_name(), '', time()-1, '/');
+session_destroy();
 ?>
-
 
 <!DOCTYPE html>
 <html lang="ja">

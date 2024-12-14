@@ -1,13 +1,9 @@
 <?php
 namespace App\Database;
-
-//フラッシュメッセージ用、完成後にメッセージも合わせて削除。
-require_once '../Services/helper.php'; 
 use function App\Services\flashMsg;
-/////////////////////////////////////////////////////
 
 /**
- * データ削除クラス（完全削除とソフトデリート）
+ * データ削除クラス
  */
 class DeleteTask extends DbConnect
 {
@@ -45,28 +41,4 @@ class DeleteTask extends DbConnect
         list($pdo, $stmt) = [null, null];
     }
   }
-
-  public static function hardDelete($id) {
-    try {
-      // message用処理
-      $del_data = self::getTaskById($id);
-      $_SESSION['del_msg'] = "カテゴリー : 「{$del_data['category']}」/ タイトル : 「{$del_data['title']}」 を削除しました";
-      
-      // 削除用の処理
-      $pdo = self::db_connect(); // tryに2回はいってしまう... DbConnectクラスの方を修正するか
-      $sql = 'DELETE FROM task WHERE id = :id';
-      $stmt = $pdo->prepare($sql);
-      $stmt->bindValue(':id', $id, \PDO::PARAM_INT);
-      $stmt->execute();
-      header('Location: ../Views/index.php');
-    } catch(\PDOException $e) {
-      flashMsg('db', "登録に失敗しました : {$e->getMessage()}"); //フラッシュメッセージ用、完成後に削除。
-      header('Location: ../Views/500error.php');
-      exit;
-
-    } finally {
-      list($pdo, $stmt) = [null, null];
-    }
-  }
-
 }

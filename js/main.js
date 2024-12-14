@@ -46,26 +46,4 @@ $(function () {
   // チャット内のスクロール最下部表示
   let element = document.getElementById("chat-inner");
   element?.scrollIntoView(false);
-
-  //完了処理
-  // $("#form").submit(function () {
-  //   let checks = [];
-  //   $("[name='done[]']:checked").each(function () {
-  //     checks.push(this.value);
-  //   });
-
-  //   $.ajax({
-  //     type: "POST",
-  //     url: "../Controller/DeleteController.php",
-  //     data: {
-  //       id: checks,
-  //     },
-  //     success: function (data) {
-  //       if (data != "") {
-  //         alert("完了処理を行いました。");
-  //       }
-  //     },
-  //   });
-  //   return false;
-  // });
 });

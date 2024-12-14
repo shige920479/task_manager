@@ -45,7 +45,7 @@ class Message extends DbConnect
       
       } catch(\PDOException $e) {
         $pdo->rollBack(); // ロールバック
-        flashMsg('db', "データ取得に失敗しました : {$e->getMessage()}"); //フラッシュメッセージ用、完成後に削除。
+        flashMsg('db', "データ取得に失敗しました : {$e->getMessage()}");
         header('Location: ../Views/500error.php');
         exit;
       

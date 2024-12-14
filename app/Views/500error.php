@@ -1,13 +1,9 @@
 <?php
-/////////// 完了後に削除/////////////////
 require_once '../Services/helper.php';
 use function App\Services\flash;
 session_start();
 $flash_msg = flash($_SESSION['error']);
-unset($_SESSION['error']);
 echo $flash_msg['db'];
-////////////////////////////////////////
-
 ?>
 
 <!DOCTYPE html>
