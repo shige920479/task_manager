@@ -34,13 +34,15 @@ class DeleteTask extends DbConnect
         $stmt->bindValue(':id', $id, \PDO::PARAM_INT);
         $stmt->execute();
         $_SESSION['del_msg'] = "タイトル : 「{$del_data['theme']}」のタスクを完了しました";
-        list($pdo, $stmt) = [null, null];
         header('Location: ?mode=index');
-      
-    } catch(\PDOException $e) {
-      flashMsg('db', "登録に失敗しました : {$e->getMessage()}"); //フラッシュメッセージ用、完成後に削除。
-      header('Location: ../Views/500error.php');
-      exit;
+        
+      } catch(\PDOException $e) {
+        flashMsg('db', "登録に失敗しました : {$e->getMessage()}"); //フラッシュメッセージ用、完成後に削除。
+        header('Location: ../Views/500error.php');
+        exit;
+
+      } finally {
+        list($pdo, $stmt) = [null, null];
     }
   }
 
@@ -61,6 +63,9 @@ class DeleteTask extends DbConnect
       flashMsg('db', "登録に失敗しました : {$e->getMessage()}"); //フラッシュメッセージ用、完成後に削除。
       header('Location: ../Views/500error.php');
       exit;
+
+    } finally {
+      list($pdo, $stmt) = [null, null];
     }
   }
 

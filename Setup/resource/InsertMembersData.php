@@ -1,5 +1,5 @@
 <?php
-namespace App\Setup;
+namespace Setup\Resource;
 
 class InsertMembersData extends Database
 {

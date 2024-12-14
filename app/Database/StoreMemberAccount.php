@@ -34,6 +34,7 @@ class StoreMemberAccount extends DbConnect
         $stmt->bindValue(':password', $hash_password, \PDO::PARAM_STR);
         $stmt->execute();
         header('Location: ./MemberLogin.php');
+
       } catch(\PDOException $e) {
         if($e->errorInfo[1] === 1062) {
           flashMsg('email', 'このメールアドレスは登録済みです');
@@ -44,6 +45,9 @@ class StoreMemberAccount extends DbConnect
           header('Location: ../Views/500error.php');
           exit;
         }
+
+      } finally {
+        list($pdo, $stmt) = [null, null];
       }
     }
   }

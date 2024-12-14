@@ -48,7 +48,11 @@ class Message extends DbConnect
         flashMsg('db', "データ取得に失敗しました : {$e->getMessage()}"); //フラッシュメッセージ用、完成後に削除。
         header('Location: ../Views/500error.php');
         exit;
+      
+      } finally {
+        list($pdo, $stmt) = [null, null];
       }
+    
     } else {
       header("Location: ?mode=chat&id={$request['id']}");
     }

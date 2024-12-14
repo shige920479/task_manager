@@ -29,25 +29,22 @@ $request = GetRequest::getRequest();
 switch ($request['mode']) {
 
   case 'index': // 最後にこの条件分岐を変えられるか検討
-      if(isset($request['sort_order'])) {
-        $tasks = DbConnect::getMemberData($_SESSION['login_id'], $request['sort_order']);
-      } else {
-        $tasks = DbConnect::getMemberData($_SESSION['login_id'], null);
-      }
+    
+    $tasks = DbConnect::getMemberData($_SESSION['login_id'], $request);
 
-      if($tasks) {
-        $current_page = isset($request['page']) ? $request['page'] : null;
-        $paginate_tasks = paginate($tasks, $current_page, $request);
-        $categories = DbConnect::getCategory($_SESSION['login_id']);
-      }
-      $token = setToken();
-      $flash_array = "";
-      $old = "";
-      if(isset($_SESSION['error'])) $flash_array = flash($_SESSION['error']);
-      if(isset($_SESSION['old'])) $old = old($_SESSION['old']);
+    if($tasks) {
+      $current_page = isset($request['page']) ? $request['page'] : null;
+      $paginate_tasks = paginate($tasks, $current_page, $request);
+      $categories = DbConnect::getCategory($_SESSION['login_id']);
+    }
+    $token = setToken();
+    $flash_array = "";
+    $old = "";
+    if(isset($_SESSION['error'])) $flash_array = flash($_SESSION['error']);
+    if(isset($_SESSION['old'])) $old = old($_SESSION['old']);
 
-      include('../Views/index.php');
-      break;
+    include('../Views/index.php');
+    break;
   
   case 'logout':
     Logout::logout($request);

@@ -35,8 +35,7 @@ class StoreTask extends DbConnect
         $stmt->bindValue(':content', $request['content'], \PDO::PARAM_STR);
         $stmt->bindValue(':deadline', $request['deadline'], \PDO::PARAM_STR);
         $stmt->execute();
-        list($pdo, $stmt) = [null, null];
-
+        
         if(isset($_SESSION['old'])) unset($_SESSION['old']);
         header('Location: ?mode=index');
         exit;
@@ -45,7 +44,10 @@ class StoreTask extends DbConnect
         flashMsg('db', "登録に失敗しました : {$e->getMessage()}");
         header('Location: ../Views/500error.php');
         exit;
-      }
+        
+      } finally {
+        list($pdo, $stmt) = [null, null];
+      } 
     } else {
       header('Location: ?mode=index');
       exit;
@@ -92,9 +94,9 @@ class StoreTask extends DbConnect
     }
     //完了目標のバリデーション
     if($request['deadline'] === "") {
-      flashMsg('deadline', '日付が未入力です');      
+      flashMsg('deadline', '未入力です');      
     } elseif(!self::dateValidate($request['deadline'])) {
-      flashMsg('deadline', '無効な日付形式です');
+      flashMsg('deadline', '無効な日付形式');
     } elseif($request['deadline'] < date('Y-m-d')) {
       flashMsg('deadline', '過去の日付です');
     } else {

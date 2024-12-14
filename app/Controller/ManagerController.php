@@ -24,11 +24,7 @@ $request = GetRequest::getRequest();
 switch ($request['mode']) {
 
   case 'index':
-    if(isset($request['sort_order'])) {
-      $tasks = DbConnect::getTaskData($request, $request['sort_order']);
-    } else {
-      $tasks = DbConnect::getTaskData($request, null);
-    }
+    $tasks = DbConnect::getTaskData($request);
 
     if($tasks) {
       $current_page = isset($request['page']) ? $request['page'] : null;

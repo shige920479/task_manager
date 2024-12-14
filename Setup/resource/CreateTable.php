@@ -1,5 +1,5 @@
 <?php
-namespace App\Setup;
+namespace Setup\Resource;
 
 class CreateTable extends Database
 {
@@ -7,9 +7,6 @@ class CreateTable extends Database
    {
     try {
       $pdo = self::dbCon();
-      $sql = "DROP TABLE IF EXISTS member";
-      $pdo->query($sql);
-
       $sql = "CREATE table member (
               id INT PRIMARY KEY AUTO_INCREMENT,
               name VARCHAR(50) NOT NULL,
@@ -33,9 +30,6 @@ class CreateTable extends Database
   {
    try {
      $pdo = self::dbCon();
-     $sql = "DROP TABLE IF EXISTS manager";
-     $pdo->query($sql);
-
      $sql = "CREATE table manager (
              id INT PRIMARY KEY AUTO_INCREMENT,
              name VARCHAR(50) NOT NULL,
@@ -60,9 +54,6 @@ class CreateTable extends Database
    {
      try {
       $pdo = self::dbCon();
-      $sql = "DROP TABLE IF EXISTS task";
-      $pdo->query($sql);
-
       $sql = "CREATE table task (
               id INT PRIMARY KEY AUTO_INCREMENT,
               member_id INT NOT NULL,
@@ -94,9 +85,6 @@ class CreateTable extends Database
   {
     try {
      $pdo = self::dbCon();
-     $sql = "DROP TABLE IF EXISTS message";
-     $pdo->query($sql);
-
      $sql = "CREATE table message (
              id INT PRIMARY KEY AUTO_INCREMENT,
              task_id INT NOT NULL,
