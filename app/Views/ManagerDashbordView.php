@@ -22,14 +22,16 @@
                 <td>
                   <?php foreach($tasks as $task) :?>
                     <?php if($task['category'] === $category && $task['deadline'] === $date->format('Y-m-d')) : ?>
-                      <div class="box <?php echo 'mem-color' . $task['member_id'] ?>">
-                        <p><?php echo $task['name'] ?></p>
-                        <div class="theme-flex">
-                          <span class="theme"><?php echo $task['theme'] ?></span>
-                          <span class="star"><?php echo str_repeat('★', intval($task['priority'])) ?></span>
+                      <a href='<?php echo "?mode=chat&id={$task['id']}"?>'>
+                        <div class="box <?php echo 'mem-color' . $task['member_id'] ?>">
+                          <p><?php echo $task['name'] ?></p>
+                          <div class="theme-flex">
+                            <span class="theme"><?php echo $task['theme'] ?></span>
+                            <span class="star"><?php echo str_repeat('★', intval($task['priority'])) ?></span>
+                          </div>
+                          <p><?php echo $task['content'] ?></p>
                         </div>
-                        <p><?php echo $task['content'] ?></p>
-                      </div>
+                      </a>
                     <?php endif; ?>
                     <?php endforeach; ?>
                 </td>
