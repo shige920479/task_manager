@@ -17,7 +17,7 @@ class GetRequest
     if($_SERVER['REQUEST_METHOD'] === 'POST') {
       if(!isset($_POST['token']) || $_POST['token'] !== $_SESSION['token']) {
         flashMsg('tokenerror', "不正なリクエストです、再度ログインをお試しください"); 
-        header('Location: ../Views/400error.php');
+        header('Location: /task_manager/error/?error_mode=400error');
         exit;
       } else {
         unset($_SESSION['token']);

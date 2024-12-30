@@ -3,6 +3,7 @@ namespace App\Database;
 
 use function App\Services\flashMsg;
 use function App\Services\old_store;
+use function App\Services\writeLog;
 
 /**
  * メンバー新規アカウント登録用クラス
@@ -41,8 +42,9 @@ class StoreMemberAccount extends DbConnect
           header('Location: /task_manager/account/');
           exit;
         } else {
-          flashMsg('db', "登録に失敗しました : {$e->getMessage()}");
-          header('Location: ../Views/500error.php');  /////////////////後で要修正////////////////////
+          flashMsg('db', "内部サーバーエラーです。\n検索中のリソースに問題があるため、リソースを表示できません");
+          writeLog(LOG_FILEPATH, $e->getMessage());
+          header('Location: /task_manager/error/?error_mode=500error');
           exit;
         }
 

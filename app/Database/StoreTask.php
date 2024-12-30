@@ -5,6 +5,7 @@ use DateTime;
 use PDOException;
 use function App\Services\flashMsg;
 use function App\Services\old_store;
+use function App\Services\writeLog;
 
 /**
  * 新規タスク登録用クラス
@@ -41,8 +42,9 @@ class StoreTask extends DbConnect
         exit;
         
       } catch(PDOException $e) {
-        flashMsg('db', "登録に失敗しました : {$e->getMessage()}");
-        header('Location: ../Views/500error.php');
+        flashMsg('db', "内部サーバーエラーです。\n検索中のリソースに問題があるため、リソースを表示できません");
+        writeLog(LOG_FILEPATH, $e->getMessage());
+        header('Location: /task_manager/error/?error_mode=500error');
         exit;
         
       } finally {

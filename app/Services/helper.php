@@ -292,3 +292,16 @@ function setChatHtml(array $chats, string $login_user): string
     return $chat_html;
 }
 
+/**
+ * ログファイルへの書き込み
+ * @param string $file_name ログファイルのパス
+ * @param string $message エラーメッセージ
+ * @return void
+ */
+function writeLog($file_name, $message): void
+{
+    date_default_timezone_set('Asia/Tokyo');
+    $date = date('Y/m/d H:i:s');
+    $log = "{$date} {$message}\n";
+    file_put_contents(LOG_FILEPATH, $log, FILE_APPEND | LOCK_EX);
+}

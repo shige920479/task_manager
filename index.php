@@ -4,7 +4,8 @@ $routes = [
   '/task_manager/dashboard/' => 'MemberController',
   '/task_manager/managerLogin/' => 'ManagerLogin',
   '/task_manager/manager_dashboard/' => 'ManagerController',
-  '/task_manager/account/' => 'MemberAccount'
+  '/task_manager/account/' => 'MemberAccount',
+  '/task_manager/error/' => 'ErrorController'
 ];
 
 $path = parse_url($_SERVER['REQUEST_URI'] , PHP_URL_PATH);

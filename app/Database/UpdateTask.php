@@ -2,6 +2,7 @@
 namespace App\Database;
 
 use function App\Services\flashMsg;
+use function App\Services\writeLog;
 
 /**
  * タスク更新用クラス
@@ -42,8 +43,9 @@ class UpdateTask extends StoreTask
         exit;
         
       } catch(\PDOException $e) {
-        flashMsg('db', "登録に失敗しました : {$e->getMessage()}");
-        header('Location: ../Views/500error.php');
+        flashMsg('db', "内部サーバーエラーです。\n検索中のリソースに問題があるため、リソースを表示できません");
+        writeLog(LOG_FILEPATH, $e->getMessage());
+        header('Location: /task_manager/error/?error_mode=500error');
         exit;
         
       } finally {

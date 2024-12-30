@@ -3,6 +3,7 @@ namespace App\Database;
 
 use function App\Services\flashMsg;
 use function App\Services\old_store;
+use function App\Services\writeLog;
 
 /**
  * タスクに対するコメント（チャット）のデータベース登録用クラス
@@ -45,8 +46,9 @@ class Message extends DbConnect
       
       } catch(\PDOException $e) {
         $pdo->rollBack(); // ロールバック
-        flashMsg('db', "データ取得に失敗しました : {$e->getMessage()}");
-        header('Location: ../Views/500error.php');
+        flashMsg('db', "内部サーバーエラーです。\n検索中のリソースに問題があるため、リソースを表示できません");
+        writeLog(LOG_FILEPATH, $e->getMessage());
+        header('Location: /task_manager/error/?error_mode=500error');
         exit;
       
       } finally {

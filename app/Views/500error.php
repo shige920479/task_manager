@@ -1,11 +1,3 @@
-<?php
-require_once '../Services/helper.php';
-use function App\Services\flash;
-session_start();
-$flash_msg = flash($_SESSION['error']);
-echo $flash_msg['db'];
-?>
-
 <!DOCTYPE html>
 <html lang="ja">
   <head>
@@ -17,10 +9,11 @@ echo $flash_msg['db'];
     <div>
       <h1><span>Error</span>500</h1>
       <p>Internal Server Error</p>
+      <p><?php echo isset($flash_array['db']) ? $flash_array['db'] : ''; ?></p>
     </div>
     <div>
       <img
-        src="../../images/database-exclamation.svg"
+        src="/task_manager/images/database-exclamation.svg"
         alt=""
         style="width: 80px"
       />

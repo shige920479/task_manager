@@ -24,10 +24,6 @@ if(!isset($_SESSION['login'])) {
   exit;
 }
 
-echo "<pre>";
-var_dump($_SESSION);
-echo "</pre>";
-
 $request = GetRequest::getRequest();
 
 switch ($request['mode']) {
