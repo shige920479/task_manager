@@ -4,11 +4,11 @@ use function App\Services\h;
 use function App\Services\MgSetReceiveIcon;
 use function App\Services\MgSetSendIcon;
 ?>
-<?php include '../Views/ManagerHeader.php';?>
+<?php include './app/Views/ManagerHeader.php';?>
     <div class="task-wrapper">
       <section id="search-section">
         <h2>タスク検索</h2>
-        <form action="" method="get" id="search">
+        <form action="/task_manager/manager_dashboard/" method="get" id="search">
           <ul id="search-flex">
             <li>
               <label for="name">メンバー名</label>
@@ -49,7 +49,7 @@ use function App\Services\MgSetSendIcon;
         <h2>タスク一覧</h2>
         <?php echo empty($tasks) ? "<span class='initial-msg'>未完了のタスクはありません</span>": '';?>
         <div id="sort-pagination">
-          <form action="" method="get" id="sort">
+          <form action="/task_manager/manager_dashboard/" method="get" id="sort">
             <select name="sort_order" id="sort_order">
               <option value="">新規登録順</option>
               <option value="sort_name" <?php echo isset($request['sort_order']) && $request['sort_order'] === 'sort_name' ? 'selected': "";?>>メンバー別</option>

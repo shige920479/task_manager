@@ -167,9 +167,9 @@ function setSendIcon(int $msg_flag, int $mem_to_mg, int $task_id): string
     if($msg_flag === 0) {
         return "";
     } elseif($mem_to_mg === 1) {
-        return "<a href='?mode=chat&id={$task_id}'><img src='../../images/hikoki.png'></a>";
+        return "<a href='?mode=chat&id={$task_id}'><img src='/task_manager/images/hikoki.png'></a>";
     } elseif($mem_to_mg === 2) {
-        return "<a href='?mode=chat&id={$task_id}'><img src='../../images/checkbox.png'></a>";
+        return "<a href='?mode=chat&id={$task_id}'><img src='/task_manager/images/checkbox.png'></a>";
     }
     return "";
 }
@@ -187,9 +187,9 @@ function MgSetSendIcon(int $msg_flag, int $mg_to_mem, int $task_id): string
     if($msg_flag === 0) {
         return "";
     } elseif($mg_to_mem === 1) {
-        return "<a href='?mode=chat&id={$task_id}'><img src='../../images/hikoki.png'></a>";
+        return "<a href='?mode=chat&id={$task_id}'><img src='/task_manager/images/hikoki.png'></a>";
     } elseif($mg_to_mem === 0) {
-        return "<a href='?mode=chat&id={$task_id}'><img src='../../images/checkbox.png'></a>";
+        return "<a href='?mode=chat&id={$task_id}'><img src='/task_manager/images/checkbox.png'></a>";
     }
     return "";
 }
@@ -207,9 +207,9 @@ function setRecieveIcon(int $msg_flag, int $mg_to_mem, int $task_id): string
     if($msg_flag === 0) {
         return "";
     } elseif($mg_to_mem === 1) {
-        return "<a href='?mode=chat&id={$task_id}'><img src='../../images/midoku.png'></a>";
+        return "<a href='?mode=chat&id={$task_id}'><img src='/task_manager/images/midoku.png'></a>";
     } elseif($mg_to_mem === 0) {
-        return "<a href='?mode=chat&id={$task_id}'><img src='../../images/kidoku.png'></a>";
+        return "<a href='?mode=chat&id={$task_id}'><img src='/task_manager/images/kidoku.png'></a>";
     }
     return "";
 }
@@ -227,9 +227,9 @@ function MgSetReceiveIcon(int $msg_flag, int $mem_to_mg, int $task_id): string
     if($msg_flag === 0) {
         return "";
     } elseif($mem_to_mg === 1) {
-        return "<a href='?mode=chat&id={$task_id}'><img src='../../images/midoku.png'></a>";
+        return "<a href='?mode=chat&id={$task_id}'><img src='/task_manager/images/midoku.png'></a>";
     } elseif($mem_to_mg === 2) {
-        return "<a href='?mode=chat&id={$task_id}'><img src='../../images/kidoku.png'></a>";
+        return "<a href='?mode=chat&id={$task_id}'><img src='/task_manager/images/kidoku.png'></a>";
     }
     return "";
 }

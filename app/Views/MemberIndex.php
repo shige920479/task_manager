@@ -2,7 +2,7 @@
 use function App\Services\h;
 use function App\Services\setRecieveIcon;
 use function App\Services\setSendIcon;
-include '../Views/MemberHeader.php';
+include './app/Views/MemberHeader.php';
 ?>
 
     <div class="task-wrapper">
@@ -98,7 +98,7 @@ include '../Views/MemberHeader.php';
                 <?php echo setRecieveIcon($task['msg_flag'], $task['mg_to_mem'], $task['id']) ?>
               </td>
               <td>
-                <form action="../Controller/MemberController.php" method="post">
+                <form action="/task_manager/dashboard/" method="post">
                   <button type="submit" class="comp-btn btn">完了</button>
                   <input type="hidden" name="mode" value="soft_del">
                   <input type="hidden" name="id" value="<?php echo h($task['id']) ?>">

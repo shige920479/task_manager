@@ -3,7 +3,7 @@ use function App\Services\h;
 use function App\Services\setChatHtml;
 ?>
 
-<?php include '../Views/MemberHeader.php'; ?>
+<?php include './app/Views/MemberHeader.php'; ?>
   <div id="chat-wrapper">
       <h1>コメント編集</h1>
       <div id="chat-flex">
@@ -44,7 +44,7 @@ use function App\Services\setChatHtml;
               <?php echo $chats ? setChatHtml($chats, MEMBER) : "" ?>
             </ul>
           </div>
-          <form action="?mode=send_message" method="post" id="message-box">
+          <form action="/task_manager/dashboard/" method="post" id="message-box">
             <label>メッセージ入力<?php echo isset($flash_array['comment']) ? "<span class='flash-msg'>{$flash_array['comment']}</span>" : ""; ?></label>
             <textarea name="comment" rows="3"><?php echo isset($old['comment']) ? h($old['comment']) : ""; ?></textarea>
             <button type="submit" class="sendmsg-btn btn">メッセージ送信</button>

@@ -21,13 +21,13 @@ class Login extends DbConnect
 
       if(!self::$user_data) {
         flashMsg('email', 'メールアドレスが登録されておりません、再度入力願います');
-        if($table === MEMBER) {header('Location: ./MemberLogin.php');}
-        if($table === MANAGER) {header('Location: ./ManagerLogin.php');}
+        if($table === MEMBER) {header('Location: /task_manager/');}
+        if($table === MANAGER) {header('Location: /task_manager/managerLogin/');}
         exit;
       } elseif(!password_verify($request['password'], self::$user_data['password'])) {
         flashMsg('password', 'パスワードが異なっております、再度入力願います');
-        if($table === MEMBER) {header('Location: ./MemberLogin.php');}
-        if($table === MANAGER) {header('Location: ./ManagerLogin.php');}
+        if($table === MEMBER) {header('Location: /task_manager/');}
+        if($table === MANAGER) {header('Location: /task_manager/managerLogin/');}
         exit;
       } else {
         session_regenerate_id(TRUE); // セッションidを再発行
@@ -36,20 +36,22 @@ class Login extends DbConnect
           $_SESSION['login'] = self::$user_data['email']; // セッションにログイン情報を登録
           $_SESSION['login_id'] = self::$user_data['id'];
           $_SESSION['login_name']= self::$user_data['name'];
-          header('Location: ./MemberController.php?mode=index');
+
+          header('Location: /task_manager/dashboard/?mode=index');
           return true;
         } 
         if($table === MANAGER) {
           $_SESSION['m_login'] = $request['email'];
           $_SESSION['m_login_name']= self::$user_data['name'];
-          header('Location: ./ManagerController.php?mode=index');
+          // header('Location: ./ManagerController.php?mode=index');
+          header('Location: /task_manager/manager_dashboard/?mode=index');
           return true;
         }
         exit;
       }
     } else {
-      if($table === MEMBER) {header('Location: ./MemberLogin.php');}
-      if($table === MANAGER)  {header('Location: ./ManagerLogin.php');}
+      if($table === MEMBER) {header('Location: /task_manager/');}
+      if($table === MANAGER)  {header('Location: /task_manager/managerLogin/');}
       exit;
     }
   }

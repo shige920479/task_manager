@@ -1,12 +1,12 @@
 <?php
 use function App\Services\h; 
 ?>
-<?php include '../Views/MemberHeader.php'; ?>
+<?php include './app/Views/MemberHeader.php'; ?>
 <div class="wrapper edit-wrapper">
       <h1>編集ページ</h1>
       <div id="to_index"><a href="?mode=index">一覧へ戻る</a></div>
       <section>
-        <form action="?mode=update" method="post">
+        <form action="/task_manager/dashboard/" method="post">
           <ul id="edit-table">
             <li>
               <label for="priority">優先度</label>

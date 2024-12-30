@@ -1,10 +1,10 @@
 <?php
-require_once '../Services/helper.php';
+require_once './app/Services/helper.php';
 use function App\Services\h;
 use function App\Services\setChatHtml;
 ?>
 
-<?php include '../Views/ManagerHeader.php';?>
+<?php include './app/Views/ManagerHeader.php';?>
       <div id="chat-wrapper">
         <h1>コメント編集</h1>
         <div id="chat-flex">
@@ -43,7 +43,7 @@ use function App\Services\setChatHtml;
                 <?php echo $chats ? setChatHtml($chats, MANAGER) : "" ?>
               </ul>
             </div>
-            <form action="?mode=send_message" method="post" id="message-box">
+            <form action="/task_manager/manager_dashboard/" method="post" id="message-box">
               <label>メッセージ入力<?php echo isset($flash_array['comment']) ? "<span class='flash-msg'>{$flash_array['comment']}</span>" : ""; ?></label>
               <textarea name="comment" rows="3"><?php echo isset($old['comment']) ? h($old['comment']) : ""; ?></textarea>
               <button type="submit" class="sendmsg-btn btn">メッセージ送信</button>

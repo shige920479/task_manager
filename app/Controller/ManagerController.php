@@ -1,7 +1,7 @@
 <?php
-require_once '../../vendor/autoload.php';
-require_once '../config/config.php';
-require_once '../Services/helper.php';
+require_once './vendor/autoload.php';
+require_once './app/config/config.php';
+require_once './app/Services/helper.php';
 use App\Database\DbConnect;
 use App\Database\Logout;
 use App\Database\Message;
@@ -15,9 +15,14 @@ use function App\Services\setToken;
 session_start();
 
 if(!isset($_SESSION['m_login'])) {
-  header('Location: ./ManagerLogin.php');
+  header('Location: /task_manager/managerLogin');
   exit;
 }
+
+echo "<pre>";
+var_dump($_SESSION);
+echo "</pre>";
+
 
 $request = GetRequest::getRequest();
 
@@ -38,7 +43,7 @@ switch ($request['mode']) {
     $category_list = array_unique(array_column($tasks, 'category'));//選択したメンバーでリスト内容を変える
     sort($category_list);
 
-    include('../Views/ManagerIndex.php');
+    include('./app/Views/ManagerIndex.php');
     break;
   
   case 'chat':
@@ -51,13 +56,13 @@ switch ($request['mode']) {
     if(isset($_SESSION['error'])) $flash_array = flash($_SESSION['error']);
     if(isset($_SESSION['old'])) $old = old($_SESSION['old']);
 
-    include('../Views/ManagerChatView.php');
+    include('./app/Views/ManagerChatView.php');
     break;
 
   case 'send_message':
     Message::sendMessage($request);
     
-    include('../Views/ManagerChatView.php');
+    include('./app/Views/ManagerChatView.php');
     break;
   
   case 'dashboard':
@@ -73,7 +78,7 @@ switch ($request['mode']) {
 
     $categories = array_unique(array_column($tasks, 'category'));
     $token = setToken();
-    include('../Views/ManagerDashbordView.php');
+    include('./app/Views/ManagerDashbordView.php');
     break;
 
   case 'logout':

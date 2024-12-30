@@ -1,7 +1,7 @@
 <?php
-require_once '../../vendor/autoload.php';
-require_once '../config/config.php';
-require_once '../Services/helper.php';
+require_once './vendor/autoload.php';
+require_once './app/config/config.php';
+require_once './app/Services/helper.php';
 
 use App\Database\DbConnect;
 use App\Database\DeleteTask;
@@ -20,16 +20,20 @@ use function App\Services\setToken;
 session_start();
 
 if(!isset($_SESSION['login'])) {
-  header('Location: ./MemberLogin.php');
+  header('Location: /task_manager/');
   exit;
 }
+
+echo "<pre>";
+var_dump($_SESSION);
+echo "</pre>";
 
 $request = GetRequest::getRequest();
 
 switch ($request['mode']) {
 
   case 'index':
-    
+    echo dirname(__FILE__);
     $tasks = DbConnect::getMemberData($_SESSION['login_id'], $request);
 
     if($tasks) {
@@ -43,7 +47,7 @@ switch ($request['mode']) {
     if(isset($_SESSION['error'])) $flash_array = flash($_SESSION['error']);
     if(isset($_SESSION['old'])) $old = old($_SESSION['old']);
 
-    include('../Views/index.php');
+    include('./app/Views/MemberIndex.php');
     break;
   
   case 'logout':
@@ -59,7 +63,7 @@ switch ($request['mode']) {
     $old = "";
     if(isset($_SESSION['error'])) $flash_array = flash($_SESSION['error']);   
     if(isset($_SESSION['old'])) $old = old($_SESSION['old']);
-    include('../Views/MemberEditView.php');
+    include('./app/Views/MemberEditView.php');
     break;
 
   case 'store':
@@ -79,7 +83,7 @@ switch ($request['mode']) {
     if(isset($_SESSION['error'])) $flash_array = flash($_SESSION['error']);
     if(isset($_SESSION['old'])) $old = old($_SESSION['old']);
 
-    include('../Views/MemberChatView.php');
+    include('./app/Views/MemberChatView.php');
     break;
 
   case 'send_message':
@@ -98,7 +102,7 @@ switch ($request['mode']) {
     $categories = array_unique(array_column($tasks, 'category'));
     $token = setToken();
 
-    include('../Views/MemberDashbordView.php');
+    include('./app/Views/MemberDashbordView.php');
     break;
 
   case 'soft_del':

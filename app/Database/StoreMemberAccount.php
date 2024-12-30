@@ -18,7 +18,7 @@ class StoreMemberAccount extends DbConnect
    {
     self::Validation($request);
     if(isset($_SESSION['error'])) {
-      header('Location: ./MemberAccount.php');
+      header('Location: /task_manager/account/');
       exit;
     } else {
       $hash_password = password_hash($request['password'], PASSWORD_BCRYPT);
@@ -33,16 +33,16 @@ class StoreMemberAccount extends DbConnect
         $stmt->bindValue(':email', $request['email'], \PDO::PARAM_STR);
         $stmt->bindValue(':password', $hash_password, \PDO::PARAM_STR);
         $stmt->execute();
-        header('Location: ./MemberLogin.php');
+        header('Location: /task_manager/');
 
       } catch(\PDOException $e) {
         if($e->errorInfo[1] === 1062) {
           flashMsg('email', 'このメールアドレスは登録済みです');
-          header('Location: ./MemberAccount.php');
+          header('Location: /task_manager/account/');
           exit;
         } else {
           flashMsg('db', "登録に失敗しました : {$e->getMessage()}");
-          header('Location: ../Views/500error.php');
+          header('Location: ../Views/500error.php');  /////////////////後で要修正////////////////////
           exit;
         }
 

@@ -10,13 +10,13 @@ use function App\Services\setToken;
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css" />
-    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="/task_manager/css/style.css">
   </head>
   <body>
     <section class="login-wrapper">
       <h1>Task Manager</h1>
       <h2>アカウント作成</h2>
-      <form action="?mode=store_account" method="post" class="login-box">
+      <form action="/task_manager/account/" method="post" class="login-box">
         <ul>
           <div class="input account">
               <div>
@@ -47,7 +47,7 @@ use function App\Services\setToken;
           <input type="hidden" name="token" value="<?php echo h(setToken());?>">
           <button type="submit">アカウント登録</button>
         </ul>
-        <p id="to-login"><a href="./MemberLogin.php">ログイン画面に戻る</a></p>
+        <p id="to-login"><a href="/task_manager/">ログイン画面に戻る</a></p>
       </form>
     </section>
   </body>

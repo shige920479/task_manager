@@ -1,7 +1,7 @@
 <?php
-require_once '../../vendor/autoload.php';
-require_once '../Services/helper.php';
-require_once '../config/config.php';
+require_once './vendor/autoload.php';
+require_once './app/Services/helper.php';
+require_once './app/config/config.php';
 
 use App\Database\StoreMemberAccount;
 use App\Services\GetRequest;
@@ -21,6 +21,6 @@ if(!empty($request) && $request['mode'] === 'store_account') {
   if(isset($_SESSION['error'])) $flash_array = flash($_SESSION['error']);
   if(isset($_SESSION['old'])) $old = old($_SESSION['old']);  
 
-  include('../Views/MemberAccountView.php');
+  include('./app/Views/MemberAccountView.php');
   exit;
 }

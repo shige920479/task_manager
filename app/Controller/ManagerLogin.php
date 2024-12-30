@@ -1,7 +1,7 @@
 <?php
-require_once '../../vendor/autoload.php';
-require_once '../Services/helper.php';
-require_once '../config/config.php';
+require_once './vendor/autoload.php';
+require_once './app/Services/helper.php';
+require_once './app/config/config.php';
 
 use App\Database\Login;
 use App\Services\GetRequest;
@@ -10,15 +10,21 @@ use function App\Services\flash;
 use function App\Services\old;
 
 session_start();
-$in = GetRequest::getRequest();
 
-if(!empty($in) && $in['mode'] === 'login') {
-  Login::Login($in, MANAGER);
+if(isset($_SESSION['m_login'])) {
+  header('Location: /task_manager/manager_dashboard/?mode=index');
+  exit;
+}
+
+$request = GetRequest::getRequest();
+
+if(!empty($request) && $request['mode'] === 'login') {
+  Login::Login($request, MANAGER);
 } else {
   list($flash_array, $old) = ["", ""];
   if(isset($_SESSION['error'])) $flash_array = flash($_SESSION['error']);
   if(isset($_SESSION['old'])) $old = old($_SESSION['old']);  
 
-  include('../Views/ManagerLoginView.php');
+  include('./app/Views/ManagerLoginView.php');
   exit;
 }
