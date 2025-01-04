@@ -68,7 +68,7 @@ use function App\Services\MgSetSendIcon;
         <table>
           <thead>
             <tr>
-              <th>メンバー名</th><th>優先度</th><th>カテゴリー</th><th>タスクテーマ</th><th>タスク概要</th>
+              <th>メンバー名</th><th>優先度</th><th>カテゴリー</th><th>完了</th><th>タスクテーマ</th><th>タスク概要</th>
               <th>完了目標</th><th>残日数</th><th>送信</th><th>受信</th>
             </tr>
           </thead>
@@ -79,6 +79,13 @@ use function App\Services\MgSetSendIcon;
               <td><?php echo $task['name'];?></td>
               <td class="priority"><?php echo h(str_repeat('☆',$task['priority'])) ?></td>
               <td><?php echo $task['category'] ?></td>
+              <td class="comp-icon">
+                <?php if($task['del_flag'] === 1): ?>
+                  <img src="/task_manager/images/check-pink.png">
+                <?php elseif($task['del_flag'] === 2): ?>
+                  <img src="/task_manager/images/turnback-green.png">
+                <?php endif ;?>
+              </td>
               <td class="edit-link"><?php echo "<a href='?mode=chat&id={$task['id']}'>{$task['theme']}</a>" ?></td>
               <td><?php echo $task['content'] ?></td>
               <td><?php echo $task['deadline'] ?></td>

@@ -77,8 +77,8 @@ table {
  メンバーログイン画面 MemberLoginView.php
 -------------------------------------------*/
 .login-wrapper {
-  width: 360px;
-  margin: 80px auto;
+  width: 430px;
+  margin: 25px auto;
 }
 .login-wrapper h1,
 .login-wrapper h2,
@@ -407,19 +407,17 @@ header {
   width: 13%;
 }
 #task-list th:nth-child(3) {
-  width: 25%;
+  width: 3%;
 }
 #task-list th:nth-child(4) {
-  width: 28%;
+  width: 22%;
 }
-#task-list th:nth-child(5),
-#task-list td:nth-child(5) {
-  width: 10%;
-  text-align: center;
+#task-list th:nth-child(5) {
+  width: 28%;
 }
 #task-list th:nth-child(6),
 #task-list td:nth-child(6) {
-  width: 6%;
+  width: 10%;
   text-align: center;
 }
 #task-list th:nth-child(7),
@@ -429,6 +427,11 @@ header {
 }
 #task-list th:nth-child(8),
 #task-list td:nth-child(8) {
+  width: 6%;
+  text-align: center;
+}
+#task-list th:nth-child(9),
+#task-list td:nth-child(9) {
   width: 6%;
   text-align: center;
 }
@@ -563,6 +566,8 @@ header {
 }
 
 /* task一覧(マネージャー) */
+
+/*↓↓↓↓↓↓↓↓↓↓↓↓ 使っていない様に思える ↓↓↓↓↓↓↓↓↓↓↓↓ */
 #m-task-list .edit-btn {
   background-color: rgb(22, 155, 22);
   border-radius: 5px;
@@ -597,7 +602,11 @@ header {
 #m-task-list tbody tr:nth-child(odd) {
   background-color: #464e541f;
 }
-
+.comp-icon img {
+  display: block;
+  text-align: center;
+  width: 20px;
+}
 #m-task-list th:nth-child(1),
 #m-task-list td:nth-child(1) {
   width: 10%;
@@ -610,26 +619,30 @@ header {
   width: 12%;
 }
 #m-task-list th:nth-child(4) {
-  width: 20%;
+  width: 4%;
 }
-#m-task-list th:nth-child(5),
-#m-task-list td:nth-child(5) {
-  width: 30%;
+
+#m-task-list th:nth-child(5) {
+  width: 18%;
 }
 #m-task-list th:nth-child(6),
 #m-task-list td:nth-child(6) {
-  width: 7%;
-  text-align: center;
-}
-#m-task-list th:nth-child(8),
-#m-task-list td:nth-child(8),
-#m-task-list th:nth-child(9),
-#m-task-list td:nth-child(9) {
-  width: 5%;
-  text-align: center;
+  width: 28%;
 }
 #m-task-list th:nth-child(7),
 #m-task-list td:nth-child(7) {
+  width: 7%;
+  text-align: center;
+}
+#m-task-list th:nth-child(9),
+#m-task-list td:nth-child(9),
+#m-task-list th:nth-child(10),
+#m-task-list td:nth-child(10) {
+  width: 5%;
+  text-align: center;
+}
+#m-task-list th:nth-child(8),
+#m-task-list td:nth-child(8) {
   width: 5%;
   text-align: right;
   padding-right: 6px;
@@ -718,6 +731,7 @@ header {
 .chat.me .mes {
   color: #fff;
   background: #5ac323;
+  overflow-wrap: anywhere;
 }
 
 .chat .status {
@@ -734,7 +748,8 @@ header {
   margin: 5px 0 5px 0;
   padding: 8px;
 }
-.sendmsg-btn {
+.sendmsg-btn,
+.sendback-btn {
   background-color: rgb(12, 102, 212);
   color: #fff;
   font-weight: bold;
@@ -742,6 +757,9 @@ header {
   width: 150px;
   padding: 5px 20px;
   margin-left: auto;
+}
+.sendback-btn {
+  background-color: rgb(238, 18, 73);
 }
 /*----------------------------------------------------
 ダッシュボード MemberDashBoard.php, ManagerDashBoard.php, 

@@ -46,8 +46,15 @@ use function App\Services\setChatHtml;
             <form action="/task_manager/manager_dashboard/" method="post" id="message-box">
               <label>メッセージ入力<?php echo isset($flash_array['comment']) ? "<span class='flash-msg'>{$flash_array['comment']}</span>" : ""; ?></label>
               <textarea name="comment" rows="3"><?php echo isset($old['comment']) ? h($old['comment']) : ""; ?></textarea>
-              <button type="submit" class="sendmsg-btn btn">メッセージ送信</button>
-              <input type="hidden" name="mode" value="send_message">
+              
+              <!-- 機能追加 -->
+              <?php if($task['del_flag'] === 0) :?>
+                <button type="submit" class="sendmsg-btn btn">メッセージ送信</button>
+                <input type="hidden" name="mode" value="send_message">
+              <?php elseif($task['del_flag'] === 1) :?>
+                <button type="submit" class="sendback-btn btn">差戻メッセージ</button>
+                <input type="hidden" name="mode" value="sendback_message">
+              <?php endif ;?>  
               <input type="hidden" name="id" value="<?php echo h($task['id']) ?>">
               <input type="hidden" name="sender" value="0">
               <input type="hidden" name="token" value="<?php echo h($token);?>">

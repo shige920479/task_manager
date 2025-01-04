@@ -18,3 +18,7 @@
 2024/12/30 17:49:46 SQLSTATE[HY000] [1045] Access denied for user 'testuser'@'localhost' (using password: YES)
 2024/12/30 18:00:54 SQLSTATE[HY000] [1045] Access denied for user 'testuser'@'localhost' (using password: YES)
 2024/12/30 18:01:27 SQLSTATE[HY000] [1045] Access denied for user 'testuser'@'localhost' (using password: YES)
+2025/01/04 14:01:20 SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ' m.name
+              FROM task as t
+              LEFT JOIN member as m
+ ...' at line 1

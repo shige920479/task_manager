@@ -32,7 +32,7 @@ class DbConnect
    {
     try {
       $pdo = self::db_connect();
-      $sql = "SELECT * FROM task WHERE member_id = :member_id and del_flag = 0";
+      $sql = "SELECT * FROM task WHERE member_id = :member_id and del_flag in (0,2)";
 
       if(!isset($request['sort_order']) || $request['sort_order'] === "") $sql .= ' ORDER BY updated_at desc';
       if(isset($request['sort_order']) && $request['sort_order'] === 'sort_deadline') $sql .= ' ORDER BY deadline';
@@ -226,11 +226,24 @@ class DbConnect
    {
     try {
       $pdo = self::db_connect();
-      $sql = 'SELECT t.*, m.name
+
+      /**
+       * リファクタリング
+       * マネージャーによる完全削除機能の追加
+       * 下記は、完了タスクも表示する様にsql修正
+       */
+
+      // $sql = 'SELECT t.*, m.name
+      //         FROM task as t
+      //         LEFT JOIN member as m 
+      //         ON t.member_id = m.id
+      //         WHERE t.del_flag = 0';
+
+      $sql = "SELECT t.*, m.name
               FROM task as t
-              left join member as m 
-              ON t.member_id = m.id
-              WHERE t.del_flag = 0';
+              LEFT JOIN member as m
+              ON t.member_id = m.id";
+
       if(!empty($request['name'])) $sql .= " AND m.name = :name";
       if(!empty($request['category'])) $sql .= " AND t.category = :category";
       if(!empty($request['theme'])) $sql .= " AND t.theme LIKE :theme";

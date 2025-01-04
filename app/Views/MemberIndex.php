@@ -79,7 +79,7 @@ include './app/Views/MemberHeader.php';
         <table>
           <thead>
             <tr>
-              <th>優先度</th><th>カテゴリー</th><th>テーマ</th><th>タスク概略</th><th>目標完了日</th><th>送信</th><th>受信</th><th>完了</th>
+              <th>優先度</th><th>カテゴリー</th><th></th><th>テーマ</th><th>タスク概略</th><th>目標完了日</th><th>送信</th><th>受信</th><th>完了</th>
             </tr>
           </thead>
           <tbody>
@@ -88,6 +88,7 @@ include './app/Views/MemberHeader.php';
             <tr>
               <td class="priority"><?php echo str_repeat('☆', $task['priority'])?></td>
               <td><?php echo $task['category'] ?></td>
+              <td class="comp-icon"><?php echo $task['del_flag'] === 2 ? '<img src="/task_manager/images/turnback-green.png">' : "" ;?></td>
               <td class="edit-link"><?php echo "<a href='?mode=edit&id={$task['id']}'>{$task['theme']}</a>" ?></td>
               <td><?php echo $task['content'] ?></td>
               <td><?php echo $task['deadline'] ?></td>

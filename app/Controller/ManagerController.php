@@ -60,6 +60,12 @@ switch ($request['mode']) {
     include('./app/Views/ManagerChatView.php');
     break;
   
+  case 'sendback_message':
+    Message::sendBack($request);
+    
+    include('./app/Views/ManagerChatView.php');
+    break;
+  
   case 'dashboard':
     
     $tasks = DbConnect::getTaskData(null, null);
