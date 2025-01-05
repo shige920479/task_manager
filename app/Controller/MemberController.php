@@ -29,7 +29,7 @@ $request = GetRequest::getRequest();
 switch ($request['mode']) {
 
   case 'index':
-    echo dirname(__FILE__);
+
     $tasks = DbConnect::getMemberData($_SESSION['login_id'], $request);
 
     if($tasks) {
@@ -86,7 +86,7 @@ switch ($request['mode']) {
     Message::sendMessage($request);
     break;
 
-  case 'dashboard':
+  case 'callender':
     Carbon::setLocale('ja'); 
     $current_week = isset($request['week']) ? $request['week'] : Carbon::now()->format('Y-m-d');
     $start_date = Carbon::parse($current_week)->startOfWeek(Carbon::MONDAY);
@@ -98,7 +98,7 @@ switch ($request['mode']) {
     $categories = array_unique(array_column($tasks, 'category'));
     $token = setToken();
 
-    include('./app/Views/MemberDashbordView.php');
+    include('./app/Views/MemberCallenderView.php');
     break;
 
   case 'soft_del':

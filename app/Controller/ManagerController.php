@@ -3,10 +3,13 @@ require_once './vendor/autoload.php';
 require_once './app/config/config.php';
 require_once './app/Services/helper.php';
 use App\Database\DbConnect;
+use App\Database\DeleteTask;
 use App\Database\Logout;
 use App\Database\Message;
 use App\Services\GetRequest;
 use Carbon\Carbon;
+use Setup\Resource\Database;
+
 use function App\Services\flash;
 use function App\Services\old;
 use function App\Services\paginate;
@@ -66,7 +69,7 @@ switch ($request['mode']) {
     include('./app/Views/ManagerChatView.php');
     break;
   
-  case 'dashboard':
+  case 'callender':
     
     $tasks = DbConnect::getTaskData(null, null);
 
@@ -79,7 +82,12 @@ switch ($request['mode']) {
 
     $categories = array_unique(array_column($tasks, 'category'));
     $token = setToken();
-    include('./app/Views/ManagerDashbordView.php');
+    include('./app/Views/ManagerCallenderView.php');
+    break;
+
+  case 'hard_del':
+
+    DeleteTask::hardDelete($request['id']);
     break;
 
   case 'logout':

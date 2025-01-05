@@ -46,8 +46,14 @@ use function App\Services\MgSetSendIcon;
         </form>
       </section>
       <section id="m-task-list">
-        <h2>タスク一覧</h2>
-        <?php echo empty($tasks) ? "<span class='initial-msg'>未完了のタスクはありません</span>": '';?>
+        <div id="title-page">
+          <h2>タスク一覧</h2>
+            <?php if(!empty($_SESSION['del_msg'])) :?>
+                <?php echo "<span class='del_msg'>{$_SESSION['del_msg']}</span>"; ?>
+                <?php unset($_SESSION['del_msg']);?>
+            <?php endif ;?>
+            <?php echo empty($tasks) ? "<span class='initial-msg'>未完了のタスクはありません</span>": '';?>
+        </div>
         <div id="sort-pagination">
           <form action="/task_manager/manager_dashboard/" method="get" id="sort">
             <select name="sort_order" id="sort_order">
@@ -69,7 +75,7 @@ use function App\Services\MgSetSendIcon;
           <thead>
             <tr>
               <th>メンバー名</th><th>優先度</th><th>カテゴリー</th><th>完了</th><th>タスクテーマ</th><th>タスク概要</th>
-              <th>完了目標</th><th>残日数</th><th>送信</th><th>受信</th>
+              <th>完了目標</th><th>残日数</th><th>送信</th><th>受信</th><th>削除</th>
             </tr>
           </thead>
           <tbody>
@@ -88,13 +94,23 @@ use function App\Services\MgSetSendIcon;
               </td>
               <td class="edit-link"><?php echo "<a href='?mode=chat&id={$task['id']}'>{$task['theme']}</a>" ?></td>
               <td><?php echo $task['content'] ?></td>
-              <td><?php echo $task['deadline'] ?></td>
+              <td><?php echo date('m月d日', strtotime($task['deadline']))  ?></td>
               <td class="diff-date" data-days="<?= diffDate($task['deadline']) ?>"><?= diffDate($task['deadline'])."日" ?></td>
               <td class="msg-icon">
                 <?php echo MgSetSendIcon($task['msg_flag'],$task['mg_to_mem'] , $task['id']) ?>
               </td>
               <td class="msg-icon">
                 <?php echo MgSetReceiveIcon($task['msg_flag'], $task['mem_to_mg'], $task['id']) ?>
+              </td>
+              <td>
+                <?php if($task['del_flag'] === 1):?>
+                  <form action="/task_manager/manager_dashboard/" method="post">
+                    <button type="submit" class="del-btn btn">削除</button>
+                    <input type="hidden" name="mode" value="hard_del">
+                    <input type="hidden" name="id" value="<?php echo h($task['id'])?>">
+                    <input type="hidden" name="token" value="<?php echo h($token);?>">
+                  </form>
+                <?php endif;?>
               </td>
             </tr>
             <?php endforeach ;?>

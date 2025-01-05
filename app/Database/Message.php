@@ -97,6 +97,8 @@ class Message extends DbConnect
         writeLog(LOG_FILEPATH, $e->getMessage());
         header('Location: /task_manager/error/?error_mode=500error');
         exit;
+      } finally {
+        list($pdo, $stmt) = [null, null];
       }
     } else {
       header("Location: ?mode=chat&id={$request['id']}");

@@ -1,9 +1,9 @@
-<?php include './app/Views/MemberHeader.php'; ?>
+<?php include './app/Views/ManagerHeader.php';?>
     <div class="calender-wrapper">
       <div id="month">
-        <a href='<?php echo "?mode=dashboard&week={$prev_week}&member_id={$request['member_id']}";?>'>前週</a>
+        <a href='<?php echo "?mode=callender&week={$prev_week}";?>'>前週</a>
         <p><?php echo $start_date->format('m/d'); ?> ～ <?php echo $end_date->format('m/d'); ?></p>
-        <a href='<?php echo "?mode=dashboard&week={$next_week}&member_id={$request['member_id']}";?>'>来週</a>
+        <a href='<?php echo "?mode=callender&week={$next_week}";?>'>来週</a>
       </div>
       <table id="taskboard">
         <thead>
@@ -22,13 +22,20 @@
                 <td>
                   <?php foreach($tasks as $task) :?>
                     <?php if($task['category'] === $category && $task['deadline'] === $date->format('Y-m-d')) : ?>
-                      <div class="box">
-                        <div class="theme-flex">
-                          <span class="theme"><?php echo $task['theme'] ?></span>
-                          <span class="star"><?php echo str_repeat('★', intval($task['priority'])) ?></span>
+                      <a href='<?php echo "?mode=chat&id={$task['id']}"?>'>
+                        <?php if($task['del_flag'] === 1) :?>
+                          <div class="box comp-color">
+                        <?php else :?>
+                          <div class="box <?php echo 'mem-color' . $task['member_id'] ?>">
+                        <?php endif;?>
+                          <p><?php echo $task['name'] ?></p>
+                          <div class="theme-flex">
+                            <span class="theme"><?php echo $task['theme'] ?></span>
+                            <span class="star"><?php echo str_repeat('★', intval($task['priority'])) ?></span>
+                          </div>
+                          <p><?php echo $task['content'] ?></p>
                         </div>
-                        <p><?php echo $task['content'] ?></p>
-                      </div>
+                      </a>
                     <?php endif; ?>
                     <?php endforeach; ?>
                 </td>

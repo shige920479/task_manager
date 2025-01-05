@@ -91,7 +91,7 @@ include './app/Views/MemberHeader.php';
               <td class="comp-icon"><?php echo $task['del_flag'] === 2 ? '<img src="/task_manager/images/turnback-green.png">' : "" ;?></td>
               <td class="edit-link"><?php echo "<a href='?mode=edit&id={$task['id']}'>{$task['theme']}</a>" ?></td>
               <td><?php echo $task['content'] ?></td>
-              <td><?php echo $task['deadline'] ?></td>
+              <td><?php echo date('m月d日', strtotime($task['deadline']))  ?></td>
               <td class="msg-icon">
                 <?php echo setSendIcon($task['msg_flag'], $task['mem_to_mg'], $task['id']) ?>
               </td>

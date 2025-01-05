@@ -20,7 +20,7 @@ use function App\Services\h;
         <h1>メンバータスク一覧</h1>
         <div id="header-nav">
           <div><a href="?mode=index" id="header-link">タスク一覧</a></div>
-          <div><a href="?mode=dashboard" id="header-link">ダッシュボード</a></div>
+          <div><a href="?mode=callender" id="header-link">タスクカレンダー</a></div>
           <div id="menu-icon">
             <img src="/task_manager/images/menu.png" alt="">
             <div class="menu-content">

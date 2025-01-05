@@ -372,10 +372,10 @@ header {
   pointer-events: none;
 }
 
-#task-list .comp-btn {
+#task-list .comp-btn,
+#m-task-list .del-btn {
   color: #fff;
-  margin: 3px 0;
-  padding: 0 10px;
+  padding: 4px 8px;
   border-radius: 5px;
   background-color: orange;
 }
@@ -385,10 +385,11 @@ header {
   text-align: left;
   width: 100%;
 }
-#task-list th,
-#task-list td {
-  line-height: 2.5;
+
+#task-list tr {
+  height: 35px;
 }
+
 #task-list th {
   background-color: rgba(30, 30, 211, 0.644);
   color: #fff;
@@ -452,11 +453,15 @@ header {
 .msg-icon img {
   width: 25px;
 }
+.msg-icon img:hover {
+  transform: scale(1.15);
+}
 
 /*削除メッセージ */
 #task-list .del_msg,
 #task-list .initial-msg,
-#m-task-list .initial-msg {
+#m-task-list .initial-msg,
+#m-task-list .del_msg {
   color: #fff;
   margin-left: 40px;
   font-size: 0.8rem;
@@ -568,7 +573,7 @@ header {
 /* task一覧(マネージャー) */
 
 /*↓↓↓↓↓↓↓↓↓↓↓↓ 使っていない様に思える ↓↓↓↓↓↓↓↓↓↓↓↓ */
-#m-task-list .edit-btn {
+/* #m-task-list .edit-btn {
   background-color: rgb(22, 155, 22);
   border-radius: 5px;
   color: #fff;
@@ -583,16 +588,15 @@ header {
 }
 #m-task-list .comp-btn {
   background-color: orange;
-}
+} */
 
 #m-task-list table {
   font-size: 0.8rem;
   text-align: left;
   width: 100%;
 }
-#m-task-list th,
-#m-task-list td {
-  line-height: 2.8;
+#m-task-list tr {
+  height: 35px;
 }
 #m-task-list th {
   background-color: rgba(30, 30, 211, 0.644);
@@ -631,14 +635,16 @@ header {
 }
 #m-task-list th:nth-child(7),
 #m-task-list td:nth-child(7) {
-  width: 7%;
+  width: 5%;
   text-align: center;
 }
 #m-task-list th:nth-child(9),
 #m-task-list td:nth-child(9),
 #m-task-list th:nth-child(10),
-#m-task-list td:nth-child(10) {
-  width: 5%;
+#m-task-list td:nth-child(10),
+#m-task-list th:nth-child(11),
+#m-task-list td:nth-child(11) {
+  width: 4%;
   text-align: center;
 }
 #m-task-list th:nth-child(8),
@@ -762,7 +768,7 @@ header {
   background-color: rgb(238, 18, 73);
 }
 /*----------------------------------------------------
-ダッシュボード MemberDashBoard.php, ManagerDashBoard.php, 
+ダッシュボード MemberCallenderView.php, ManagerCallenderView.php, 
 ----------------------------------------------------*/
 .calender-wrapper {
   max-width: 1200px;
@@ -781,6 +787,10 @@ header {
 }
 #month p {
   font-size: 1.5rem;
+}
+#month a:hover {
+  color: rgb(14, 5, 151);
+  font-weight: bold;
 }
 
 /* ボード全体 */
@@ -868,4 +878,7 @@ td:has(.category) {
 }
 .box.mem-color6 {
   background-color: rgba(0, 255, 234, 0.489);
+}
+.box.comp-color {
+  background-color: #565657;
 }
