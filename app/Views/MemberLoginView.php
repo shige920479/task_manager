@@ -10,8 +10,7 @@ use function App\Services\setToken;
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css" />
-    <link rel="stylesheet" href="/task_manager/css/style.css">
-    <!-- <link rel="stylesheet" href="/css/style.css"> -->
+    <link rel="stylesheet" href="<?php echo PATH . 'css/style.css'; ?>">
   </head>
   <body>
     <section class="login-wrapper">
@@ -19,8 +18,7 @@ use function App\Services\setToken;
       <h2>チームメンバーログイン</h2>
       <div class="login-box">
         <h3>Sign Up</h3>
-        <!-- <form action="./MemberLogin.php" method="post"> -->
-        <form action="/task_manager/" method="post">
+        <form action="<?php echo PATH?>" method="post">
           <ul>
             <div class="input">
               <label for="email">メールアドレス</label>
@@ -40,13 +38,12 @@ use function App\Services\setToken;
         </form>
         <div id="to-register">
           <span>アカントが未登録ですか？</span>
-          <a href="/task_manager/account/">アカウントを作成</a>
+          <a href="<?php echo PATH . 'account/'?>">アカウントを作成</a>
         </div>
       </div>
       <div id="to-manager">
-        <a href="/task_manager/managerLogin/">管理者用ログイン画面はこちら</a>
+        <a href="<?php echo PATH . 'managerLogin/'?>">管理者用ログイン画面はこちら</a>
       </div>
     </section>
-    <?php echo dirname(__DIR__) . '/' ?>
   </body>
 </html>

@@ -22,3 +22,8 @@
               FROM task as t
               LEFT JOIN member as m
  ...' at line 1
+2025/01/10 15:13:25 PDO::__construct(): Argument #1 ($dsn) must be a valid data source name
+2025/01/10 15:22:53 PDO::__construct(): Argument #1 ($dsn) must be a valid data source name
+2025/01/14 05:59:31 SQLSTATE[HY000] [1045] Access denied for user 'testuser1'@'localhost' (using password: YES)
+2025/01/14 06:13:10 SQLSTATE[HY000] [1045] Access denied for user 'testuser1'@'localhost' (using password: YES)
+2025/01/14 06:20:39 SQLSTATE[HY000] [1045] Access denied for user 'testuser1'@'localhost' (using password: YES)

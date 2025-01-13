@@ -8,7 +8,7 @@ use function App\Services\MgSetSendIcon;
     <div class="task-wrapper">
       <section id="search-section">
         <h2>タスク検索</h2>
-        <form action="/task_manager/manager_dashboard/" method="get" id="search">
+        <form action="<?php echo PATH . 'manager_dashboard/' ?>" method="get" id="search">
           <ul id="search-flex">
             <li>
               <label for="name">メンバー名</label>
@@ -55,7 +55,7 @@ use function App\Services\MgSetSendIcon;
             <?php echo empty($tasks) ? "<span class='initial-msg'>未完了のタスクはありません</span>": '';?>
         </div>
         <div id="sort-pagination">
-          <form action="/task_manager/manager_dashboard/" method="get" id="sort">
+          <form action="<?php echo PATH . 'manager_dashboard/';?>" method="get" id="sort">
             <select name="sort_order" id="sort_order">
               <option value="">新規登録順</option>
               <option value="sort_name" <?php echo isset($request['sort_order']) && $request['sort_order'] === 'sort_name' ? 'selected': "";?>>メンバー別</option>
@@ -87,9 +87,9 @@ use function App\Services\MgSetSendIcon;
               <td><?php echo $task['category'] ?></td>
               <td class="comp-icon">
                 <?php if($task['del_flag'] === 1): ?>
-                  <img src="/task_manager/images/check-pink.png">
+                  <img src="<?php echo PATH . 'images/check-pink.png';?>">
                 <?php elseif($task['del_flag'] === 2): ?>
-                  <img src="/task_manager/images/turnback-green.png">
+                  <img src="<?php echo PATH . 'images/turnback-green.png';?>">
                 <?php endif ;?>
               </td>
               <td class="edit-link"><?php echo "<a href='?mode=chat&id={$task['id']}'>{$task['theme']}</a>" ?></td>
@@ -104,7 +104,7 @@ use function App\Services\MgSetSendIcon;
               </td>
               <td>
                 <?php if($task['del_flag'] === 1):?>
-                  <form action="/task_manager/manager_dashboard/" method="post">
+                  <form action="<?php echo PATH . 'manager_dashboard/';?>" method="post">
                     <button type="submit" class="del-btn btn">削除</button>
                     <input type="hidden" name="mode" value="hard_del">
                     <input type="hidden" name="id" value="<?php echo h($task['id'])?>">

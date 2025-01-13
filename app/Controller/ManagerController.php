@@ -18,7 +18,7 @@ use function App\Services\setToken;
 session_start();
 
 if(!isset($_SESSION['m_login'])) {
-  header('Location: /task_manager/managerLogin');
+  header('Location:' . PATH . 'managerLogin/');
   exit;
 }
 

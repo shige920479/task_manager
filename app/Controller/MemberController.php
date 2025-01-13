@@ -1,5 +1,5 @@
 <?php
-require_once './vendor/autoload.php';
+// require_once './vendor/autoload.php';
 require_once './app/config/config.php';
 require_once './app/Services/helper.php';
 
@@ -20,7 +20,7 @@ use function App\Services\setToken;
 session_start();
 
 if(!isset($_SESSION['login'])) {
-  header('Location: /task_manager/');
+  header('Location:' . PATH);
   exit;
 }
 

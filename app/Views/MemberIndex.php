@@ -88,7 +88,7 @@ include './app/Views/MemberHeader.php';
             <tr>
               <td class="priority"><?php echo str_repeat('☆', $task['priority'])?></td>
               <td><?php echo $task['category'] ?></td>
-              <td class="comp-icon"><?php echo $task['del_flag'] === 2 ? '<img src="/task_manager/images/turnback-green.png">' : "" ;?></td>
+              <td class="comp-icon"><?php echo $task['del_flag'] === 2 ? '<img src="' . PATH . 'images/turnback-green.png">' : "" ;?></td>
               <td class="edit-link"><?php echo "<a href='?mode=edit&id={$task['id']}'>{$task['theme']}</a>" ?></td>
               <td><?php echo $task['content'] ?></td>
               <td><?php echo date('m月d日', strtotime($task['deadline']))  ?></td>
@@ -99,7 +99,7 @@ include './app/Views/MemberHeader.php';
                 <?php echo setRecieveIcon($task['msg_flag'], $task['mg_to_mem'], $task['id']) ?>
               </td>
               <td>
-                <form action="/task_manager/dashboard/" method="post">
+                <form action="<?php echo PATH . 'dashboard/' ?>" method="post">
                   <button type="submit" class="comp-btn btn">完了</button>
                   <input type="hidden" name="mode" value="soft_del">
                   <input type="hidden" name="id" value="<?php echo h($task['id']) ?>">

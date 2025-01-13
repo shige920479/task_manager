@@ -6,7 +6,7 @@ use function App\Services\h;
       <h1>編集ページ</h1>
       <div id="to_index"><a href="?mode=index">一覧へ戻る</a></div>
       <section>
-        <form action="/task_manager/dashboard/" method="post">
+        <form action="<?php echo PATH;?>" method="post">
           <ul id="edit-table">
             <li>
               <label for="priority">優先度</label>

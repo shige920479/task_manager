@@ -9,9 +9,9 @@ use function App\Services\h;
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TODO</title>
     <link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css" />
-    <link rel="stylesheet" href="/task_manager/css/style.css" />
+    <link rel="stylesheet" href="<?php echo PATH . 'css/style.css'; ?>"/>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="/task_manager/js/main.js"></script>
+    <script src="<?php echo PATH . 'js/main.js'; ?>"></script>
   </head>
   <body>
     <header>
@@ -21,7 +21,7 @@ use function App\Services\h;
           <div><a href="?mode=index" id="header-link">タスク一覧</a></div>
           <div><a href="?mode=callender&member_id=<?php echo $_SESSION['login_id'];?>" id="header-link">タスクカレンダー</a></div>
           <div id="menu-icon">
-            <img src="/task_manager/images/menu.png" alt="">
+            <img src="<?php echo PATH . 'images/menu.png' ?>" alt="">
             <div class="menu-content">
               <P><?php echo $_SESSION['login_name'];?>さん</P>
               <form action="?mode=logout" method="post">

@@ -50,7 +50,7 @@ class Message extends DbConnect
         $pdo->rollBack(); // ロールバック
         flashMsg('db', "内部サーバーエラーです。\n検索中のリソースに問題があるため、リソースを表示できません");
         writeLog(LOG_FILEPATH, $e->getMessage());
-        header('Location: /task_manager/error/?error_mode=500error');
+        header('Location:' . PATH . 'error/?error_mode=500error');
         exit;
       
       } finally {
@@ -95,7 +95,7 @@ class Message extends DbConnect
         $pdo->rollBack();
         flashMsg('db', "内部サーバーエラーです。\n検索中のリソースに問題があるため、リソースを表示できません");
         writeLog(LOG_FILEPATH, $e->getMessage());
-        header('Location: /task_manager/error/?error_mode=500error');
+        header('Location:' . PATH . 'error/?error_mode=500error');
         exit;
       } finally {
         list($pdo, $stmt) = [null, null];

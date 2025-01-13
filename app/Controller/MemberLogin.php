@@ -12,7 +12,7 @@ use function App\Services\old;
 session_start();
 
 if(isset($_SESSION['login_id'])) {
-  header('Location: /task_manager/dashboard/?mode=index');
+  header('Location:' . PATH . 'dashboard/?mode=index');
   exit;
 }
 

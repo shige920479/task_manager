@@ -19,7 +19,7 @@ class StoreMemberAccount extends DbConnect
    {
     self::Validation($request);
     if(isset($_SESSION['error'])) {
-      header('Location: /task_manager/account/');
+      header('Location:' . PATH . 'account/');
       exit;
     } else {
       $hash_password = password_hash($request['password'], PASSWORD_BCRYPT);
@@ -34,17 +34,17 @@ class StoreMemberAccount extends DbConnect
         $stmt->bindValue(':email', $request['email'], \PDO::PARAM_STR);
         $stmt->bindValue(':password', $hash_password, \PDO::PARAM_STR);
         $stmt->execute();
-        header('Location: /task_manager/');
+        header('Location:' . PATH);
 
       } catch(\PDOException $e) {
         if($e->errorInfo[1] === 1062) {
           flashMsg('email', 'このメールアドレスは登録済みです');
-          header('Location: /task_manager/account/');
+          header('Location:' . PATH . 'account/');
           exit;
         } else {
           flashMsg('db', "内部サーバーエラーです。\n検索中のリソースに問題があるため、リソースを表示できません");
           writeLog(LOG_FILEPATH, $e->getMessage());
-          header('Location: /task_manager/error/?error_mode=500error');
+          header('Location:' . PATH . 'error/?error_mode=500error');
           exit;
         }
 

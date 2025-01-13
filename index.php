@@ -1,4 +1,8 @@
 <?php
+require_once './vendor/autoload.php';
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
 $routes = [
   '/task_manager/' => 'MemberLogin',
   '/task_manager/dashboard/' => 'MemberController',
@@ -6,6 +10,12 @@ $routes = [
   '/task_manager/manager_dashboard/' => 'ManagerController',
   '/task_manager/account/' => 'MemberAccount',
   '/task_manager/error/' => 'ErrorController'
+  // '/portfolio/task_manager/' => 'MemberLogin',
+  // '/portfolio/task_manager/dashboard/' => 'MemberController',
+  // '/portfolio/task_manager/managerLogin/' => 'ManagerLogin',
+  // '/portfolio/task_manager/manager_dashboard/' => 'ManagerController',
+  // '/portfolio/task_manager/account/' => 'MemberAccount',
+  // '/portfolio/task_manager/error/' => 'ErrorController'
 ];
 
 $path = parse_url($_SERVER['REQUEST_URI'] , PHP_URL_PATH);
