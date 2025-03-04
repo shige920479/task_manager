@@ -6,7 +6,7 @@ use function App\Services\old_store;
 use function App\Services\writeLog;
 
 /**
- * メンバー新規アカウント登録用クラス
+ * メンバー新規アカウント登録
  */
 class StoreMemberAccount extends DbConnect
 {
@@ -55,6 +55,7 @@ class StoreMemberAccount extends DbConnect
   }
   /**
    * 新規アカンウト登録専用のバリデーション
+   * 
    * @param array $request 入力データ
    * @return bool
    */

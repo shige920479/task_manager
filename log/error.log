@@ -1,29 +1,3 @@
-2024/12/30 16:48:53 ログ出力テストログ出力テストログ出力テストログ出力テストログ出力テスト 0
-2024/12/30 16:48:53 ログ出力テストログ出力テストログ出力テストログ出力テストログ出力テスト 1
-2024/12/30 16:48:53 ログ出力テストログ出力テストログ出力テストログ出力テストログ出力テスト 2
-2024/12/30 16:48:53 ログ出力テストログ出力テストログ出力テストログ出力テストログ出力テスト 3
-2024/12/30 16:48:53 ログ出力テストログ出力テストログ出力テストログ出力テストログ出力テスト 4
-2024/12/30 16:48:53 ログ出力テストログ出力テストログ出力テストログ出力テストログ出力テスト 5
-2024/12/30 16:48:53 ログ出力テストログ出力テストログ出力テストログ出力テストログ出力テスト 6
-2024/12/30 16:48:53 ログ出力テストログ出力テストログ出力テストログ出力テストログ出力テスト 7
-2024/12/30 16:48:53 ログ出力テストログ出力テストログ出力テストログ出力テストログ出力テスト 8
-2024/12/30 16:48:53 ログ出力テストログ出力テストログ出力テストログ出力テストログ出力テスト 9
-2024/12/30 16:49:16 SQLSTATE[HY000] [1045] Access denied for user 'testuser'@'localhost' (using password: YES)
-2024/12/30 16:49:48 SQLSTATE[HY000] [1045] Access denied for user 'testuser'@'localhost' (using password: YES)
-2024/12/30 16:52:30 SQLSTATE[HY000] [1045] Access denied for user 'testuser'@'localhost' (using password: YES)
-2024/12/30 17:07:03 SQLSTATE[HY000] [1045] Access denied for user 'testuser'@'localhost' (using password: YES)
-2024/12/30 17:29:11 SQLSTATE[HY000] [1045] Access denied for user 'testuser'@'localhost' (using password: YES)
-2024/12/30 17:35:11 SQLSTATE[HY000] [1045] Access denied for user 'testuser'@'localhost' (using password: YES)
-2024/12/30 17:44:15 SQLSTATE[HY000] [1045] Access denied for user 'testuser'@'localhost' (using password: YES)
-2024/12/30 17:49:46 SQLSTATE[HY000] [1045] Access denied for user 'testuser'@'localhost' (using password: YES)
-2024/12/30 18:00:54 SQLSTATE[HY000] [1045] Access denied for user 'testuser'@'localhost' (using password: YES)
-2024/12/30 18:01:27 SQLSTATE[HY000] [1045] Access denied for user 'testuser'@'localhost' (using password: YES)
-2025/01/04 14:01:20 SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ' m.name
-              FROM task as t
-              LEFT JOIN member as m
- ...' at line 1
-2025/01/10 15:13:25 PDO::__construct(): Argument #1 ($dsn) must be a valid data source name
-2025/01/10 15:22:53 PDO::__construct(): Argument #1 ($dsn) must be a valid data source name
-2025/01/14 05:59:31 SQLSTATE[HY000] [1045] Access denied for user 'testuser1'@'localhost' (using password: YES)
-2025/01/14 06:13:10 SQLSTATE[HY000] [1045] Access denied for user 'testuser1'@'localhost' (using password: YES)
-2025/01/14 06:20:39 SQLSTATE[HY000] [1045] Access denied for user 'testuser1'@'localhost' (using password: YES)
+2025/02/04 09:18:08 SQLSTATE[HY000] [2006] MySQL server has gone away
+2025/02/22 11:57:47 SQLSTATE[HY000] [1045] Access denied for user 'testuser'@'localhost' (using password: YES)
+2025/03/04 13:16:22 SQLSTATE[HY000] [1045] Access denied for user 'testuser1'@'localhost' (using password: YES)

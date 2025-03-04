@@ -7,7 +7,7 @@ use function App\Services\flashMsg;
 use function App\Services\writeLog;
 
 /**
- * データ削除クラス
+ * タスクデータ削除
  */
 class DeleteTask extends DbConnect
 {
@@ -48,6 +48,7 @@ class DeleteTask extends DbConnect
   }
   /**
    * タスクの完全削除（マネージャー権限） taskテーブルとmessageテーブルの該当idを削除
+   * 
    * @param int $id タスクid
    * @return void
    */
@@ -74,7 +75,7 @@ class DeleteTask extends DbConnect
       $stmt->execute();    
 
       $pdo->commit();
-      $_SESSION['del_msg'] = "タイトル : 「{$del_data['theme']}」のタスクを完了しました";
+      $_SESSION['del_msg'] = "タイトル : 「{$del_data['theme']}」のタスクを完全に削除しました";
       header('Location: ?mode=index');
 
     } catch(PDOException $e) {

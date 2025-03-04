@@ -83,7 +83,7 @@ use function App\Services\MgSetSendIcon;
             <?php foreach($paginate_tasks[0] as $task) :?>
             <tr>
               <td><?php echo $task['name'];?></td>
-              <td class="priority"><?php echo h(str_repeat('☆',$task['priority'])) ?></td>
+              <td class="priority"><?php echo h(str_repeat('★',$task['priority'])) ?></td>
               <td><?php echo $task['category'] ?></td>
               <td class="comp-icon">
                 <?php if($task['del_flag'] === 1): ?>

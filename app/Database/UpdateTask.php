@@ -5,7 +5,7 @@ use function App\Services\flashMsg;
 use function App\Services\writeLog;
 
 /**
- * タスク更新用クラス
+ * タスク更新
  */
 class UpdateTask extends StoreTask
 {

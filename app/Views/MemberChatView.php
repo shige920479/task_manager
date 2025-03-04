@@ -28,7 +28,7 @@ use function App\Services\setChatHtml;
                 <div class="m-edit-list"><?php echo $task['theme']?></div>
               </li>
               <li>
-                <label for="content">タスク概要</label>
+                <label for="content">タスク概略</label>
                 <div class="m-edit-list"><?php echo $task['content']?></div>
               </li>
               <li>
@@ -45,11 +45,6 @@ use function App\Services\setChatHtml;
             </ul>
           </div>
           <form action="<?php echo PATH . 'dashboard/' ?>" method="post" id="message-box">
-          <!-- <form action="/task_manager/dashboard/" method="post" id="message-box"> -->
-
-          <!-- 1/13の修正はここまで、明日はこのファイルの上から再開 -->
-
-
             <label>メッセージ入力<?php echo isset($flash_array['comment']) ? "<span class='flash-msg'>{$flash_array['comment']}</span>" : ""; ?></label>
             <textarea name="comment" rows="3"><?php echo isset($old['comment']) ? h($old['comment']) : ""; ?></textarea>
             <button type="submit" class="sendmsg-btn btn">メッセージ送信</button>

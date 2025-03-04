@@ -1,8 +1,8 @@
 <?php
-// require_once './vendor/autoload.php';
 require_once './app/config/config.php';
 require_once './app/Services/helper.php';
 
+use App\Database\Authenticate;
 use App\Database\DbConnect;
 use App\Database\DeleteTask;
 use App\Database\Logout;
@@ -12,6 +12,7 @@ use App\Database\UpdateTask;
 use App\Services\GetRequest;
 use Carbon\Carbon;
 use function App\Services\flash;
+use function App\Services\flashMsg;
 use function App\Services\old;
 use function App\Services\paginate;
 use function App\Services\setToken;
@@ -51,6 +52,14 @@ switch ($request['mode']) {
     break;
 
   case 'edit':
+
+    $task_member = Authenticate::taskBelongsToMember($request['id']);
+    if($task_member !== $_SESSION['login_id']) {
+      flashMsg('tokenerror', "不正なリクエストです、再度ログインをお試しください"); 
+      header('Location:' . PATH . 'error/?error_mode=400error');
+      exit;
+    } 
+    
     $edit_data = DbConnect::getTaskById($request['id']);
     $categories = DbConnect::getCategory($edit_data['member_id']); 
 
@@ -71,6 +80,13 @@ switch ($request['mode']) {
     break;
 
   case 'chat':
+    $task_member = Authenticate::taskBelongsToMember($request['id']);
+    if($task_member !== $_SESSION['login_id']) {
+      flashMsg('tokenerror', "不正なリクエストです、再度ログインをお試しください"); 
+      header('Location:' . PATH . 'error/?error_mode=400error');
+      exit;
+    } 
+
     $task = DbConnect::getTaskById($request['id']);
     $chats = DbConnect::getChatData($request['id'], MEMBER);
     $token = setToken();
@@ -87,6 +103,13 @@ switch ($request['mode']) {
     break;
 
   case 'callender':
+
+    if((int)$request['member_id'] !== $_SESSION['login_id']) {
+      flashMsg('tokenerror', "不正なリクエストです、再度ログインをお試しください"); 
+      header('Location:' . PATH . 'error/?error_mode=400error');
+      exit;
+    }
+
     Carbon::setLocale('ja'); 
     $current_week = isset($request['week']) ? $request['week'] : Carbon::now()->format('Y-m-d');
     $start_date = Carbon::parse($current_week)->startOfWeek(Carbon::MONDAY);

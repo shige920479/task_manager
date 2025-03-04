@@ -86,7 +86,7 @@ include './app/Views/MemberHeader.php';
             <?php if(isset($paginate_tasks[0])) :?>
             <?php foreach($paginate_tasks[0] as $task) :?>
             <tr>
-              <td class="priority"><?php echo str_repeat('☆', $task['priority'])?></td>
+              <td class="priority"><?php echo str_repeat('★', $task['priority'])?></td>
               <td><?php echo $task['category'] ?></td>
               <td class="comp-icon"><?php echo $task['del_flag'] === 2 ? '<img src="' . PATH . 'images/turnback-green.png">' : "" ;?></td>
               <td class="edit-link"><?php echo "<a href='?mode=edit&id={$task['id']}'>{$task['theme']}</a>" ?></td>

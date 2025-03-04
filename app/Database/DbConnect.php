@@ -3,9 +3,11 @@ namespace App\Database;
 
 use function App\Services\flashMsg;
 use function App\Services\writeLog;
-
 use PDO;
 
+/**
+ * データベース関連の各種処理
+ */
 class DbConnect
 {
   /**
@@ -227,22 +229,11 @@ class DbConnect
     try {
       $pdo = self::db_connect();
 
-      /**
-       * リファクタリング
-       * マネージャーによる完全削除機能の追加
-       * 下記は、完了タスクも表示する様にsql修正
-       */
-
-      // $sql = 'SELECT t.*, m.name
-      //         FROM task as t
-      //         LEFT JOIN member as m 
-      //         ON t.member_id = m.id
-      //         WHERE t.del_flag = 0';
-
       $sql = "SELECT t.*, m.name
               FROM task as t
               LEFT JOIN member as m
-              ON t.member_id = m.id";
+              ON t.member_id = m.id
+              WHERE 1 = 1";
 
       if(!empty($request['name'])) $sql .= " AND m.name = :name";
       if(!empty($request['category'])) $sql .= " AND t.category = :category";
@@ -280,7 +271,7 @@ class DbConnect
    * 登録されている全メンバー名を取得
    * 
    * @param void
-   * @return array $members memberテーブルに登録済のメンバー名
+   * @return array|bool $members memberテーブルに登録済のメンバー名
    */
   public static function getMemberName(): array
   {
@@ -290,11 +281,13 @@ class DbConnect
       $stmt = $pdo->query($sql);
       $members = $stmt->fetchAll();
       return $members;
+      exit;
       
     } catch(\PDOException $e) {
       flashMsg('db', "内部サーバーエラーです。\n検索中のリソースに問題があるため、リソースを表示できません");
       writeLog(LOG_FILEPATH, $e->getMessage());
       header('Location:' . PATH . 'error/?error_mode=500error');
+      exit;
     
     } finally {  
       list($pdo, $stmt) = [null, null];

@@ -95,7 +95,4 @@ switch ($request['mode']) {
     Logout::logout($request);
     break;
 
-  // default:
-  //   code...
-  //   break;
 }

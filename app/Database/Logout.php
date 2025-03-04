@@ -1,6 +1,10 @@
 <?php
 namespace App\Database;
 
+/**
+ * ログアウト処理
+ */
+
 class Logout
 {
   /**

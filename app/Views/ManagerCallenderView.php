@@ -6,11 +6,11 @@
         <a href='<?php echo "?mode=callender&week={$next_week}";?>'>来週</a>
       </div>
       <table id="taskboard">
+        <div id="color-exp"><span>完了タスク</span></div>
         <thead>
           <tr>
             <th>カテゴリー</th>
             <?php for($date = $start_date->copy(); $date <= $end_date; $date->addDay()): ?>
-            <!-- <th><?php echo $date->format('m/d') . '(' . $date->format('D') . ')'; ?></th> -->
             <th><?php echo $date->isoFormat('MM/DD（ddd）'); ?></th>
             <?php endfor; ?>
           </tr>

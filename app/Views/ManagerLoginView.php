@@ -8,7 +8,7 @@ use function App\Services\setToken;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>TaskManager</title>
     <link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css" />
     <link rel="stylesheet" href="<?php echo PATH . 'css/style.css';?>">
   </head>
@@ -37,7 +37,7 @@ use function App\Services\setToken;
         </div>
       </form>
       <div id="to-member">
-        <a href="<?php echo PATH;?>">メンバー用ログイン画面はこちら</a>
+        <a href="<?php echo PATH;?>" class="auth-link">メンバー用ログイン画面はこちら</a>
       </div>
     </section>
   </body>

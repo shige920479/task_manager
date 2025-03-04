@@ -4,6 +4,9 @@ namespace App\Database;
 use function App\Services\flashMsg;
 use function App\Services\old_store;
 
+/**
+ * ログイン処理
+ */
 class Login extends DbConnect
 {  
   private static $user_data;

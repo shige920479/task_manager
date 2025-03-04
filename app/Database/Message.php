@@ -8,12 +8,13 @@ use function App\Services\old_store;
 use function App\Services\writeLog;
 
 /**
- * タスクに対するコメント（チャット）のデータベース登録用クラス
+ * タスクに対するコメント（チャット）のデータベース登録
  */
 class Message extends DbConnect
 {
   /**
    * チャットメッセージ登録&&一覧表のアイコンステータス変更用フラグの切替
+   * 
    * @param array $request 入力データ ['sender'] = member|manager ・・処理が異なるので識別用の引数
    * @return void
    */
@@ -63,6 +64,7 @@ class Message extends DbConnect
   }
   /**
    * 差し戻し用メッセージ ※メンバーが完了したタスクに対してマネージャーから差し戻しする処理
+   * 
    * @param array $request 入力データ ['sender'] = member|manager ・・処理が異なるので識別用の引数
    * @return void
    */
@@ -105,9 +107,9 @@ class Message extends DbConnect
     }
   }
 
-
   /**
    * チャットメッセージ専用のバリデーション
+   * 
    * @param array $request 入力データ
    * @return bool
    */

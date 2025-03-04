@@ -5,8 +5,7 @@ html {
 }
 
 body {
-  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
-    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   font-style: normal;
   color: rgb(86, 86, 86);
   font-size: 0.9rem;
@@ -78,7 +77,7 @@ table {
 -------------------------------------------*/
 .login-wrapper {
   width: 430px;
-  margin: 25px auto;
+  margin: 80px auto;
 }
 .login-wrapper h1,
 .login-wrapper h2,
@@ -89,6 +88,7 @@ table {
 .login-wrapper h2 {
   margin: 20px 0;
   font-size: 0.9rem;
+  color: #ff0078;
 }
 .login-box {
   background-color: #e9eaec;
@@ -131,10 +131,16 @@ table {
   margin-top: 15px;
   font-size: 0.8rem;
 }
-#to-register a {
+#to-register .auth-link {
   margin-left: 20px;
+  color: gray;
   text-decoration: underline;
 }
+.auth-link:hover,
+#to-register .auth-link:hover {
+  color: rgb(12, 12, 56);
+}
+
 /*-------------------------------------------
  メンバーアカウント作成画面 MemberAccountView.php
 -------------------------------------------*/
@@ -205,8 +211,7 @@ header {
   padding: 5px 20px;
   border-radius: 5px;
   border: 2px solid #4d4a60;
-  box-shadow: inset -5px -5px 10px 0px rgba(255, 255, 255, 0.5),
-    inset 5px 5px 10px 0px #4c4962;
+  box-shadow: inset -5px -5px 10px 0px rgba(255, 255, 255, 0.5), inset 5px 5px 10px 0px #4c4962;
 }
 #header-link:hover {
   opacity: 0.7;
@@ -437,12 +442,15 @@ header {
   text-align: center;
 }
 .edit-link a {
-  color: #050505;
+  color: #1e088a;
+  text-decoration: underline;
 }
 .edit-link a:hover {
-  text-decoration: underline;
-  color: rgb(8, 2, 44);
   font-weight: bold;
+}
+#task-list .priority,
+#m-task-list .priority {
+  color: rgb(218, 196, 32);
 }
 
 /*メッセージ 送信・受信アイコン*/
@@ -560,6 +568,7 @@ header {
   color: gray;
   font-size: 0.8rem;
   line-height: 2;
+  padding-left: 8px;
 }
 .search-btn {
   padding: 8px 10px;
@@ -571,24 +580,6 @@ header {
 }
 
 /* task一覧(マネージャー) */
-
-/*↓↓↓↓↓↓↓↓↓↓↓↓ 使っていない様に思える ↓↓↓↓↓↓↓↓↓↓↓↓ */
-/* #m-task-list .edit-btn {
-  background-color: rgb(22, 155, 22);
-  border-radius: 5px;
-  color: #fff;
-  font-size: 0.8rem;
-  padding: 4px 11px;
-}
-#m-task-list .comp-btn {
-  color: #fff;
-  margin: 3px 0;
-  padding: 0 10px;
-  border-radius: 5px;
-}
-#m-task-list .comp-btn {
-  background-color: orange;
-} */
 
 #m-task-list table {
   font-size: 0.8rem;
@@ -768,7 +759,7 @@ header {
   background-color: rgb(238, 18, 73);
 }
 /*----------------------------------------------------
-ダッシュボード MemberCallenderView.php, ManagerCallenderView.php, 
+カレンダー MemberCallenderView.php, ManagerCallenderView.php, 
 ----------------------------------------------------*/
 .calender-wrapper {
   max-width: 1200px;
@@ -792,8 +783,27 @@ header {
   color: rgb(14, 5, 151);
   font-weight: bold;
 }
-
 /* ボード全体 */
+#color-exp {
+  text-align: right;
+  padding-right: 5px;
+}
+#color-exp span {
+  font-size: 0.8rem;
+  position: relative;
+}
+#color-exp span::before {
+  content: "";
+  position: absolute;
+  display: block;
+  border-radius: 3px;
+  width: 30px;
+  height: 16px;
+  background-color: #565657;
+  left: -35px;
+  top: 2px;
+}
+
 #taskboard th:nth-child(1) {
   width: 10%;
 }

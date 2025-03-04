@@ -8,13 +8,14 @@ use function App\Services\old_store;
 use function App\Services\writeLog;
 
 /**
- * 新規タスク登録用クラス
+ * 新規タスク登録
  */
 class StoreTask extends DbConnect
 {
 
   /**
    * データベースへの新規タスク登録
+   * 
    * @param array $request 入力データ
    * @return void 
    */
@@ -57,6 +58,7 @@ class StoreTask extends DbConnect
   }
   /**
    * 新規タスク登録専用のバリデーション
+   * 
    * @param array $request 入力データ
    * @return bool
    */
@@ -110,6 +112,7 @@ class StoreTask extends DbConnect
   }
   /**
    * 新規タスク登録のバリデーションで使用する日付バリデーション
+   * 
    * @param string $input_date 入力された日付(フォーマット済の日付)
    * @param string $format 日付をインスタンス化する際に使用
    */

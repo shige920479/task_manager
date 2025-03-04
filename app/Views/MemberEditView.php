@@ -6,7 +6,7 @@ use function App\Services\h;
       <h1>編集ページ</h1>
       <div id="to_index"><a href="?mode=index">一覧へ戻る</a></div>
       <section>
-        <form action="<?php echo PATH;?>" method="post">
+        <form action="<?php echo PATH . 'dashboard/';?>" method="post">
           <ul id="edit-table">
             <li>
               <label for="priority">優先度</label>
@@ -33,7 +33,7 @@ use function App\Services\h;
               <input type="text" name="theme" id="theme" value="<?php echo isset($old['theme']) ? h($old['theme']) : $edit_data['theme'];?>"/>
             </li>
             <li>
-              <label for="content">コメント</label>
+              <label for="content">タスク概略</label>
               <?php echo isset($flash_array['content']) ? "<span class='flash-msg'>{$flash_array['content']}</span>" : '' ?>
               <textarea type="text" name="content" id="content"><?php echo isset($old['content']) ? h($old['content']) : $edit_data['content']?>
               </textarea>

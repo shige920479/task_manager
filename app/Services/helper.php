@@ -263,13 +263,13 @@ function setChatHtml(array $chats, string $login_user): string
             if($chat['sender'] === 1) {
                 $chat_html .= "<li class='chat me'><p class='mes'>";
                 $chat_html .= $chat['comment'];
-                $chat_html .= "<div class='status'>";
+                $chat_html .= "</p><div class='status'>";
                 $chat_html .= $created_at;
                 $chat_html .= "</div></li>";
             } elseif($chat['sender'] === 0) {
                 $chat_html .= "<li class='chat you'><p class='mes'>";
                 $chat_html .= $chat['comment'];
-                $chat_html .= "<div class='status'>";
+                $chat_html .= "</p><div class='status'>";
                 $chat_html .= $created_at;
                 $chat_html .= "</div></li>";
             }
@@ -277,13 +277,13 @@ function setChatHtml(array $chats, string $login_user): string
             if($chat['sender'] === 0) {
                 $chat_html .= "<li class='chat me'><p class='mes'>";
                 $chat_html .= $chat['comment'];
-                $chat_html .= "<div class='status'>";
+                $chat_html .= "</p><div class='status'>";
                 $chat_html .= $created_at;
                 $chat_html .= "</div></li>";
             } elseif($chat['sender'] === 1) {
                 $chat_html .= "<li class='chat you'><p class='mes'>";
                 $chat_html .= $chat['comment'];
-                $chat_html .= "<div class='status'>";
+                $chat_html .= "</p><div class='status'>";
                 $chat_html .= $created_at;
                 $chat_html .= "</div></li>";
             }
@@ -294,14 +294,15 @@ function setChatHtml(array $chats, string $login_user): string
 
 /**
  * ログファイルへの書き込み
+ * 
  * @param string $file_name ログファイルのパス
  * @param string $message エラーメッセージ
  * @return void
  */
-function writeLog($file_name, $message): void
+function writeLog(string $file_name, string $message): void
 {
     date_default_timezone_set('Asia/Tokyo');
     $date = date('Y/m/d H:i:s');
     $log = "{$date} {$message}\n";
-    file_put_contents(LOG_FILEPATH, $log, FILE_APPEND | LOCK_EX);
+    file_put_contents($file_name, $log, FILE_APPEND | LOCK_EX);
 }

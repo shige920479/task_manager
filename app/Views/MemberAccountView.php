@@ -8,7 +8,7 @@ use function App\Services\setToken;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>TaskManager</title>
     <link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css" />
     <link rel="stylesheet" href="<?php echo PATH . 'css/style.css'?>">
   </head>
@@ -47,7 +47,7 @@ use function App\Services\setToken;
           <input type="hidden" name="token" value="<?php echo h(setToken());?>">
           <button type="submit">アカウント登録</button>
         </ul>
-        <p id="to-login"><a href="<?php echo PATH ;?>">ログイン画面に戻る</a></p>
+        <p id="to-login"><a href="<?php echo PATH ;?>" class="auth-link">ログイン画面に戻る</a></p>
       </form>
     </section>
   </body>
