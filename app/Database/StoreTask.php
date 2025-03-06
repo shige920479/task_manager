@@ -3,20 +3,25 @@ namespace App\Database;
 
 use DateTime;
 use PDOException;
-
-//フラッシュメッセージ用、完成後にメッセージも合わせて削除。
-require_once '../Services/helper.php'; 
 use function App\Services\flashMsg;
 use function App\Services\old_store;
+use function App\Services\writeLog;
 
-/////////////////////////////////////////////////////
-
+/**
+ * 新規タスク登録
+ */
 class StoreTask extends DbConnect
 {
-  public static function storeTask ($in) {
 
-    if(self::validation($in)) {
-
+  /**
+   * データベースへの新規タスク登録
+   * 
+   * @param array $request 入力データ
+   * @return void 
+   */
+   public static function storeTask (array $request): void
+  {
+    if(self::validation($request)) {
       try {
         $pdo = DbConnect::db_connect();
         $sql = "INSERT INTO task
@@ -25,80 +30,97 @@ class StoreTask extends DbConnect
               (:member_id, :priority, :category, :theme, :content, :deadline)
               ";
         $stmt = $pdo->prepare($sql);
-        $stmt->bindValue(':member_id', $in['member_id'], \PDO::PARAM_STR);
-        $stmt->bindValue(':priority', intval($in['priority']), \PDO::PARAM_INT);
-        $stmt->bindValue(':category', $in['category'], \PDO::PARAM_STR);
-        $stmt->bindValue(':theme', $in['theme'], \PDO::PARAM_STR);
-        $stmt->bindValue(':content', $in['content'], \PDO::PARAM_STR);
-        $stmt->bindValue(':deadline', $in['deadline'], \PDO::PARAM_STR);
+        $stmt->bindValue(':member_id', $request['member_id'], \PDO::PARAM_STR);
+        $stmt->bindValue(':priority', intval($request['priority']), \PDO::PARAM_INT);
+        $stmt->bindValue(':category', $request['category'], \PDO::PARAM_STR);
+        $stmt->bindValue(':theme', $request['theme'], \PDO::PARAM_STR);
+        $stmt->bindValue(':content', $request['content'], \PDO::PARAM_STR);
+        $stmt->bindValue(':deadline', $request['deadline'], \PDO::PARAM_STR);
         $stmt->execute();
-        $pdo = [];
-        header('Location: ../Views/index.php');
+        
+        if(isset($_SESSION['old'])) unset($_SESSION['old']);
+        header('Location:' . PATH . 'dashboard?mode=index');
         exit;
         
       } catch(PDOException $e) {
-        flashMsg('db', "登録に失敗しました : {$e->getMessage()}"); //フラッシュメッセージ用、完成後に削除。
-        header('Location: ../Views/500error.php');
+        flashMsg('db', "内部サーバーエラーです。\n検索中のリソースに問題があるため、リソースを表示できません");
+        writeLog(LOG_FILEPATH, $e->getMessage());
+        header('Location:' . PATH . 'error?error_mode=500error');
         exit;
-      }
+        
+      } finally {
+        list($pdo, $stmt) = [null, null];
+      } 
     } else {
-      header('Location: ../Views/index.php');
+      header('Location:' . PATH . 'dashboard?mode=index');
       exit;
     }
   }
-  protected static function validation($in) {
-
+  /**
+   * 新規タスク登録専用のバリデーション
+   * 
+   * @param array $request 入力データ
+   * @return bool
+   */
+  protected static function validation(array $request): bool
+  {
     //優先度のバリデーション
-    if($in['priority'] === "") {
+    if($request['priority'] === "") {
       flashMsg('priority', '要選択');
-    } elseif(!in_array($in['priority'], [1,2,3])) {
+    } elseif(!in_array($request['priority'], [1,2,3])) {
       flashMsg('priority', '再選択');      
     } else {
-      old_store('priority', $in['priority']);
+      old_store('priority', $request['priority']);
     }
     //カテゴリーのバリデーション
-    if($in['category'] === "") {
+    if($request['category'] === "") {
       flashMsg('category', '入力or選択願います');      
-    } elseif(mb_strlen($in['category']) > 50) {
+    } elseif(mb_strlen($request['category']) > 50) {
       flashMsg('category', '50文字以内で入力願います');
     } else {
-      old_store('category', $in['category']);
+      old_store('category', $request['category']);
     }
     //テーマのバリデーション
-    if($in['theme'] === "") {
+    if($request['theme'] === "") {
       flashMsg('theme', '未入力です');      
-    } elseif(mb_strlen($in['theme']) > 50) {
+    } elseif(mb_strlen($request['theme']) > 50) {
       flashMsg('theme', '50文字以内で入力願います');
     } else {
-      old_store('theme', $in['theme']);
+      old_store('theme', $request['theme']);
     }
     //タスク内容のバリデーション
-    if($in['content'] === "") {
+    if($request['content'] === "") {
       flashMsg('content', '未入力です');      
-    } elseif(mb_strlen($in['content']) > 255) {
+    } elseif(mb_strlen($request['content']) > 255) {
       flashMsg('content', '255文字以内で入力願います');
     } else {
-      old_store('content', $in['content']);
+      old_store('content', $request['content']);
     }
     //完了目標のバリデーション
-    if($in['deadline'] === "") {
-      flashMsg('deadline', '日付が未入力です');      
-    } elseif(!self::dateValidate($in['deadline'])) {
-      flashMsg('deadline', '無効な日付形式です');
-    } elseif($in['deadline'] < date('Y-m-d')) {
+    if($request['deadline'] === "") {
+      flashMsg('deadline', '未入力です');      
+    } elseif(!self::dateValidate($request['deadline'])) {
+      flashMsg('deadline', '無効な日付形式');
+    } elseif($request['deadline'] < date('Y-m-d')) {
       flashMsg('deadline', '過去の日付です');
     } else {
-      old_store('deadline', $in['deadline']);
+      old_store('deadline', $request['deadline']);
     }
 
     $result = empty($_SESSION['error']) ? true : false;
     return $result;
   }
-  //日付チェック
-  protected static function dateValidate($inputDate, $format = 'Y-m-d') {
+  /**
+   * 新規タスク登録のバリデーションで使用する日付バリデーション
+   * 
+   * @param string $input_date 入力された日付(フォーマット済の日付)
+   * @param string $format 日付をインスタンス化する際に使用
+   */
+  protected static function dateValidate(string $input_date, string $format = 'Y-m-d'): bool
+  {
     date_default_timezone_set('Asia/Tokyo');
-    $d = DateTime::createFromFormat($format, $inputDate);
-    return $d && $d->format($format) === $inputDate;
+    $d = DateTime::createFromFormat($format, $input_date);
+    return $d && $d->format($format) === $input_date;
   }
 
 }

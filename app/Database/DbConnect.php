@@ -1,53 +1,71 @@
 <?php
 namespace App\Database;
-require_once '../config/config.php';
 
-//フラッシュメッセージ用、完成後にメッセージも合わせて削除。
-require_once '../Services/helper.php'; 
 use function App\Services\flashMsg;
-/////////////////////////////////////////////////////
-
+use function App\Services\writeLog;
 use PDO;
-use PDOException;
 
-// 作ってみた後にすべての例外処理を外せるか見直し -> ここは外さないで、他のファイルで外せるものを検討。
-
+/**
+ * データベース関連の各種処理
+ */
 class DbConnect
 {
-  protected static function db_connect() {
-      $pdo = new PDO(DSN, USERNAME, PASSWORD);
+  /**
+   * データベース接続
+   * @param void
+   * @return pdo
+   */
+  protected static function db_connect(): pdo
+  {
+      $pdo = new PDO("mysql:host=" . $_ENV['DB_HOST'] . "; dbname=" . $_ENV['DB_NAME'] . "; charset=utf8", $_ENV['DB_USER'], $_ENV['DB_PASS']);
       $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
       $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
       return $pdo;
   }
 
-  /** index.php メンバーidからタスクデータを取得
-  * param int $member_id
-  * return array $member_data 
-  */
-  public static function getMemberData(int $member_id): array
+  /**
+   * メンバーidから該当のタスクデータを取得
+   * 
+   * @param int $member_id セッション変数を使用
+   * @param array|null $request ここでは並替の規則（$request['sort_order']）を使用、nullは無いと思うが念のため許容
+   * @return array|bool $member_data メンバーのタスクデータ、登録直後の初期データがない際はfalse
+   */
+  public static function getMemberData(int $member_id, ?array $request): array
    {
     try {
       $pdo = self::db_connect();
-      $sql = "SELECT * FROM task WHERE member_id = :member_id and del_flag = 0";
+      $sql = "SELECT * FROM task WHERE member_id = :member_id and del_flag in (0,2)";
+
+      if(!isset($request['sort_order']) || $request['sort_order'] === "") $sql .= ' ORDER BY updated_at desc';
+      if(isset($request['sort_order']) && $request['sort_order'] === 'sort_deadline') $sql .= ' ORDER BY deadline';
+      if(isset($request['sort_order']) && $request['sort_order'] === 'sort_category') $sql .= ' ORDER BY category'; 
+      if(isset($request['sort_order']) && $request['sort_order'] === 'sort_priority') $sql .= ' ORDER BY priority desc'; 
+
       $stmt = $pdo->prepare($sql);
       $stmt->bindValue(':member_id', $member_id, PDO::PARAM_INT);
       $stmt->execute();
       $member_data = $stmt->fetchAll();
-      list($pdo, $stmt) = [null, null];
       return $member_data;
-
-    } catch(PDOException $e) {
-      flashMsg('db', "データ取得に失敗しました : {$e->getMessage()}"); //フラッシュメッセージ用、完成後に削除。
-      header('Location: ../Views/500error.php');
+      
+    } catch(\PDOException $e) {
+      flashMsg('db', "内部サーバーエラーです。\n検索中のリソースに問題があるため、リソースを表示できません");
+      writeLog(LOG_FILEPATH, $e->getMessage());
+      header('Location:' . PATH . 'error?error_mode=500error');
       exit;
+    } finally {
+      list($pdo, $stmt) = [null, null];
     }
   }
 
-  /** ManagerChatView.php, MemberChatView.php, MemberEditView.php, DeleteTask.php で使用
-   * 変数名が判りにくいので、別途命名
+  /**
+   * タスクidから該当のタスクデータとメンバーの名前を取得 
+   * 
+   * (MemberController.php,ManagerController.php,DeleteTask.php)
+   * @param int $task_id 選択したタスクid
+   * @return array $task 該当のタスクデータ・メンバーの名前
    */
-  public static function selectId($id) {
+  public static function getTaskById(int $task_id): array
+  {
     try {
       $pdo = self::db_connect();
       $sql = "SELECT t.*, m.name
@@ -57,26 +75,33 @@ class DbConnect
               WHERE t.id = :id";
 
       $stmt = $pdo->prepare($sql);
-      $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+      $stmt->bindValue(':id', $task_id, PDO::PARAM_INT);
       $stmt->execute();
       $task = $stmt->fetch();
-      list($pdo, $stmt) = [null, null];
       return $task;
 
-    } catch(PDOException $e) {
-      flashMsg('db', "データ取得に失敗しました : {$e->getMessage()}"); //フラッシュメッセージ用、完成後に削除。
-      header('Location: ../Views/500error.php');
+    } catch(\PDOException $e) {
+      flashMsg('db', "内部サーバーエラーです。\n検索中のリソースに問題があるため、リソースを表示できません");
+      writeLog(LOG_FILEPATH, $e->getMessage());
+      header('Location:' . PATH . 'error?error_mode=500error');
       exit;
-    } 
+    } finally {
+      list($pdo, $stmt) = [null, null];
+    }
   }
 
-  /** MemberChatView.php, ManagerChatView.php
-   * param int $task_id
-   * return array メッセージデータ
+  /** 
+   * チャットボックス内のメッセージデータ取得＆ページ読込時に未読メッセージの既読化（一覧ページのアイコン切替）
+   * 
+   * @param int $task_id
+   * @param string $login_user メンバー|マネージャーかを識別
+   * @return array $chats メッセージデータ
    */
-  public static function getMessage($task_id, $login_user) {
+  public static function getChatData(int $task_id, string $login_user): array|false
+  {
     try {
       $pdo = self::db_connect();
+      $pdo->beginTransaction(); // トランザクション開始
       $sql = "SELECT * FROM message WHERE task_id = :task_id";
       $stmt = $pdo->prepare($sql);
       $stmt->bindValue(':task_id', $task_id, PDO::PARAM_INT);
@@ -86,60 +111,93 @@ class DbConnect
       // メッセージの読み込みと同時に、memberおよびmanagerの確認フラグを処理
       if($chats) self::loadConfirm($task_id, $login_user, $pdo);
 
-      list($pdo, $stmt) = [null, null];
+      $pdo->commit(); //コミット
       return $chats;
-
-    } catch(PDOException $e) {
-      flashMsg('db', "データ取得に失敗しました : {$e->getMessage()}"); //フラッシュメッセージ用、完成後に削除。
-      header('Location: ../Views/500error.php');
+      
+    } catch(\PDOException $e) {
+      flashMsg('db', "内部サーバーエラーです。\n検索中のリソースに問題があるため、リソースを表示できません");
+      writeLog(LOG_FILEPATH, $e->getMessage());
+      $pdo->rollBack(); // ロールバック
+      header('Location:' . PATH . 'error?error_mode=500error');
       exit;
+    } finally {
+      list($pdo, $stmt) = [null, null];
     }
   }
-
+  /**
+   * getChatData()内でのみ使用、ページ読込時に既読としてメンバー・マネージャー双方のフラグを処理（アイコンに反映）
+   * 
+   * @param int $task_id
+   * @param string $login_user メンバーorマネージャーかを識別
+   * @param pdo $pdo
+   * @return void
+   */
   private static function loadConfirm(int $task_id, string $login_user, $pdo): void
   {
-    $sql = "SELECT * FROM task WHERE id = :id"; //selectId()でも良いが、何度もこちらの方がPDO一回で済む
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindValue(':id', $task_id, PDO::PARAM_INT);
-    $stmt->execute();
-    $task = $stmt->fetch();
+    try {
+      $sql = "SELECT * FROM task WHERE id = :id";
+      $stmt = $pdo->prepare($sql);
+      $stmt->bindValue(':id', $task_id, PDO::PARAM_INT);
+      $stmt->execute();
+      $task = $stmt->fetch();
 
-    if($login_user === MANAGER && $task['mem_to_mg'] == 1) {
-      $sql = "UPDATE task SET mem_to_mg = 2 WHERE id = :task_id";
-    } elseif($login_user === MEMBER && $task['mg_to_mem'] == 1) {
-      $sql = "UPDATE task SET mg_to_mem = 0 WHERE id = :task_id";
-    } else {
-      return;
+      if($login_user === MANAGER && $task['mem_to_mg'] == 1) {
+        $sql = "UPDATE task SET mem_to_mg = 2 WHERE id = :task_id";
+      } elseif($login_user === MEMBER && $task['mg_to_mem'] == 1) {
+        $sql = "UPDATE task SET mg_to_mem = 0 WHERE id = :task_id";
+      } else {
+        return;
+      }
+      $stmt = $pdo->prepare($sql);
+      $stmt->bindValue(':task_id', $task_id, PDO::PARAM_INT);
+      $stmt->execute();
+
+    } catch(\PDOException $e) {
+      flashMsg('db', "内部サーバーエラーです。\n検索中のリソースに問題があるため、リソースを表示できません");
+      writeLog(LOG_FILEPATH, $e->getMessage());
+      header('Location:' . PATH . 'error?error_mode=500error');
+      exit;
+
+    } finally {
+      list($pdo, $stmt) = [null, null];
     }
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindValue(':task_id', $task_id, PDO::PARAM_INT);
-    $stmt->execute();
   }
   
-  
-  /** Login.php
-   * param string メールアドレス、テーブル名
-   * return array メンバー情報
+  /** 
+   * ログイン認証時にメールアドレスからユーザー情報を取得（Login.php）
+   * 
+   * @param string $email メールアドレス
+   * @param string $table memberテーブルormanagerテーブルを識別
+   * @return array|bool $user_data 認証中ユーザーの登録情報|登録無ければfalse
    */
-  public static function getUserByEmail($email, $table) {
+  public static function getUserByEmail(string $email, string $table): array|false
+   {
     try {
       $pdo = self::db_connect();
       $stmt = $pdo->prepare("SELECT * FROM {$table} WHERE email = :email");
       $stmt->bindValue(':email', $email, PDO::PARAM_STR);
       $stmt->execute();
-      $login_member = $stmt->fetch();
-      list($pdo, $stmt) = [null, null];
-      return $login_member;
-
-    } catch(PDOException $e) {
-      flashMsg('db', "データ取得に失敗しました : {$e->getMessage()}"); //フラッシュメッセージ用、完成後に削除。
-      header('Location: ../Views/500error.php');
+      $user_data = $stmt->fetch();
+      return $user_data;
+      
+    } catch(\PDOException $e) {
+      flashMsg('db', "内部サーバーエラーです。\n検索中のリソースに問題があるため、リソースを表示できません");
+      writeLog(LOG_FILEPATH, $e->getMessage());
+      header('Location:' . PATH . 'error?error_mode=500error');
       exit;
-    } 
+
+    } finally {
+      list($pdo, $stmt) = [null, null];
+    }
   }
-
-
-  public static function getCategory($member_id) {
+  /**
+   * タスク一覧のセレクトボックスのoptionタグに使用するカテゴリーを取得（MemberController.php）
+   * 
+   * @param int $member_id ログイン中のメンバーid
+   * @return $categories タスクに使用しているカテゴリー（重複なし）
+   */
+  public static function getCategory(int $member_id): array
+   {
     try {
       $pdo = self::db_connect();
       $sql = "SELECT DISTINCT category FROM task where member_id = :member_id";
@@ -147,71 +205,92 @@ class DbConnect
       $stmt->bindValue(':member_id', $member_id, PDO::PARAM_INT);
       $stmt->execute();
       $categories = $stmt->fetchAll();
-      list($pdo, $stmt) = [null, null];
       return $categories;
-
-    } catch(PDOException $e) {
-      flashMsg('db', "データ取得に失敗しました : {$e->getMessage()}"); //フラッシュメッセージ用、完成後に削除。
-      header('Location: ../Views/500error.php');
+      
+    } catch(\PDOException $e) {
+      flashMsg('db', "内部サーバーエラーです。\n検索中のリソースに問題があるため、リソースを表示できません");
+      writeLog(LOG_FILEPATH, $e->getMessage());
+      header('Location:' . PATH . 'error?error_mode=500error');
       exit;
+
+    } finally {
+      list($pdo, $stmt) = [null, null];
     }
   }
 
-//Manager.indexで使用（全員or検索双方のデータを取得） ※memberテーブルと連結させてメンバー名も取得
-  public static function getTaskData($in) {
+  /**
+   * 全メンバーのタスクデータに加えmemberテーブルから名前を取得（ManagerIndex.php）
+   * 
+   * @param array $request 検索条件・並替の規則（$request['sort_order']）、nullは無いと思うが念のため許容
+   * @return array $all_data 全メンバー|検索|並べ替え後のタスクデータ
+   */
+  public static function getTaskData(?array $request): array
+   {
     try {
       $pdo = self::db_connect();
-      $sql = 'SELECT t.*, m.name
+
+      $sql = "SELECT t.*, m.name
               FROM task as t
-              left join member as m 
+              LEFT JOIN member as m
               ON t.member_id = m.id
-              WHERE t.del_flag = 0';
-      if(!empty($in['name'])) {
-        $sql .= " AND m.name = :name";
-      }
-      if(!empty($in['category'])) {
-        $sql .= " AND t.category = :category";
-      }
-      if(!empty($in['theme'])) {
-        $sql .= " AND t.theme LIKE :theme";
-      }
+              WHERE 1 = 1";
+
+      if(!empty($request['name'])) $sql .= " AND m.name = :name";
+      if(!empty($request['category'])) $sql .= " AND t.category = :category";
+      if(!empty($request['theme'])) $sql .= " AND t.theme LIKE :theme";
+      if(!isset($request['sort_order']) || $request['sort_order'] === "") $sql .= ' ORDER BY t.updated_at desc';
+      if(isset($request['sort_order']) && $request['sort_order'] === 'sort_name') $sql .= ' ORDER BY m.name';
+      if(isset($request['sort_order']) && $request['sort_order'] === 'sort_deadline') $sql .= ' ORDER BY t.deadline';
+      if(isset($request['sort_order']) && $request['sort_order'] === 'sort_category') $sql .= ' ORDER BY t.category'; 
+      if(isset($request['sort_order']) && $request['sort_order'] === 'sort_priority') $sql .= ' ORDER BY t.priority desc'; 
 
       $stmt = $pdo->prepare($sql);
 
-      if(!empty($in['name'])) {
-        $stmt->bindValue(':name', $in['name'], PDO::PARAM_STR);
+      if(!empty($request['name'])) $stmt->bindValue(':name', $request['name'], PDO::PARAM_STR);
+      if(!empty($request['category'])) $stmt->bindValue(':category', $request['category'], PDO::PARAM_STR);
+      if(!empty($request['theme'])) {
+        $theme = '%'. $request['theme'] . '%';
+        $stmt->bindValue(':theme', $theme, PDO::PARAM_STR);
       }
-      if(!empty($in['category'])) {
-        $stmt->bindValue(':category', $in['category'], PDO::PARAM_STR);
-      }
-      if(!empty($in['theme'])) {
-        $category = '%'. $in['theme'] . '%';
-        $stmt->bindValue(':theme', $category, PDO::PARAM_STR);
-      }
-      // echo $sql;
-      // exit;
+
       $stmt->execute();
       $all_data = $stmt->fetchAll();
-      list($pdo, $stmt) = [null, null];
       return $all_data;
-
-    } catch(PDOException $e) {
-      flashMsg('db', "データ取得に失敗しました : {$e->getMessage()}"); //フラッシュメッセージ用、完成後に削除。
-      header('Location: ../Views/500error.php');
+      
+    } catch(\PDOException $e) {
+      flashMsg('db', "内部サーバーエラーです。\n検索中のリソースに問題があるため、リソースを表示できません");
+      writeLog(LOG_FILEPATH, $e->getMessage());
+      header('Location:' . PATH . 'error?error_mode=500error');
       exit;
+
+    } finally {
+      list($pdo, $stmt) = [null, null];
     }
   }
-
-
   /**
-   * 必要なデータ
-   * 【要件】最大10件、ページは最後まで表示
-   * 【必要なデータ】 10件分のデータ、ページ数、現在のページ
+   * 登録されている全メンバー名を取得
+   * 
+   * @param void
+   * @return array|bool $members memberテーブルに登録済のメンバー名
    */
-
-
-  
-
-
-
+  public static function getMemberName(): array
+  {
+    try {
+      $pdo = self::db_connect();
+      $sql = 'SELECT name FROM member';
+      $stmt = $pdo->query($sql);
+      $members = $stmt->fetchAll();
+      return $members;
+      exit;
+      
+    } catch(\PDOException $e) {
+      flashMsg('db', "内部サーバーエラーです。\n検索中のリソースに問題があるため、リソースを表示できません");
+      writeLog(LOG_FILEPATH, $e->getMessage());
+      header('Location:' . PATH . 'error?error_mode=500error');
+      exit;
+    
+    } finally {  
+      list($pdo, $stmt) = [null, null];
+    }
+  }
 }

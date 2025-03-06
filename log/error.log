@@ -1,0 +1,4 @@
+2025/02/04 09:18:08 SQLSTATE[HY000] [2006] MySQL server has gone away
+2025/02/22 11:57:47 SQLSTATE[HY000] [1045] Access denied for user 'testuser'@'localhost' (using password: YES)
+2025/03/04 13:16:22 SQLSTATE[HY000] [1045] Access denied for user 'testuser1'@'localhost' (using password: YES)
+2025/03/06 17:29:12 SQLSTATE[HY000] [1045] Access denied for user 'testuser1'@'localhost' (using password: YES)

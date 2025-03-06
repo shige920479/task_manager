@@ -1,67 +1,71 @@
 <?php
 namespace App\Database;
 
-require_once __DIR__ . '/../Services/helper.php';
-
-use PDOException;
 use function App\Services\flashMsg;
 use function App\Services\old_store;
 
+/**
+ * ログイン処理
+ */
 class Login extends DbConnect
 {  
-  static $login_user;
+  private static $user_data;
+  
   /**
-   * param array $in postデータ
-   * param string $table テーブル名 
+   * メンバー・マネージャー共通のログイン認証
+   * @param array $request 入力データ（メールアドレス・パスワード）
+   * @param string $table member|manager テーブル 
    */
-  public static function login(array $in, string $table):void
+  public static function login(array $request, string $table): bool
   {
-    if(self::blankCheck($in)) {
+    if(self::blankCheck($request)) {
 
-      $login_user = self::getUserByEmail($in['email'], $table);
+      self::$user_data = self::getUserByEmail($request['email'], $table);
 
-      if(!$login_user) {
+      if(!self::$user_data) {
         flashMsg('email', 'メールアドレスが登録されておりません、再度入力願います');
-        if($table === MEMBER) {header('Location: ../Views/MemberLoginView.php');}
-        if($table === MANAGER) {header('Location: ../Views/ManagerLoginView.php');}
+        if($table === MEMBER) {header('Location:' . PATH);}
+        if($table === MANAGER) {header('Location:' . PATH . 'managerLogin');}
         exit;
-      } elseif(!password_verify($in['password'], $login_user['password'])) {
+      } elseif(!password_verify($request['password'], self::$user_data['password'])) {
         flashMsg('password', 'パスワードが異なっております、再度入力願います');
-        if($table === MEMBER) {header('Location: ../Views/MemberLoginView.php');}
-        if($table === MANAGER) {header('Location: ../Views/ManagerLoginView.php');}
+        if($table === MEMBER) {header('Location:' . PATH);}
+        if($table === MANAGER) {header('Location:' . PATH . 'managerLogin');}
         exit;
       } else {
         session_regenerate_id(TRUE); // セッションidを再発行
-        if(isset($_SESSION['old'])) { unset($_SESSION['old']); } // エラー時に使う入力情報を消去<-ここで使うべきか見直し
+        if(isset($_SESSION['old'])) unset($_SESSION['old']);
         if($table === MEMBER) { 
-          $_SESSION['login'] = $login_user['email']; // セッションにログイン情報を登録
-          $_SESSION['login_id'] = $login_user['id'];
-          $_SESSION['login_name']= $login_user['name'];
-          header('Location: ../Views/index.php');
+          $_SESSION['login'] = self::$user_data['email']; // セッションにログイン情報を登録
+          $_SESSION['login_id'] = self::$user_data['id'];
+          $_SESSION['login_name']= self::$user_data['name'];
+          header('Location:' . PATH . 'dashboard?mode=index');
+          return true;
         } 
         if($table === MANAGER) {
-          $_SESSION['m_login'] = $in['email'];
-          $_SESSION['m_login_name']= $login_user['name'];
-          header('Location: ../Views/ManagerIndex.php');
+          $_SESSION['m_login'] = $request['email'];
+          $_SESSION['m_login_name']= self::$user_data['name'];
+          header('Location:' . PATH . 'manager_dashboard?mode=index');
+          return true;
         }
         exit;
       }
     } else {
-      if($table === MEMBER) {header('Location: ../Views/MemberLoginView.php');}
-      if($table === MANAGER)  {header('Location: ../Views/ManagerLoginView.php');}
+      if($table === MEMBER) {header('Location:' . PATH);}
+      if($table === MANAGER)  {header('Location:' . PATH . 'managerLogin');}
       exit;
     }
   }
 
-  private static function blankCheck(array $in):bool
+  private static function blankCheck(array $request):bool
   {
     $result = false;
-    if($in['email'] === '') {
+    if($request['email'] === '') {
       flashMsg('email', 'メールアドレスを入力してください');
     } else {
-      old_store('email', $in['email']);
+      old_store('email', $request['email']);
     }
-    if($in['password'] === '') {
+    if($request['password'] === '') {
       flashMsg('password', 'パスワードを入力してください');
     }
     $result = !isset($_SESSION['error']) ?? true;

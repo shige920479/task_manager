@@ -1,18 +1,26 @@
 <?php
 namespace App\Database;
-require_once '../Services/GetForm.php';
-require_once '../config/config.php';
+
+/**
+ * ログアウト処理
+ */
 
 class Logout
 {
-  public static function logout(array $in): void
+  /**
+   * メンバー・マネージャー共通のログアウト処理
+   * @param array $request member|manager
+   * @return void
+   */
+  public static function logout(array $request): void
   {
     $_SESSION = array();
+    setcookie(session_name(), '', time()-1, '/');
     session_destroy();
-    if($in['login_user'] === MEMBER) {
-      header('Location: ../Views/index.php');
-    } elseif($in['login_user'] === MANAGER) {
-      header('Location: ../Views/ManagerLoginView.php');
+    if($request['login_user'] === MEMBER) {
+      header('Location:' . PATH);
+    } elseif($request['login_user'] === MANAGER) {
+      header('Location:' . PATH . 'managerLogin');
     }
     exit;
   }

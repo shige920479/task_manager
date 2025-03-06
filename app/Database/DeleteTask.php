@@ -1,63 +1,93 @@
 <?php
 namespace App\Database;
 
-//フラッシュメッセージ用、完成後にメッセージも合わせて削除。
-require_once '../Services/helper.php'; 
+use PDOException;
+
 use function App\Services\flashMsg;
-/////////////////////////////////////////////////////
+use function App\Services\writeLog;
 
 /**
- * 宿題）$_SESSION[del_msg]を消してない為、エラー画面から戻ると
- * フラッシュメッセージが表示される。
+ * タスクデータ削除
  */
-
-/**
- * データ削除クラス（完全削除とソフトデリート）
- * param $id
- * return void
- */
-
 class DeleteTask extends DbConnect
 {
-  // 完了処理
-  public static function softDelete($id) {
-    try {
-        $del_data = self::selectId($id);
-        
-        // 削除用の処理
+  /**
+   * メンバー側のタスク完了処理（ソフトデリート）
+   * 
+   * @param $id タスクid
+   * @return void
+   */
+  public static function softDelete(int $id): void
+   {
+    try {        
+        // 削除後のメッセージ表示用の情報取得
         $pdo = self::db_connect();
+        $sql = "SELECT theme FROM task WHERE id = :id";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue(':id', $id, \PDO::PARAM_INT);
+        $stmt->execute();
+        $del_data = $stmt->fetch();
+
+        // 削除処理
         $sql = "UPDATE task SET del_flag = 1 WHERE id = :id";
         $stmt = $pdo->prepare($sql);
         $stmt->bindValue(':id', $id, \PDO::PARAM_INT);
         $stmt->execute();
-        $_SESSION['del_msg'] = "カテゴリー : 「{$del_data['category']}」 タイトル : 「{$del_data['theme']}」 を削除しました";
-        header('Location: ../Views/index.php');
-      
-    } catch(\PDOException $e) {
-      flashMsg('db', "登録に失敗しました : {$e->getMessage()}"); //フラッシュメッセージ用、完成後に削除。
-      header('Location: ../Views/500error.php');
-      exit;
+        $_SESSION['del_msg'] = "タイトル : 「{$del_data['theme']}」のタスクを完了しました";
+        header('Location:' . PATH . 'dashboard?mode=index');
+        
+      } catch(\PDOException $e) {
+        flashMsg('db', "内部サーバーエラーです。\n検索中のリソースに問題があるため、リソースを表示できません");
+        writeLog(LOG_FILEPATH, $e->getMessage());
+        header('Location:' . PATH . 'error?error_mode=500error');
+        exit;
+
+      } finally {
+        list($pdo, $stmt) = [null, null];
     }
   }
-
-  public static function hardDelete($id) {
+  /**
+   * タスクの完全削除（マネージャー権限） taskテーブルとmessageテーブルの該当idを削除
+   * 
+   * @param int $id タスクid
+   * @return void
+   */
+  public static function hardDelete(int $id): void
+  {
     try {
-      // message用処理
-      $del_data = self::selectId($id);
-      $_SESSION['del_msg'] = "カテゴリー : 「{$del_data['category']}」/ タイトル : 「{$del_data['title']}」 を削除しました";
-      
-      // 削除用の処理
-      $pdo = self::db_connect(); // tryに2回はいってしまう... DbConnectクラスの方を修正するか
-      $sql = 'DELETE FROM task WHERE id = :id';
+      $pdo = self::db_connect();
+      $pdo->beginTransaction();
+
+      $sql = "SELECT theme FROM task WHERE id = :id";
       $stmt = $pdo->prepare($sql);
       $stmt->bindValue(':id', $id, \PDO::PARAM_INT);
       $stmt->execute();
-      header('Location: ../Views/index.php');
-    } catch(\PDOException $e) {
-      flashMsg('db', "登録に失敗しました : {$e->getMessage()}"); //フラッシュメッセージ用、完成後に削除。
-      header('Location: ../Views/500error.php');
-      exit;
-    }
-  }
+      $del_data = $stmt->fetch();
 
+      $sql = "DELETE FROM task WHERE id = :id";
+      $stmt = $pdo->prepare($sql);
+      $stmt->bindParam(':id', $id, \PDO::PARAM_INT);
+      $stmt->execute();      
+
+      $sql = "DELETE FROM message WHERE task_id = :task_id";
+      $stmt = $pdo->prepare($sql);
+      $stmt->bindParam(':task_id', $id, \PDO::PARAM_INT);
+      $stmt->execute();    
+
+      $pdo->commit();
+      $_SESSION['del_msg'] = "タイトル : 「{$del_data['theme']}」のタスクを完全に削除しました";
+      header('Location:' . PATH . 'manager_dashboard?mode=index');
+
+    } catch(PDOException $e) {
+      $pdo->rollBack();
+      flashMsg('db', "内部サーバーエラーです。\n検索中のリソースに問題があるため、リソースを表示できません");
+      writeLog(LOG_FILEPATH, $e->getMessage());
+      header('Location:' . PATH . 'error?error_mode=500error');
+
+      exit;
+    } finally {
+      list($pdo, $stmt) = [null, null];
+    }
+
+  }
 }

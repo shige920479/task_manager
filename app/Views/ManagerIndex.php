@@ -1,151 +1,116 @@
 <?php
-/** ログイン後の画面表示
- * 1.Taskテーブルからログインメンバーの表示データを取得する
- * 2.htmlに展開
- */
-
-
-session_start();
-require_once '../../vendor/autoload.php';
-require_once '../Services/helper.php';
-use App\Database\DbConnect;
-use App\Services\GetForm;
-use function App\Services\flash;
-use function App\Services\flashMsg;
+use function App\Services\diffDate;
 use function App\Services\h;
 use function App\Services\MgSetReceiveIcon;
 use function App\Services\MgSetSendIcon;
-use function App\Services\paginate;
-use function App\Services\setRecieveIcon;
-use function App\Services\setSendIcon;
-use function App\Services\setToken;
-
-if(!isset($_SESSION['m_login'])) {
-  header('Location: ./ManagerLoginView.php');
-  exit;
-}
-
-$in = GetForm::getForm();
-$tasks = DbConnect::getTaskData($in);
-$current_page = isset($in['page']) ? $in['page'] : null;
-// $paginate_tasks = paginate($tasks, $current_page, $base_url=basename(__FILE__));
-$paginate_tasks = paginate($tasks, $current_page, $base_url=$_SERVER['PHP_SELF']);
-// echo "<pre>";
-// var_dump($tasks);
-// echo "</pre>";
-// exit;
-
-// selectボックス用のデータ取得
-$name_list = array_unique(array_column($tasks, 'name'));
-sort($name_list);
-$category_list = array_unique(array_column($tasks, 'category'));
-sort($category_list);
-
-// echo "<pre>";
-// var_dump($name_list);
-// echo "</pre>";
-// exit;
-
-
-// 宿題）削除後のリダイレクト時にセッションメッセージ$_SESSION[del_msg]を消す必要あり。
 ?>
-
-<!DOCTYPE html>
-<html lang="ja">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TODO</title>
-    <link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css" />
-    <link rel="stylesheet" href="../../css/style.css" />
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="../../js/main.js"></script>
-    
-  </head>
-  <body>
-    <header>
-      <div id="task-header" class="task-wrapper">
-        <h1>メンバータスク一覧</h1>
-        <div>
-          <P>ユーザー名：<span><?php echo h($_SESSION['m_login_name'])?>さん</span></P>
-          <form action="../Controller/ManagerController.php" method="post">
-            <button id="logout-btn" type="submit">
-              <img src="../../images/box-arrow-right.svg" alt="">
-              <span>ログアウト</span>
-              <input type="hidden" name="mode" value="logout">
-              <input type="hidden" name="login_user" value="<?php echo MANAGER ?>">
-              <input type="hidden" name="token" value="<?php echo h(setToken()) ?>">
-            </button>
-          </form>
-        </div>
-      </div>
-    </header>
+<?php include './app/Views/ManagerHeader.php';?>
     <div class="task-wrapper">
-    <div style="text-align: right;"><a href="./ManagerDashbordView.php">ダッシュボードへ</a></div>
       <section id="search-section">
         <h2>タスク検索</h2>
-        <form action="" method="get" id="search">
+        <form action="<?php echo PATH . 'manager_dashboard' ?>" method="get" id="search">
           <ul id="search-flex">
             <li>
               <label for="name">メンバー名</label>
               <select name="name" id="name">
-                <option value="">選択してください</option>
-                <?php foreach($name_list as $name) :?>
-                <option value="<?php echo $name ?>"><?php echo $name ?></option>
+                <option value="">全て選択</option>
+                <?php foreach($members as $member) :?>
+                  <?php if($member['name'] === $request['name']): ?>
+                    <option value="<?php echo $member['name'] ?>" selected><?php echo h($member['name']) ?></option>
+                  <?php else:?>
+                    <option value="<?php echo $member['name'] ?>"><?php echo h($member['name']) ?></option>
+                  <?php endif; ?>
                 <?php endforeach ;?>
               </select>
             </li>
             <li>
               <label for="category">カテゴリー</label>
               <select name="category" id="category">
-                <option value="">選択してください</option>
-                <?php foreach($category_list as $category) :?>
-                <option value="<?php echo $category ?>"><?php echo $category ?></option>
+                <option value="">全て選択</option>
+                <?php foreach($category_list as $category):?>
+                  <?php if($category === $request['category']): ?>
+                    <option value="<?php echo $category ?>" selected><?php echo h($category) ?></option>
+                  <?php else:?>
+                    <option value="<?php echo $category ?>"><?php echo h($category) ?></option>
+                  <?php endif; ?>
                 <?php endforeach ;?>
               </select>
             </li>
             <li>
               <label for="theme">テーマ</label>
-              <input type="text" name="theme">
+              <input type="text" name="theme" value="<?php echo isset($request['theme']) ? h($request['theme']): "";?>">
             </li>
             <li><button type="submit" class="search-btn btn">検索</button></li>
           </ul>
+          <input type="hidden" name="mode" value="index">
         </form>
       </section>
       <section id="m-task-list">
-        <div>
+        <div id="title-page">
           <h2>タスク一覧</h2>
-            <!-- 宿題）↓↓↓ここはファンション化ですっきりさせたい -->        
             <?php if(!empty($_SESSION['del_msg'])) :?>
-            <?php echo "<span>{$_SESSION['del_msg']}</span>"; ?>
-            <?php $_SESSION['del_msg'] = ''?>
+                <?php echo "<span class='del_msg'>{$_SESSION['del_msg']}</span>"; ?>
+                <?php unset($_SESSION['del_msg']);?>
             <?php endif ;?>
-            <!-- 後でaction="" method=""を追加する -->
+            <?php echo empty($tasks) ? "<span class='initial-msg'>未完了のタスクはありません</span>": '';?>
         </div>
-        <ul id="paginate"><?php echo $paginate_tasks[1] ? $paginate_tasks[1] : "" ;?></ul>
+        <div id="sort-pagination">
+          <form action="<?php echo PATH . 'manager_dashboard';?>" method="get" id="sort">
+            <select name="sort_order" id="sort_order">
+              <option value="">新規登録順</option>
+              <option value="sort_name" <?php echo isset($request['sort_order']) && $request['sort_order'] === 'sort_name' ? 'selected': "";?>>メンバー別</option>
+              <option value="sort_category" <?php echo isset($request['sort_order']) && $request['sort_order'] === 'sort_category' ? 'selected': "";?>>カテゴリー別</option>
+              <option value="sort_deadline" <?php echo isset($request['sort_order']) && $request['sort_order'] === 'sort_deadline' ? 'selected': "";?>>完了目標順</option>
+              <option value="sort_priority" <?php echo isset($request['sort_order']) && $request['sort_order'] === 'sort_priority' ? 'selected': "";?>>優先度順</option>
+            </select>
+            <input type="hidden" name="mode" value="index">
+            <input type="hidden" name="name" value="<?php echo $request['name'] ?? '';?>">
+            <input type="hidden" name="category" value="<?php echo $request['category'] ?? '';?>">
+            <input type="hidden" name="theme" value="<?php echo $request['theme'] ?? '';?>">
+
+          </form>
+          <ul id="paginate"><?php echo isset($paginate_tasks[1]) ? $paginate_tasks[1] : "" ;?></ul>
+        </div>
         <table>
           <thead>
             <tr>
-              <th>メンバー名</th><th>優先度</th><th>カテゴリー</th><th>タスクテーマ</th><th>タスク概要</th>
-              <th>完了目標</th><th>残日数</th><th>送信</th><th>受信</th>
+              <th>メンバー名</th><th>優先度</th><th>カテゴリー</th><th>完了</th><th>タスクテーマ</th><th>タスク概要</th>
+              <th>完了目標</th><th>残日数</th><th>送信</th><th>受信</th><th>削除</th>
             </tr>
           </thead>
           <tbody>
             <?php if(isset($paginate_tasks[0])) :?>
             <?php foreach($paginate_tasks[0] as $task) :?>
             <tr>
-              <td><?php echo h($task['name']);?></td>
-              <td class="priority"><?php echo h(str_repeat('☆',$task['priority'])) ?></td>
-              <td><?php echo h($task['category']) ?></td>
-              <td class="edit-link"><?php echo "<a href='./ManagerChatView.php?id={$task['id']}'>{$task['theme']}</a>" ?></td>
-              <td class="edit-link"><?php echo "<a href='./ManagerChatView.php?id={$task['id']}'>{$task['content']}</a>" ?></td>
-              <td><?php echo h($task['deadline']) ?></td>
-              <td>残日数</td>
+              <td><?php echo $task['name'];?></td>
+              <td class="priority"><?php echo h(str_repeat('★',$task['priority'])) ?></td>
+              <td><?php echo $task['category'] ?></td>
+              <td class="comp-icon">
+                <?php if($task['del_flag'] === 1): ?>
+                  <img src="images/check-pink.png">
+                <?php elseif($task['del_flag'] === 2): ?>
+                  <img src="images/turnback-green.png">
+                <?php endif ;?>
+              </td>
+              <td class="edit-link"><?php echo "<a href='manager_dashboard?mode=chat&id={$task['id']}'>{$task['theme']}</a>" ?></td>
+              <td><?php echo $task['content'] ?></td>
+              <td><?php echo date('m月d日', strtotime($task['deadline']))  ?></td>
+              <td class="diff-date" data-days="<?= diffDate($task['deadline']) ?>"><?= diffDate($task['deadline'])."日" ?></td>
               <td class="msg-icon">
                 <?php echo MgSetSendIcon($task['msg_flag'],$task['mg_to_mem'] , $task['id']) ?>
               </td>
               <td class="msg-icon">
                 <?php echo MgSetReceiveIcon($task['msg_flag'], $task['mem_to_mg'], $task['id']) ?>
+              </td>
+              <td>
+                <?php if($task['del_flag'] === 1):?>
+                  <form action="<?php echo PATH . 'manager_dashboard';?>" method="post">
+                    <button type="submit" class="del-btn btn">削除</button>
+                    <input type="hidden" name="mode" value="hard_del">
+                    <input type="hidden" name="id" value="<?php echo h($task['id'])?>">
+                    <input type="hidden" name="token" value="<?php echo h($token);?>">
+                  </form>
+                <?php endif;?>
               </td>
             </tr>
             <?php endforeach ;?>

@@ -1,8 +1,7 @@
 /vendor
-/images
-/app/config
 memo
 session_check.php
 session_destroy.php
 test.html
 test.php
+.env

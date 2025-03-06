@@ -1,28 +1,28 @@
 <?php
 namespace App\Database;
 
-use PDOException;
-
-require_once '../Services/helper.php';
 use function App\Services\flashMsg;
 use function App\Services\old_store;
+use function App\Services\writeLog;
 
 /**
- * 10/30:DB登録まで（すでにメールアドレス登録済の処理も◎）
- * 次回：ログイン機能、adminログイン機能、csrf対策、h()対策、その他、youtubeを見返して必要なセキュリティ対策を講じる。
- * さらに、バリデーション＋エラーメッセージなどのクラス化を検討。できそうな気がするが。
- *  ～余裕があれば、パスワード忘れの対応も。2段階認証的な要素もいれる（メール->ワンタイムパスを飛ばしてみたいな）
+ * メンバー新規アカウント登録
  */
-
 class StoreMemberAccount extends DbConnect
 {
-  public static function memberRegister($in) {
-    self::Validation($in);
+  /**
+   * データベースへのアカント登録
+   * @param array $request 入力データ
+   * @return void 登録後はログイン画面へ遷移
+   */
+  public static function memberRegister(array $request): void
+   {
+    self::Validation($request);
     if(isset($_SESSION['error'])) {
-      header('Location: ../Views/MemberAccountView.php');
+      header('Location:' . PATH . 'account');
       exit;
     } else {
-      $hash_password = password_hash($in['password'], PASSWORD_BCRYPT);
+      $hash_password = password_hash($request['password'], PASSWORD_BCRYPT);
       try {
         $pdo = DbConnect::db_connect();
         $sql = "INSERT INTO member
@@ -30,68 +30,58 @@ class StoreMemberAccount extends DbConnect
                 values
                 (:name, :email, :password)";
         $stmt = $pdo->prepare($sql);
-        $stmt->bindValue(':name', $in['name'], \PDO::PARAM_STR);
-        $stmt->bindValue(':email', $in['email'], \PDO::PARAM_STR);
+        $stmt->bindValue(':name', $request['name'], \PDO::PARAM_STR);
+        $stmt->bindValue(':email', $request['email'], \PDO::PARAM_STR);
         $stmt->bindValue(':password', $hash_password, \PDO::PARAM_STR);
         $stmt->execute();
-        header('Location: ../Views/MemberLoginView.php');
-      } catch(PDOException $e) {
+        header('Location:' . PATH);
+
+      } catch(\PDOException $e) {
         if($e->errorInfo[1] === 1062) {
           flashMsg('email', 'このメールアドレスは登録済みです');
-          header('Location: ../Views/MemberAccountView.php');
+          header('Location:' . PATH . 'account');
           exit;
         } else {
-          flashMsg('db', "登録に失敗しました : {$e->getMessage()}"); //フラッシュメッセージ用、完成後に削除。
-          header('Location: ../Views/500error.php');
+          flashMsg('db', "内部サーバーエラーです。\n検索中のリソースに問題があるため、リソースを表示できません");
+          writeLog(LOG_FILEPATH, $e->getMessage());
+          header('Location:' . PATH . 'error?error_mode=500error');
           exit;
         }
+
+      } finally {
+        list($pdo, $stmt) = [null, null];
       }
     }
   }
-
-  // private へ変更できそう
-  public static function Validation($in) {
-    if($in['name'] === "") {
+  /**
+   * 新規アカンウト登録専用のバリデーション
+   * 
+   * @param array $request 入力データ
+   * @return bool
+   */
+  private static function Validation($request) {
+    if($request['name'] === "") {
       flashMsg('name', '名前を入力してください');
-    } elseif(mb_strlen($in['name']) > 50) {
+    } elseif(mb_strlen($request['name']) > 50) {
       flashMsg('name', '名前は50文字以下で入力してください');      
     } else {
-      old_store('name', $in['name']);
+      old_store('name', $request['name']);
     }
-    if($in['email'] === "") {
+    if($request['email'] === "") {
       flashMsg('email', 'メールアドレスを入力してください');      
-    } elseif(!preg_match("/^([a-zA-Z0-9])+([a-zA-Z0-9\._-])*@([a-zA-Z0-9_-])+([a-zA-Z0-9\._-]+)+$/", $in['email'])) {
+    } elseif(!preg_match("/^([a-zA-Z0-9])+([a-zA-Z0-9\._-])*@([a-zA-Z0-9_-])+([a-zA-Z0-9\._-]+)+$/", $request['email'])) {
       flashMsg('email', 'メールアドレスが正しくありません');
     } else {
-      old_store('email', $in['email']);
+      old_store('email', $request['email']);
     }
-    if($in['password'] === "") {
+    if($request['password'] === "") {
       flashMsg('password', 'パスワードを入力してください');
-    } elseif($in['password'] !== $in['confirm-password']) {
+    } elseif($request['password'] !== $request['confirm-password']) {
       flashMsg('password', 'パスワードが一致しません、再入力ください');
-    } elseif(!preg_match("/\A(?=.*?[A-z])(?=.*?\d)[A-z\d]{6,20}+\z/", $in['password'])) {
+    } elseif(!preg_match("/\A(?=.*?[A-z])(?=.*?\d)[A-z\d]{6,20}+\z/", $request['password'])) {
       flashMsg('password', '半角英数字混在で6桁以上20桁以下で登録願います');
     }
   }
-  // public static function Validation($in) {
-  //   if($in['name'] === "") {
-  //     flashMsg('name', '名前を入力してください');
-  //   } elseif(mb_strlen($in['name']) > 50) {
-  //     flashMsg('name', '名前は50文字以下で入力してください');      
-  //   }
-  //   if($in['email'] === "") {
-  //     flashMsg('email', 'メールアドレスを入力してください');      
-  //   } elseif(!preg_match("/^([a-zA-Z0-9])+([a-zA-Z0-9\._-])*@([a-zA-Z0-9_-])+([a-zA-Z0-9\._-]+)+$/", $in['email'])) {
-  //     flashMsg('email', 'メールアドレスが正しくありません');
-  //   }
-  //   if($in['password'] === "") {
-  //     flashMsg('password', 'パスワードを入力してください');
-  //   } elseif($in['password'] !== $in['confirm-password']) {
-  //     flashMsg('password', 'パスワードが一致しません、再入力ください');
-  //   } elseif(!preg_match("/\A(?=.*?[A-z])(?=.*?\d)[A-z\d]{6,20}+\z/", $in['password'])) {
-  //     flashMsg('password', '半角英数字混在で6桁以上20桁以下で登録願います');
-  //   }
-  // }
 }
 
 

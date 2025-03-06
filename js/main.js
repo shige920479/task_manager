@@ -23,26 +23,27 @@ $(function () {
       return false;
     }
   });
+  $("#menu-icon").on("mouseenter", function () {
+    $(".menu-content").addClass("open");
+  });
+  $(".menu-content").on("mouseleave", function () {
+    $(this).removeClass("open");
+  });
 
-  //完了処理
-  // $("#form").submit(function () {
-  //   let checks = [];
-  //   $("[name='done[]']:checked").each(function () {
-  //     checks.push(this.value);
-  //   });
+  //ソート
+  $("#sort_order").on("change", function () {
+    $("#sort").submit();
+  });
 
-  //   $.ajax({
-  //     type: "POST",
-  //     url: "../Controller/DeleteController.php",
-  //     data: {
-  //       id: checks,
-  //     },
-  //     success: function (data) {
-  //       if (data != "") {
-  //         alert("完了処理を行いました。");
-  //       }
-  //     },
-  //   });
-  //   return false;
-  // });
+  //残日数の文字色
+  $("td[data-days]").each(function () {
+    const days = parseInt($(this).data("days"), 10);
+    if (days <= 0) {
+      $(this).css("color", "red");
+    }
+  });
+
+  // チャット内のスクロール最下部表示
+  let element = document.getElementById("chat-inner");
+  element?.scrollIntoView(false);
 });
