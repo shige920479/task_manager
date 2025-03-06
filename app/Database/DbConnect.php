@@ -50,7 +50,7 @@ class DbConnect
     } catch(\PDOException $e) {
       flashMsg('db', "内部サーバーエラーです。\n検索中のリソースに問題があるため、リソースを表示できません");
       writeLog(LOG_FILEPATH, $e->getMessage());
-      header('Location:' . PATH . 'error/?error_mode=500error');
+      header('Location:' . PATH . 'error?error_mode=500error');
       exit;
     } finally {
       list($pdo, $stmt) = [null, null];
@@ -83,7 +83,7 @@ class DbConnect
     } catch(\PDOException $e) {
       flashMsg('db', "内部サーバーエラーです。\n検索中のリソースに問題があるため、リソースを表示できません");
       writeLog(LOG_FILEPATH, $e->getMessage());
-      header('Location:' . PATH . 'error/?error_mode=500error');
+      header('Location:' . PATH . 'error?error_mode=500error');
       exit;
     } finally {
       list($pdo, $stmt) = [null, null];
@@ -118,7 +118,7 @@ class DbConnect
       flashMsg('db', "内部サーバーエラーです。\n検索中のリソースに問題があるため、リソースを表示できません");
       writeLog(LOG_FILEPATH, $e->getMessage());
       $pdo->rollBack(); // ロールバック
-      header('Location:' . PATH . 'error/?error_mode=500error');
+      header('Location:' . PATH . 'error?error_mode=500error');
       exit;
     } finally {
       list($pdo, $stmt) = [null, null];
@@ -155,7 +155,7 @@ class DbConnect
     } catch(\PDOException $e) {
       flashMsg('db', "内部サーバーエラーです。\n検索中のリソースに問題があるため、リソースを表示できません");
       writeLog(LOG_FILEPATH, $e->getMessage());
-      header('Location:' . PATH . 'error/?error_mode=500error');
+      header('Location:' . PATH . 'error?error_mode=500error');
       exit;
 
     } finally {
@@ -183,7 +183,7 @@ class DbConnect
     } catch(\PDOException $e) {
       flashMsg('db', "内部サーバーエラーです。\n検索中のリソースに問題があるため、リソースを表示できません");
       writeLog(LOG_FILEPATH, $e->getMessage());
-      header('Location:' . PATH . 'error/?error_mode=500error');
+      header('Location:' . PATH . 'error?error_mode=500error');
       exit;
 
     } finally {
@@ -210,7 +210,7 @@ class DbConnect
     } catch(\PDOException $e) {
       flashMsg('db', "内部サーバーエラーです。\n検索中のリソースに問題があるため、リソースを表示できません");
       writeLog(LOG_FILEPATH, $e->getMessage());
-      header('Location:' . PATH . 'error/?error_mode=500error');
+      header('Location:' . PATH . 'error?error_mode=500error');
       exit;
 
     } finally {
@@ -260,7 +260,7 @@ class DbConnect
     } catch(\PDOException $e) {
       flashMsg('db', "内部サーバーエラーです。\n検索中のリソースに問題があるため、リソースを表示できません");
       writeLog(LOG_FILEPATH, $e->getMessage());
-      header('Location:' . PATH . 'error/?error_mode=500error');
+      header('Location:' . PATH . 'error?error_mode=500error');
       exit;
 
     } finally {
@@ -286,7 +286,7 @@ class DbConnect
     } catch(\PDOException $e) {
       flashMsg('db', "内部サーバーエラーです。\n検索中のリソースに問題があるため、リソースを表示できません");
       writeLog(LOG_FILEPATH, $e->getMessage());
-      header('Location:' . PATH . 'error/?error_mode=500error');
+      header('Location:' . PATH . 'error?error_mode=500error');
       exit;
     
     } finally {  

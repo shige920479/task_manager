@@ -44,7 +44,7 @@ use function App\Services\setChatHtml;
               <?php echo $chats ? setChatHtml($chats, MEMBER) : "" ?>
             </ul>
           </div>
-          <form action="<?php echo PATH . 'dashboard/' ?>" method="post" id="message-box">
+          <form action="<?php echo PATH . 'dashboard' ?>" method="post" id="message-box">
             <label>メッセージ入力<?php echo isset($flash_array['comment']) ? "<span class='flash-msg'>{$flash_array['comment']}</span>" : ""; ?></label>
             <textarea name="comment" rows="3"><?php echo isset($old['comment']) ? h($old['comment']) : ""; ?></textarea>
             <button type="submit" class="sendmsg-btn btn">メッセージ送信</button>

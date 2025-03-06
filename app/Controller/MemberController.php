@@ -52,11 +52,11 @@ switch ($request['mode']) {
     break;
 
   case 'edit':
+    $task_member_id = Authenticate::taskBelongsToMember($request['id']);
 
-    $task_member = Authenticate::taskBelongsToMember($request['id']);
-    if($task_member !== $_SESSION['login_id']) {
-      flashMsg('tokenerror', "不正なリクエストです、再度ログインをお試しください"); 
-      header('Location:' . PATH . 'error/?error_mode=400error');
+    if($task_member_id !== strval($_SESSION['login_id'])) {
+      flashMsg('tokenerror', "edit:::不正なリクエストです、再度ログインをお試しください"); 
+      header('Location:' . PATH . 'error?error_mode=400error');
       exit;
     } 
     
@@ -81,9 +81,9 @@ switch ($request['mode']) {
 
   case 'chat':
     $task_member = Authenticate::taskBelongsToMember($request['id']);
-    if($task_member !== $_SESSION['login_id']) {
+    if($task_member !== strval($_SESSION['login_id'])) {
       flashMsg('tokenerror', "不正なリクエストです、再度ログインをお試しください"); 
-      header('Location:' . PATH . 'error/?error_mode=400error');
+      header('Location:' . PATH . 'error?error_mode=400error');
       exit;
     } 
 
@@ -106,7 +106,7 @@ switch ($request['mode']) {
 
     if((int)$request['member_id'] !== $_SESSION['login_id']) {
       flashMsg('tokenerror', "不正なリクエストです、再度ログインをお試しください"); 
-      header('Location:' . PATH . 'error/?error_mode=400error');
+      header('Location:' . PATH . 'error?error_mode=400error');
       exit;
     }
 

@@ -12,7 +12,7 @@ use function App\Services\old;
 session_start();
 
 if(isset($_SESSION['m_login'])) {
-  header('Location:' . PATH . 'manager_dashboard/?mode=index');
+  header('Location:' . PATH . 'manager_dashboard?mode=index');
   exit;
 }
 

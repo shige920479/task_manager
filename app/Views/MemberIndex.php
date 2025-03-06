@@ -8,7 +8,7 @@ include './app/Views/MemberHeader.php';
     <div class="task-wrapper">
       <section id="new-task">
         <h2>新規タスク登録</h2>
-        <form action="?mode=store" method="post">
+        <form action="dashboard?mode=store" method="post">
           <ul>
             <li>
               <label for="priority">優先度</label>
@@ -65,7 +65,7 @@ include './app/Views/MemberHeader.php';
             <?php echo empty($tasks) ? "<span class='initial-msg'>未完了のタスクはありません</span>": '';?>
         </div>
         <div id="sort-pagination">
-          <form action="" method="get" id="sort">
+          <form action="dashboard" method="get" id="sort">
             <select name="sort_order" id="sort_order">
               <option value="">新規登録順</option>
               <option value="sort_deadline" <?php echo isset($request['sort_order']) && $request['sort_order'] === 'sort_deadline' ? 'selected': "";?>>目標完了日順</option>
@@ -88,8 +88,8 @@ include './app/Views/MemberHeader.php';
             <tr>
               <td class="priority"><?php echo str_repeat('★', $task['priority'])?></td>
               <td><?php echo $task['category'] ?></td>
-              <td class="comp-icon"><?php echo $task['del_flag'] === 2 ? '<img src="' . PATH . 'images/turnback-green.png">' : "" ;?></td>
-              <td class="edit-link"><?php echo "<a href='?mode=edit&id={$task['id']}'>{$task['theme']}</a>" ?></td>
+              <td class="comp-icon"><?php echo $task['del_flag'] === 2 ? '<img src="images/turnback-green.png">' : "" ;?></td>
+              <td class="edit-link"><?php echo "<a href='dashboard?mode=edit&id={$task['id']}'>{$task['theme']}</a>" ?></td>
               <td><?php echo $task['content'] ?></td>
               <td><?php echo date('m月d日', strtotime($task['deadline']))  ?></td>
               <td class="msg-icon">

@@ -41,7 +41,7 @@ function paginate(array $tasks, ?int $current_page, array $request): array
             if($i === 1) {
                 $page_html .= "<li class='this'>{$i}</li>";
             } else {
-                $page_html .= "<li><a href='?{$param}&page={$i}'>{$i}</a></li>";
+                $page_html .= "<li><a href='dashboard?{$param}&page={$i}'>{$i}</a></li>";
             }
         }
     } else {
@@ -52,7 +52,7 @@ function paginate(array $tasks, ?int $current_page, array $request): array
             if($i === intval($current_page)) {
                 $page_html .= "<li class='this'>{$i}</li>";
             } else {
-                $page_html .= "<li><a href='?{$param}&page={$i}'>{$i}</a></li>";
+                $page_html .= "<li><a href='dashboard?{$param}&page={$i}'>{$i}</a></li>";
             }
         }
     }
@@ -167,9 +167,9 @@ function setSendIcon(int $msg_flag, int $mem_to_mg, int $task_id): string
     if($msg_flag === 0) {
         return "";
     } elseif($mem_to_mg === 1) {
-        return "<a href='?mode=chat&id={$task_id}'><img src='" . PATH . "/images/hikoki.png'></a>";
+        return "<a href='dashboard?mode=chat&id={$task_id}'><img src='images/hikoki.png'></a>";
     } elseif($mem_to_mg === 2) {
-        return "<a href='?mode=chat&id={$task_id}'><img src='" . PATH . "/images/checkbox.png'></a>";
+        return "<a href='dashboard?mode=chat&id={$task_id}'><img src='images/checkbox.png'></a>";
     }
     return "";
 }
@@ -187,9 +187,9 @@ function MgSetSendIcon(int $msg_flag, int $mg_to_mem, int $task_id): string
     if($msg_flag === 0) {
         return "";
     } elseif($mg_to_mem === 1) {
-        return "<a href='?mode=chat&id={$task_id}'><img src='" . PATH . "/images/hikoki.png'></a>";
+        return "<a href='manager_dashboard?mode=chat&id={$task_id}'><img src='" . PATH . "/images/hikoki.png'></a>";
     } elseif($mg_to_mem === 0) {
-        return "<a href='?mode=chat&id={$task_id}'><img src='" . PATH . "/images/checkbox.png'></a>";
+        return "<a href='manager_dashboard?mode=chat&id={$task_id}'><img src='" . PATH . "/images/checkbox.png'></a>";
     }
     return "";
 }
@@ -207,9 +207,9 @@ function setRecieveIcon(int $msg_flag, int $mg_to_mem, int $task_id): string
     if($msg_flag === 0) {
         return "";
     } elseif($mg_to_mem === 1) {
-        return "<a href='?mode=chat&id={$task_id}'><img src='" . PATH . "/images/midoku.png'></a>";
+        return "<a href='dashboard?mode=chat&id={$task_id}'><img src='images/midoku.png'></a>";
     } elseif($mg_to_mem === 0) {
-        return "<a href='?mode=chat&id={$task_id}'><img src='" . PATH . "/images/kidoku.png'></a>";
+        return "<a href='dashboard?mode=chat&id={$task_id}'><img src='images/kidoku.png'></a>";
     }
     return "";
 }
@@ -227,9 +227,9 @@ function MgSetReceiveIcon(int $msg_flag, int $mem_to_mg, int $task_id): string
     if($msg_flag === 0) {
         return "";
     } elseif($mem_to_mg === 1) {
-        return "<a href='?mode=chat&id={$task_id}'><img src='" . PATH . "/images/midoku.png'></a>";
+        return "<a href='manager_dashboard?mode=chat&id={$task_id}'><img src='" . PATH . "/images/midoku.png'></a>";
     } elseif($mem_to_mg === 2) {
-        return "<a href='?mode=chat&id={$task_id}'><img src='" . PATH . "/images/kidoku.png'></a>";
+        return "<a href='manager_dashboard?mode=chat&id={$task_id}'><img src='" . PATH . "/images/kidoku.png'></a>";
     }
     return "";
 }

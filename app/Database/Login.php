@@ -25,12 +25,12 @@ class Login extends DbConnect
       if(!self::$user_data) {
         flashMsg('email', 'メールアドレスが登録されておりません、再度入力願います');
         if($table === MEMBER) {header('Location:' . PATH);}
-        if($table === MANAGER) {header('Location:' . PATH . 'managerLogin/');}
+        if($table === MANAGER) {header('Location:' . PATH . 'managerLogin');}
         exit;
       } elseif(!password_verify($request['password'], self::$user_data['password'])) {
         flashMsg('password', 'パスワードが異なっております、再度入力願います');
         if($table === MEMBER) {header('Location:' . PATH);}
-        if($table === MANAGER) {header('Location:' . PATH . 'managerLogin/');}
+        if($table === MANAGER) {header('Location:' . PATH . 'managerLogin');}
         exit;
       } else {
         session_regenerate_id(TRUE); // セッションidを再発行
@@ -39,20 +39,20 @@ class Login extends DbConnect
           $_SESSION['login'] = self::$user_data['email']; // セッションにログイン情報を登録
           $_SESSION['login_id'] = self::$user_data['id'];
           $_SESSION['login_name']= self::$user_data['name'];
-          header('Location:' . PATH . 'dashboard/?mode=index');
+          header('Location:' . PATH . 'dashboard?mode=index');
           return true;
         } 
         if($table === MANAGER) {
           $_SESSION['m_login'] = $request['email'];
           $_SESSION['m_login_name']= self::$user_data['name'];
-          header('Location:' . PATH . 'manager_dashboard/?mode=index');
+          header('Location:' . PATH . 'manager_dashboard?mode=index');
           return true;
         }
         exit;
       }
     } else {
       if($table === MEMBER) {header('Location:' . PATH);}
-      if($table === MANAGER)  {header('Location:' . PATH . 'managerLogin/');}
+      if($table === MANAGER)  {header('Location:' . PATH . 'managerLogin');}
       exit;
     }
   }

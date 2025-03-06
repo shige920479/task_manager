@@ -1,9 +1,9 @@
 <?php include './app/Views/MemberHeader.php'; ?>
     <div class="calender-wrapper">
       <div id="month">
-        <a href='<?php echo "?mode=callender&week={$prev_week}&member_id={$request['member_id']}";?>'>前週</a>
+        <a href='<?php echo "dashboard?mode=callender&week={$prev_week}&member_id={$request['member_id']}";?>'>前週</a>
         <p><?php echo $start_date->format('m/d'); ?> ～ <?php echo $end_date->format('m/d'); ?></p>
-        <a href='<?php echo "?mode=callender&week={$next_week}&member_id={$request['member_id']}";?>'>来週</a>
+        <a href='<?php echo "dashboard?mode=callender&week={$next_week}&member_id={$request['member_id']}";?>'>来週</a>
       </div>
       <table id="taskboard">
         <thead>

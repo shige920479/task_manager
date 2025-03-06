@@ -39,20 +39,20 @@ class StoreTask extends DbConnect
         $stmt->execute();
         
         if(isset($_SESSION['old'])) unset($_SESSION['old']);
-        header('Location: ?mode=index');
+        header('Location:' . PATH . 'dashboard?mode=index');
         exit;
         
       } catch(PDOException $e) {
         flashMsg('db', "内部サーバーエラーです。\n検索中のリソースに問題があるため、リソースを表示できません");
         writeLog(LOG_FILEPATH, $e->getMessage());
-        header('Location:' . PATH . 'error/?error_mode=500error');
+        header('Location:' . PATH . 'error?error_mode=500error');
         exit;
         
       } finally {
         list($pdo, $stmt) = [null, null];
       } 
     } else {
-      header('Location: ?mode=index');
+      header('Location:' . PATH . 'dashboard?mode=index');
       exit;
     }
   }

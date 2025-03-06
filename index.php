@@ -7,11 +7,11 @@ $dotenv->load();
 
 $routes = [
   PATH => 'MemberLogin',
-  PATH . 'dashboard/' => 'MemberController',
-  PATH . 'managerLogin/' => 'ManagerLogin',
-  PATH . 'manager_dashboard/' => 'ManagerController',
-  PATH . 'account/' => 'MemberAccount',
-  PATH . 'error/' => 'ErrorController'
+  PATH . 'dashboard' => 'MemberController',
+  PATH . 'managerLogin' => 'ManagerLogin',
+  PATH . 'manager_dashboard' => 'ManagerController',
+  PATH . 'account' => 'MemberAccount',
+  PATH . 'error' => 'ErrorController'
 ];
 
 $path = parse_url($_SERVER['REQUEST_URI'] , PHP_URL_PATH);

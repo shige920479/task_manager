@@ -10,7 +10,8 @@ use function App\Services\setToken;
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TaskManager</title>
     <link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css" />
-    <link rel="stylesheet" href="<?php echo PATH . 'css/style.css'; ?>">
+    <base href="<?php echo PATH;?>">
+    <link rel="stylesheet" href="<?php echo 'css/style.css'; ?>">
   </head>
   <body>
     <section class="login-wrapper">
@@ -38,11 +39,11 @@ use function App\Services\setToken;
         </form>
         <div id="to-register">
           <span>アカントが未登録ですか？</span>
-          <a href="<?php echo PATH . 'account/'?>" class="auth-link">→ アカウントを作成</a>
+          <a href="<?php echo PATH . 'account'?>" class="auth-link">→ アカウントを作成</a>
         </div>
       </div>
       <div id="to-manager">
-        <a href="<?php echo PATH . 'managerLogin/'?>" class="auth-link">管理者用ログイン画面はこちら</a>
+        <a href="<?php echo PATH . 'managerLogin'?>" class="auth-link">管理者用ログイン画面はこちら</a>
       </div>
     </section>
   </body>

@@ -4,9 +4,9 @@ use function App\Services\h;
 <?php include './app/Views/MemberHeader.php'; ?>
 <div class="wrapper edit-wrapper">
       <h1>編集ページ</h1>
-      <div id="to_index"><a href="?mode=index">一覧へ戻る</a></div>
+      <div id="to_index"><a href="dashboard?mode=index">一覧へ戻る</a></div>
       <section>
-        <form action="<?php echo PATH . 'dashboard/';?>" method="post">
+        <form action="<?php echo PATH . 'dashboard';?>" method="post">
           <ul id="edit-table">
             <li>
               <label for="priority">優先度</label>

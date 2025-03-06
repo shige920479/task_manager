@@ -45,13 +45,13 @@ class Message extends DbConnect
         $stmt->execute();
         $pdo->commit(); // コミット
 
-        header("Location:?mode=chat&id={$request['id']}");
+        header("Location:" . PATH . "dashboard?mode=chat&id={$request['id']}");
       
       } catch(\PDOException $e) {
         $pdo->rollBack(); // ロールバック
         flashMsg('db', "内部サーバーエラーです。\n検索中のリソースに問題があるため、リソースを表示できません");
         writeLog(LOG_FILEPATH, $e->getMessage());
-        header('Location:' . PATH . 'error/?error_mode=500error');
+        header('Location:' . PATH . 'error?error_mode=500error');
         exit;
       
       } finally {
@@ -97,7 +97,7 @@ class Message extends DbConnect
         $pdo->rollBack();
         flashMsg('db', "内部サーバーエラーです。\n検索中のリソースに問題があるため、リソースを表示できません");
         writeLog(LOG_FILEPATH, $e->getMessage());
-        header('Location:' . PATH . 'error/?error_mode=500error');
+        header('Location:' . PATH . 'error?error_mode=500error');
         exit;
       } finally {
         list($pdo, $stmt) = [null, null];
