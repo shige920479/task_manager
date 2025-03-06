@@ -19,7 +19,7 @@ class StoreMemberAccount extends DbConnect
    {
     self::Validation($request);
     if(isset($_SESSION['error'])) {
-      header('Location:' . PATH . 'account/');
+      header('Location:' . PATH . 'account');
       exit;
     } else {
       $hash_password = password_hash($request['password'], PASSWORD_BCRYPT);
@@ -39,7 +39,7 @@ class StoreMemberAccount extends DbConnect
       } catch(\PDOException $e) {
         if($e->errorInfo[1] === 1062) {
           flashMsg('email', 'このメールアドレスは登録済みです');
-          header('Location:' . PATH . 'account/');
+          header('Location:' . PATH . 'account');
           exit;
         } else {
           flashMsg('db', "内部サーバーエラーです。\n検索中のリソースに問題があるため、リソースを表示できません");

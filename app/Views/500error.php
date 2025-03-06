@@ -20,7 +20,7 @@
         <p><?php echo isset($flash_array['db']) ? $flash_array['db'] : ''; ?></p>
       </div>
       <div>
-        <img src="<?php echo PATH . 'images/database-exclamation.svg';?>" alt="" style="width: 80px">
+        <img src="images/database-exclamation.svg" alt="" style="width: 80px">
       </div>
     </div>
   </body>

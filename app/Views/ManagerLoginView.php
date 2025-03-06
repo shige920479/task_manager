@@ -9,14 +9,15 @@ use function App\Services\setToken;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TaskManager</title>
+    <base href="<?php echo PATH;?>">
     <link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css" />
-    <link rel="stylesheet" href="<?php echo PATH . 'css/style.css';?>">
+    <link rel="stylesheet" href="css/style.css">
   </head>
   <body>
     <section class="login-wrapper">
       <h1>Task Manager</h1>
       <h2 id="manager-title">管理者ログイン</h2>
-      <form action="<?php echo PATH . 'managerLogin/';?>" method="post">
+      <form action="<?php echo PATH . 'managerLogin';?>" method="post">
         <div class="login-box">
           <h3>Sign Up</h3>
           <ul>

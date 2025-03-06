@@ -99,7 +99,7 @@ include './app/Views/MemberHeader.php';
                 <?php echo setRecieveIcon($task['msg_flag'], $task['mg_to_mem'], $task['id']) ?>
               </td>
               <td>
-                <form action="<?php echo PATH . 'dashboard/' ?>" method="post">
+                <form action="<?php echo PATH . 'dashboard' ?>" method="post">
                   <button type="submit" class="comp-btn btn">完了</button>
                   <input type="hidden" name="mode" value="soft_del">
                   <input type="hidden" name="id" value="<?php echo h($task['id']) ?>">

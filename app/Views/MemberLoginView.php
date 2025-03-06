@@ -11,7 +11,7 @@ use function App\Services\setToken;
     <title>TaskManager</title>
     <link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css" />
     <base href="<?php echo PATH;?>">
-    <link rel="stylesheet" href="<?php echo 'css/style.css'; ?>">
+    <link rel="stylesheet" href="css/style.css">
   </head>
   <body>
     <section class="login-wrapper">

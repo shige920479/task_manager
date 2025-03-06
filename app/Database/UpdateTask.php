@@ -39,7 +39,7 @@ class UpdateTask extends StoreTask
         $stmt->execute();
         
         if(isset($_SESSION['old'])) unset($_SESSION['old']);
-        header('Location: ?mode=index');
+        header('Location:' . PATH . 'dashboard?mode=index');
         exit;
         
       } catch(\PDOException $e) {
@@ -53,7 +53,7 @@ class UpdateTask extends StoreTask
       }
 
     } else {
-      header("Location: ?mode=edit&id={$request['id']}");
+      header("Location:" . PATH . "dashboard?mode=edit&id={$request['id']}");
       exit;
     }
   }

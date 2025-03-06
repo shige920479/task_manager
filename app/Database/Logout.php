@@ -20,7 +20,7 @@ class Logout
     if($request['login_user'] === MEMBER) {
       header('Location:' . PATH);
     } elseif($request['login_user'] === MANAGER) {
-      header('Location:' . PATH . 'managerLogin/');
+      header('Location:' . PATH . 'managerLogin');
     }
     exit;
   }

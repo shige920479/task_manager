@@ -43,10 +43,10 @@ use function App\Services\setChatHtml;
                 <?php echo $chats ? setChatHtml($chats, MANAGER) : "" ?>
               </ul>
             </div>
-            <form action="<?php echo PATH . 'manager_dashboard/';?>" method="post" id="message-box">
+            <form action="<?php echo PATH . 'manager_dashboard';?>" method="post" id="message-box">
               <label>メッセージ入力<?php echo isset($flash_array['comment']) ? "<span class='flash-msg'>{$flash_array['comment']}</span>" : ""; ?></label>
               <textarea name="comment" rows="3"><?php echo isset($old['comment']) ? h($old['comment']) : ""; ?></textarea>
-              <?php if($task['del_flag'] === 0) :?>
+              <?php if($task['del_flag'] === 0 || $task['del_flag'] === 2) :?>
                 <button type="submit" class="sendmsg-btn btn">メッセージ送信</button>
                 <input type="hidden" name="mode" value="send_message">
               <?php elseif($task['del_flag'] === 1) :?>

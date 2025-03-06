@@ -1,9 +1,9 @@
 <?php include './app/Views/ManagerHeader.php';?>
     <div class="calender-wrapper">
       <div id="month">
-        <a href='<?php echo "?mode=callender&week={$prev_week}";?>'>前週</a>
+        <a href='<?php echo "manager_dashboard?mode=callender&week={$prev_week}";?>'>前週</a>
         <p><?php echo $start_date->format('m/d'); ?> ～ <?php echo $end_date->format('m/d'); ?></p>
-        <a href='<?php echo "?mode=callender&week={$next_week}";?>'>来週</a>
+        <a href='<?php echo "manager_dashboard?mode=callender&week={$next_week}";?>'>来週</a>
       </div>
       <table id="taskboard">
         <div id="color-exp"><span>完了タスク</span></div>
@@ -22,7 +22,7 @@
                 <td>
                   <?php foreach($tasks as $task) :?>
                     <?php if($task['category'] === $category && $task['deadline'] === $date->format('Y-m-d')) : ?>
-                      <a href='<?php echo "?mode=chat&id={$task['id']}"?>'>
+                      <a href='<?php echo "manager_dashboard?mode=chat&id={$task['id']}"?>'>
                         <?php if($task['del_flag'] === 1) :?>
                           <div class="box comp-color">
                         <?php else :?>

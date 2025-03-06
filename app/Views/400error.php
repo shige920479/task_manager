@@ -20,7 +20,7 @@
         <p><?php echo isset($flash_array['tokenerror']) ? $flash_array['tokenerror'] : ''; ?></p>
       </div>
       <div>
-        <img src="<?php echo PATH . 'images/exclamation-triangle-fill.svg';?>" alt="" style="width: 80px">
+        <img src="images/exclamation-triangle-fill.svg" alt="" style="width: 80px">
       </div>
     </div>
   </body>

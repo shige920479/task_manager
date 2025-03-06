@@ -4,6 +4,7 @@ namespace App\Database;
 use PDOException;
 
 use function App\Services\flashMsg;
+use function App\Services\getUri;
 use function App\Services\old_store;
 use function App\Services\writeLog;
 
@@ -21,7 +22,8 @@ class Message extends DbConnect
 
   public static function sendMessage(array $request): void
    {
-    // getformの改行対応が必要
+    $uri = getUri();
+
     if(self::validation($request)) {
       try {
         $pdo = self::db_connect();
@@ -45,7 +47,8 @@ class Message extends DbConnect
         $stmt->execute();
         $pdo->commit(); // コミット
 
-        header("Location:" . PATH . "dashboard?mode=chat&id={$request['id']}");
+        
+        header("Location:" . PATH . "{$uri}?mode=chat&id={$request['id']}");
       
       } catch(\PDOException $e) {
         $pdo->rollBack(); // ロールバック
@@ -59,7 +62,7 @@ class Message extends DbConnect
       }
     
     } else {
-      header("Location: ?mode=chat&id={$request['id']}");
+      header("Location:" . PATH . "{$uri}?mode=chat&id={$request['id']}");
     }
   }
   /**
@@ -91,7 +94,7 @@ class Message extends DbConnect
         $stmt->execute();
 
         $pdo->commit();
-        header("Location:?mode=chat&id={$request['id']}");
+        header("Location:" . PATH . "manager_dashboard?mode=chat&id={$request['id']}");
 
       } catch(PDOException $e) {
         $pdo->rollBack();
@@ -103,7 +106,7 @@ class Message extends DbConnect
         list($pdo, $stmt) = [null, null];
       }
     } else {
-      header("Location: ?mode=chat&id={$request['id']}");
+      header("Location:" . PATH . "manager_dashboard?mode=chat&id={$request['id']}");
     }
   }
 

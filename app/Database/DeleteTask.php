@@ -34,7 +34,7 @@ class DeleteTask extends DbConnect
         $stmt->bindValue(':id', $id, \PDO::PARAM_INT);
         $stmt->execute();
         $_SESSION['del_msg'] = "タイトル : 「{$del_data['theme']}」のタスクを完了しました";
-        header('Location: ?mode=index');
+        header('Location:' . PATH . 'dashboard?mode=index');
         
       } catch(\PDOException $e) {
         flashMsg('db', "内部サーバーエラーです。\n検索中のリソースに問題があるため、リソースを表示できません");
@@ -76,7 +76,7 @@ class DeleteTask extends DbConnect
 
       $pdo->commit();
       $_SESSION['del_msg'] = "タイトル : 「{$del_data['theme']}」のタスクを完全に削除しました";
-      header('Location: ?mode=index');
+      header('Location:' . PATH . 'manager_dashboard?mode=index');
 
     } catch(PDOException $e) {
       $pdo->rollBack();

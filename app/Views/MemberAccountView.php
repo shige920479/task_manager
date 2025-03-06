@@ -16,7 +16,7 @@ use function App\Services\setToken;
     <section class="login-wrapper">
       <h1>Task Manager</h1>
       <h2>アカウント作成</h2>
-      <form action="<?php echo PATH . 'account/' ?>" method="post" class="login-box">
+      <form action="<?php echo PATH . 'account' ?>" method="post" class="login-box">
         <ul>
           <div class="input account">
               <div>

@@ -27,6 +27,7 @@ function paginate(array $tasks, ?int $current_page, array $request): array
     $param = setParam($request);
     $data_array = array();
     $page_html = "";
+    $uri = getUri();
 
     if(empty($current_page) && $end_num < $max_per_page) {
         for($i = 0; $i < $end_num; $i++ ) {
@@ -41,7 +42,7 @@ function paginate(array $tasks, ?int $current_page, array $request): array
             if($i === 1) {
                 $page_html .= "<li class='this'>{$i}</li>";
             } else {
-                $page_html .= "<li><a href='dashboard?{$param}&page={$i}'>{$i}</a></li>";
+                $page_html .= "<li><a href='{$uri}?{$param}&page={$i}'>{$i}</a></li>";
             }
         }
     } else {
@@ -52,7 +53,7 @@ function paginate(array $tasks, ?int $current_page, array $request): array
             if($i === intval($current_page)) {
                 $page_html .= "<li class='this'>{$i}</li>";
             } else {
-                $page_html .= "<li><a href='dashboard?{$param}&page={$i}'>{$i}</a></li>";
+                $page_html .= "<li><a href='{$uri}?{$param}&page={$i}'>{$i}</a></li>";
             }
         }
     }
@@ -78,6 +79,14 @@ function setParam(array $request): string
     }
     $param = implode('&', $param_array);
     return $param;
+}
+function getUri()
+{
+    $request_uri = $_SERVER['REQUEST_URI'];
+    $parsed_uri = parse_url($request_uri);
+    $path_array = explode('/', trim($parsed_uri['path'],'/'));
+    $last_uri = end($path_array);
+    return $last_uri;
 }
 
 /**
