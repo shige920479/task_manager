@@ -18,6 +18,7 @@ use function App\Services\setToken;
       <h1>Task Manager</h1>
       <h2>チームメンバーログイン</h2>
       <div class="login-box">
+        <p style="color:cornflowerblue; text-align:center;"><?php echo isset($old['success']) ? h($old['success']) : '';?></p> 
         <h3>Sign Up</h3>
         <form action="<?php echo PATH?>" method="post">
           <ul>
