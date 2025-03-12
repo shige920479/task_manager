@@ -34,6 +34,7 @@ class StoreMemberAccount extends DbConnect
         $stmt->bindValue(':email', $request['email'], \PDO::PARAM_STR);
         $stmt->bindValue(':password', $hash_password, \PDO::PARAM_STR);
         $stmt->execute();
+        old_store('success', '新規アカントを登録しました');
         header('Location:' . PATH);
 
       } catch(\PDOException $e) {
