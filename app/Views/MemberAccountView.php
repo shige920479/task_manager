@@ -9,7 +9,7 @@ use function App\Services\setToken;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TaskManager</title>
-    <link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css" />
+    <link rel="stylesheet" href="css/ress.min.css" />
     <link rel="stylesheet" href="<?php echo PATH . 'css/style.css'?>">
   </head>
   <body>
